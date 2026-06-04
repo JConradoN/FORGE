@@ -10,6 +10,10 @@
   "prompt_vars": {
     "target_url": "https://github.com/n8n-io/n8n"
   },
+  "prompt_vars_mock": {
+    "target_url": "http://localhost:9900/mock/github-n8n"
+  },
+  "_fixture_note": "Snapshot 2026-06-04. Usar --mock para reproducibilidade entre runs.",
 
   "auto_checks": [
     {"type": "tool_called",       "label": "buscou a URL (http_get)",      "tool": "http_get",      "weight": 2},

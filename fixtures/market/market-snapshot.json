@@ -1,0 +1,126 @@
+{
+  "snapshot_date": "2026-06-04",
+  "pairs": {
+    "USD-BRL": {
+      "code": "USD",
+      "codein": "BRL",
+      "name": "Dólar Americano/Real Brasileiro",
+      "high": "5.0804",
+      "low": "5.05323",
+      "varBid": "-0.0162",
+      "pctChange": "-0.319065",
+      "bid": "5.0612",
+      "ask": "5.0642",
+      "timestamp": "1780611238",
+      "create_date": "2026-06-04 19:13:58"
+    },
+    "EUR-BRL": {
+      "code": "EUR",
+      "codein": "BRL",
+      "name": "Euro/Real Brasileiro",
+      "high": "5.91017",
+      "low": "5.8651",
+      "varBid": "-0.017289",
+      "pctChange": "-0.293565",
+      "bid": "5.87199",
+      "ask": "5.88582",
+      "timestamp": "1780610915",
+      "create_date": "2026-06-04 19:08:35"
+    },
+    "BTC-BRL": {
+      "code": "BTC",
+      "codein": "BRL",
+      "name": "Bitcoin/Real Brasileiro",
+      "high": "331048",
+      "low": "311589",
+      "varBid": "-9471",
+      "pctChange": "-2.861",
+      "bid": "321577",
+      "ask": "321578",
+      "timestamp": "1780611321",
+      "create_date": "2026-06-04 19:15:21"
+    },
+    "ETH-BRL": {
+      "code": "ETH",
+      "codein": "BRL",
+      "name": "Ethereum/Real Brasileiro",
+      "high": "9393.67",
+      "low": "8719.19",
+      "varBid": "-363.54",
+      "pctChange": "-3.898",
+      "bid": "8957.33",
+      "ask": "8962.69",
+      "timestamp": "1780609831",
+      "create_date": "2026-06-04 18:50:31"
+    }
+  },
+  "usd_history_7d": [
+    {
+      "code": "USD",
+      "codein": "BRL",
+      "name": "Dólar Americano/Real Brasileiro",
+      "high": "5.0804",
+      "low": "5.05323",
+      "varBid": "-0.021506",
+      "pctChange": "-0.423567",
+      "bid": "5.05589",
+      "ask": "5.0678",
+      "timestamp": "1780610258",
+      "create_date": "2026-06-04 18:57:38"
+    },
+    {
+      "high": "5.1037",
+      "low": "4.99764",
+      "varBid": "0.0567",
+      "pctChange": "1.12933",
+      "bid": "5.0774",
+      "ask": "5.0804",
+      "timestamp": "1780529959"
+    },
+    {
+      "high": "5.0393",
+      "low": "4.99847",
+      "varBid": "-0.0177",
+      "pctChange": "-0.351305",
+      "bid": "5.0207",
+      "ask": "5.0237",
+      "timestamp": "1780444490"
+    },
+    {
+      "high": "5.0588",
+      "low": "5.0113",
+      "varBid": "-0.0009",
+      "pctChange": "-0.017859",
+      "bid": "5.0384",
+      "ask": "5.0414",
+      "timestamp": "1780357473"
+    },
+    {
+      "high": "5.0448",
+      "low": "5.03208",
+      "varBid": "0.0072",
+      "pctChange": "0.143077",
+      "bid": "5.0393",
+      "ask": "5.0423",
+      "timestamp": "1780271978"
+    },
+    {
+      "high": "5.0943",
+      "low": "5.0321",
+      "varBid": "-0.0196",
+      "pctChange": "-0.38799",
+      "bid": "5.0321",
+      "ask": "5.0421",
+      "timestamp": "1780089054"
+    },
+    {
+      "high": "5.0834",
+      "low": "5.0155",
+      "varBid": "-0.0212",
+      "pctChange": "-0.417903",
+      "bid": "5.0517",
+      "ask": "5.0547",
+      "timestamp": "1780011794"
+    }
+  ]
+}
