@@ -1,0 +1,31 @@
+{
+  "id": "F2",
+  "name": "Análise Web + Relatório + Notificação Claudio",
+  "description": "Busca e analisa uma página web, gera relatório de relevância para o stack fox-server, envia resumo pelo Claudio.",
+  "difficulty": "hard",
+  "expected_turns": "8-15",
+
+  "prompt": "Você é um agente de análise técnica rodando no fox-server (servidor Linux com Ollama, n8n, Docker, agentes IA).\n\nSua tarefa:\n1. Acesse a URL: {target_url}\n   Use http_get para buscar o conteúdo da página.\n2. Analise o conteúdo com foco em: tecnologias mencionadas, ferramentas de IA/agentes, integrações, casos de uso.\n3. Gere um relatório de relevância para o nosso stack (Ollama local, agentes Go/Python, n8n, Qdrant, Docker).\n   O relatório deve ter as seções:\n   - RESUMO (2-3 frases)\n   - TECNOLOGIAS IDENTIFICADAS (lista)\n   - RELEVÂNCIA PARA O STACK (Alta/Média/Baixa + justificativa)\n   - OPORTUNIDADES (o que podemos aproveitar ou adaptar)\n   - CONCLUSÃO\n4. Salve o relatório em './relatorio-{model_slug}.md' usando write_file.\n5. Envie uma mensagem pelo Claudio com: o título da página, a classificação de relevância e o primeiro parágrafo do relatório.\n   Use send_claudio com a mensagem formatada em Markdown.\n6. Responda com: 'ANÁLISE CONCLUÍDA: relevância=[Alta/Média/Baixa], relatório salvo, Claudio notificado.'",
+
+  "prompt_vars": {
+    "target_url": "https://github.com/n8n-io/n8n"
+  },
+
+  "auto_checks": [
+    {"type": "tool_called",       "label": "buscou a URL (http_get)",      "tool": "http_get",      "weight": 2},
+    {"type": "file_exists",       "label": "relatório criado (.md)",       "path": "relatorio-{model_slug}.md", "weight": 2},
+    {"type": "file_contains",     "label": "relatório tem RESUMO",         "path": "relatorio-{model_slug}.md", "needle": "RESUMO",        "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem RELEVÂNCIA",     "path": "relatorio-{model_slug}.md", "needle": "RELEV",         "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem OPORTUNIDADES",  "path": "relatorio-{model_slug}.md", "needle": "OPORTUNIDADES", "weight": 1},
+    {"type": "tool_called",       "label": "enviou pelo Claudio",          "tool": "send_claudio",  "weight": 2},
+    {"type": "response_contains", "label": "confirmou conclusão",          "needle": "ANÁLISE CONCLUÍDA", "weight": 1},
+    {"type": "no_error",          "label": "sem erro de API",                                       "weight": 1}
+  ],
+
+  "judge_rubric": {
+    "content_extraction": "O agente extraiu informações relevantes da página? (0-4)",
+    "analysis_depth":     "A análise é profunda e específica ou genérica? (0-4)",
+    "relevance_accuracy": "A classificação de relevância para o stack é correta? (0-4)",
+    "report_structure":   "O relatório tem todas as seções e é bem escrito? (0-4)"
+  }
+}
