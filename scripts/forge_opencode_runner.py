@@ -83,12 +83,13 @@ def run_opencode_agent(prompt: str, workdir: Path,
                     tok_total += part.get("tokens", {}).get("total", 0)
                     print(".", end="", flush=True)
 
-                elif etype in ("tool_use", "tool_call"):
+                elif etype == "tool_use":
+                    state = part.get("state", {})
                     tool_calls_log.append({
                         "turn":   turns,
-                        "name":   part.get("tool", part.get("name", "?")),
-                        "args":   part.get("input", {}),
-                        "result": "",
+                        "name":   part.get("tool", "?"),
+                        "args":   state.get("input", {}),
+                        "result": str(state.get("output", ""))[:200],
                     })
 
             except (json.JSONDecodeError, KeyError):
