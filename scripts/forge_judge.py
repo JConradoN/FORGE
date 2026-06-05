@@ -1,158 +1,192 @@
 """
-FORGE Judge — avalia resultados com gemma4:26b (LLM-judge) e gera placeholder para Claude.
+FORGE Judge — avalia artefatos com LLM-judge e gera scores de qualidade.
+
+Modos:
+  Artefato específico (artifact_judge no cenário):
+    Lê o arquivo do workdir + TASK.md, avalia por rubrica de qualidade.
+
+  Resposta final (judge_rubric no cenário, legado):
+    Avalia final_response + tool_calls_log.
 
 Uso:
-    python3 forge_judge.py results/F1/gemma4-26b/F1-gemma4-26b-2026-06-04.json
-    python3 forge_judge.py results/F1/          # avalia todos no diretório
+    python3 forge_judge.py results/F5/qwen3.5-9b/F5-qwen3.5-9b-2026-06-05-run1.json
+    python3 forge_judge.py results/F5/           # avalia todos no diretório
+    python3 forge_judge.py results/F5/ --model qwen3.5:9b
 """
 
 import argparse
 import json
 import urllib.request
-import urllib.error
 from pathlib import Path
 
-OLLAMA_URL   = "http://localhost:11434/api/chat"
-JUDGE_MODEL  = "gemma4:26b"
+OLLAMA_URL  = "http://localhost:11434/api/chat"
+JUDGE_MODEL = "qwen3.5:9b"   # modelo padrão do judge — diferente do testado
 
-JUDGE_SYSTEM = """Você é um avaliador técnico rigoroso de agentes de IA.
-Avalie a qualidade do trabalho realizado pelo agente seguindo a rubrica fornecida.
-Para cada critério, atribua uma nota de 0 a 4:
-  0 = não realizou / completamente errado
-  1 = tentou mas falhou na maior parte
-  2 = parcialmente correto, falhas significativas
-  3 = bom, falhas menores
-  4 = excelente, completo e correto
+JUDGE_SYSTEM = """Você é um avaliador técnico rigoroso de code reviews produzidos por agentes de IA.
+Avalie objetivamente o artefato fornecido usando a rubrica dada.
+Para cada critério, atribua uma nota inteira de 0 a 3:
+  0 = ausente ou completamente inadequado
+  1 = tentativa insatisfatória, lacunas sérias
+  2 = satisfatório com falhas menores
+  3 = excelente, critério plenamente atendido
 
-Seja objetivo e específico. Baseie sua avaliação apenas no que está presente no output do agente.
-Responda APENAS com um JSON válido no formato:
+Baseie a avaliação APENAS no conteúdo do artefato. Seja específico nas justificativas.
+Responda APENAS com JSON válido, sem texto fora do JSON:
 {
-  "scores": {"criterio1": nota, "criterio2": nota, ...},
-  "avg": media_calculada,
-  "justificativas": {"criterio1": "texto curto", ...}
+  "scores": {"criterio1": 0-3, "criterio2": 0-3, ...},
+  "total": soma_dos_scores,
+  "max": total_possivel,
+  "pct": percentual_inteiro,
+  "justificativas": {"criterio1": "uma frase objetiva", ...}
 }"""
 
 
-def call_judge(content: str, rubric: dict) -> dict | None:
-    rubric_text = "\n".join(f"- {k}: {v}" for k, v in rubric.items())
-    prompt = f"""Avalie o seguinte output de um agente de IA.
+def call_judge(task_context: str, artifact_content: str,
+               rubric: dict, model: str) -> dict | None:
+    rubric_text = "\n".join(
+        f"- {k} (0-3): {v}" for k, v in rubric.items()
+    )
+    max_score = len(rubric) * 3
 
-RUBRICA DE AVALIAÇÃO:
-{rubric_text}
-
-OUTPUT DO AGENTE (resposta final):
-{content[:3000]}
-
-Atribua notas 0-4 para cada critério da rubrica e calcule a média."""
+    prompt = (
+        f"CONTEXTO DA TAREFA (TASK.md):\n{task_context[:2000]}\n\n"
+        f"ARTEFATO A AVALIAR:\n{artifact_content[:8000]}\n\n"
+        f"RUBRICA (escala 0-3 por critério, total máximo {max_score}):\n"
+        f"{rubric_text}\n\n"
+        f"Avalie o artefato e responda em JSON."
+    )
 
     payload = {
-        "model":   JUDGE_MODEL,
+        "model":    model,
         "messages": [
-            {"role": "system",  "content": JUDGE_SYSTEM},
-            {"role": "user",    "content": prompt}
+            {"role": "system", "content": JUDGE_SYSTEM},
+            {"role": "user",   "content": prompt},
         ],
         "stream":  False,
         "think":   False,
-        "options": {"temperature": 0}
+        "options": {"temperature": 0},
     }
     try:
         data = json.dumps(payload).encode()
-        req  = urllib.request.Request(OLLAMA_URL, data=data,
-                                       headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=120) as r:
-            resp    = json.loads(r.read())
-            content = resp.get("message", {}).get("content", "")
-            # Extrair JSON da resposta
-            start = content.find("{")
-            end   = content.rfind("}") + 1
+        req  = urllib.request.Request(
+            OLLAMA_URL, data=data,
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=180) as r:
+            raw     = json.loads(r.read())
+            content = raw.get("message", {}).get("content", "")
+            start   = content.find("{")
+            end     = content.rfind("}") + 1
             if start >= 0 and end > start:
-                return json.loads(content[start:end])
+                result = json.loads(content[start:end])
+                # Garantir campos calculados
+                scores = result.get("scores", {})
+                total  = sum(scores.values())
+                result["total"] = total
+                result["max"]   = max_score
+                result["pct"]   = round(total / max_score * 100) if max_score else 0
+                return result
     except Exception as e:
         print(f"  [judge] ERRO: {e}")
     return None
 
 
-def evaluate_file(path: Path):
-    data = json.loads(path.read_text())
+def evaluate_file(result_path: Path, model: str = JUDGE_MODEL):
+    data = json.loads(result_path.read_text())
 
-    if data.get("llm_judge_score") is not None:
-        print(f"  já avaliado: {path.name}")
-        return
-
-    scenario_id = data.get("scenario", "")
+    scenario_id   = data.get("scenario", "")
     scenario_path = Path(__file__).parent.parent / "scenarios" / f"{scenario_id}.json"
     if not scenario_path.exists():
         print(f"  cenário não encontrado: {scenario_id}")
         return
 
     scenario = json.loads(scenario_path.read_text())
-    rubric   = scenario.get("judge_rubric", {})
 
-    if not rubric:
-        print(f"  sem rubrica definida para {scenario_id}")
-        return
+    # Determina workdir a partir do path do resultado
+    workdir = result_path.parent / "workdir"
 
-    print(f"  avaliando {path.name} com {JUDGE_MODEL}...")
-    content = data.get("final_response", "") + "\n\n" + str(data.get("tool_calls_log", ""))
-    result  = call_judge(content, rubric)
+    # ── Avaliação de artefatos específicos ───────────────────────
+    artifact_judge = scenario.get("artifact_judge", {})
+    artifact_results = data.get("artifact_judge_scores", {})
 
-    if result:
-        scores = result.get("scores", {})
-        avg    = result.get("avg") or (sum(scores.values()) / len(scores) if scores else None)
-        data["llm_judge_score"]       = round(avg, 2) if avg else None
-        data["llm_judge_scores"]      = scores
-        data["llm_judge_justificativas"] = result.get("justificativas", {})
-        data["llm_judge_model"]       = JUDGE_MODEL
-        print(f"  LLM-judge score: {data['llm_judge_score']} | {scores}")
-    else:
-        print(f"  LLM-judge falhou — score não atribuído")
+    for artifact_name, spec in artifact_judge.items():
+        if artifact_name in artifact_results:
+            print(f"  [{artifact_name}] já avaliado — pulando")
+            continue
 
-    # Placeholder Claude score (para preenchimento manual ou via Claude)
-    if data.get("claude_score") is None:
-        data["claude_score"] = None
-        data["claude_notes"] = "(pendente — executar forge_claude_eval.py)"
+        artifact_path = workdir / artifact_name
+        if not artifact_path.exists():
+            print(f"  [{artifact_name}] arquivo não encontrado no workdir — pulando")
+            artifact_results[artifact_name] = {"error": "arquivo não encontrado"}
+            continue
 
-    # Calcular composite se tiver todos os scores
-    scores_avail = [
-        v for v in [
-            data.get("llm_judge_score"),
-            data.get("claude_score"),
-            data.get("human_score")
-        ] if v is not None
-    ]
-    if scores_avail:
-        # Pesos: auto=30%, llm_judge=30%, claude=20%, human=20%
-        auto_pct = data.get("auto_pct", 0) / 100 * 4  # converter % para 0-4
-        weights  = []
-        vals     = []
-        vals.append(auto_pct);                      weights.append(0.30)
-        if data.get("llm_judge_score") is not None:
-            vals.append(data["llm_judge_score"]);   weights.append(0.30)
-        if data.get("claude_score") is not None:
-            vals.append(data["claude_score"]);      weights.append(0.20)
-        if data.get("human_score") is not None:
-            vals.append(data["human_score"]);       weights.append(0.20)
-        total_w = sum(weights)
-        composite = sum(v * w for v, w in zip(vals, weights)) / total_w
-        data["composite_score"] = round(composite, 2)
+        # Contexto da tarefa (TASK.md se disponível)
+        context_file = spec.get("context_file", "TASK.md")
+        task_context = ""
+        ctx_path = workdir / context_file
+        if ctx_path.exists():
+            task_context = ctx_path.read_text(encoding="utf-8")
 
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
-    print(f"  salvo: {path}")
+        artifact_content = artifact_path.read_text(encoding="utf-8")
+        rubric           = spec.get("rubric", {})
+
+        print(f"  [{artifact_name}] avaliando com {model} "
+              f"({len(artifact_content)} chars, {len(rubric)} critérios)...")
+
+        result = call_judge(task_context, artifact_content, rubric, model)
+        if result:
+            artifact_results[artifact_name] = {
+                "model":          model,
+                "scores":         result["scores"],
+                "total":          result["total"],
+                "max":            result["max"],
+                "pct":            result["pct"],
+                "justificativas": result.get("justificativas", {}),
+            }
+            print(f"  [{artifact_name}] score: {result['total']}/{result['max']} "
+                  f"({result['pct']}%) | {result['scores']}")
+        else:
+            artifact_results[artifact_name] = {"error": "judge falhou"}
+            print(f"  [{artifact_name}] judge falhou")
+
+    if artifact_results:
+        data["artifact_judge_scores"] = artifact_results
+
+    # ── Avaliação legada: final_response via judge_rubric ────────
+    rubric_legacy = scenario.get("judge_rubric", {})
+    if rubric_legacy and data.get("llm_judge_score") is None:
+        print(f"  [legado] avaliando final_response com judge_rubric...")
+        content = (data.get("final_response", "") + "\n\n"
+                   + str(data.get("tool_calls_log", "")))
+        result = call_judge("", content, rubric_legacy, model)
+        if result:
+            data["llm_judge_score"]          = result["pct"] / 100 * 4  # converter para 0-4
+            data["llm_judge_scores"]         = result["scores"]
+            data["llm_judge_justificativas"] = result.get("justificativas", {})
+            data["llm_judge_model"]          = model
+
+    result_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+    print(f"  salvo: {result_path.name}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="FORGE LLM-judge evaluator")
+    parser = argparse.ArgumentParser(description="FORGE LLM-judge — avalia artefatos")
     parser.add_argument("target", help="Arquivo .json ou diretório de resultados")
+    parser.add_argument("--model", default=JUDGE_MODEL,
+                        help=f"Modelo Ollama para o judge (default: {JUDGE_MODEL})")
     args = parser.parse_args()
 
     target = Path(args.target)
-    if target.is_dir():
-        files = sorted(target.rglob("*.json"))
-    else:
-        files = [target]
+    files  = sorted(target.rglob("*.json")) if target.is_dir() else [target]
+    files  = [f for f in files if "workdir" not in str(f)]
+
+    print(f"\nFORGE Judge — modelo: {args.model}")
+    print(f"Arquivos: {len(files)}\n")
 
     for f in files:
-        evaluate_file(f)
+        print(f"→ {f.relative_to(Path(__file__).parent.parent)}")
+        evaluate_file(f, model=args.model)
+        print()
 
 
 if __name__ == "__main__":

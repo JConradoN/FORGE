@@ -54,6 +54,20 @@
     "report_quality":      "O quality_report.md reflete fielmente o que foi feito (não marca como feito o que não foi)? (0-4)"
   },
 
+  "artifact_judge": {
+    "code_review.md": {
+      "context_file": "TASK.md",
+      "scale": "0-3",
+      "rubric": {
+        "cobertura":      "Todos os arquivos mencionados no TASK.md foram analisados com pelo menos 2 problemas identificados por arquivo?",
+        "profundidade":   "Cada problema tem: localização precisa (linha/função), causa raiz, impacto real no sistema e correção concreta?",
+        "precisao":       "Os problemas identificados são reais e relevantes? Sem falsos positivos óbvios ou trivialidades de estilo?",
+        "priorizacao":    "As prioridades Alta/Média/Baixa são razoáveis e justificadas com base no impacto descrito?",
+        "acionabilidade": "As correções propostas são específicas, implementáveis e sem ambiguidade — um dev pode aplicá-las sem pesquisa adicional?"
+      }
+    }
+  },
+
   "reference": {
     "source": "Igor Chaves — AVALIACAO_MODELO_2026-05-25.md + avaliacao-gemma4-ollama-tailscale.md (/mnt/vault/TEMP/IGOR/)",
     "methodology": "Code review + implementação em codebase real. Avaliação por arquivo, dimensão e fidelidade dos relatórios."
