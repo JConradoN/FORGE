@@ -34,9 +34,10 @@ from pathlib import Path
 OLLAMA_URL    = "http://localhost:11434/api/chat"
 RESULTS_BASE   = Path(__file__).parent.parent / "results"
 SCENARIOS_BASE = Path(__file__).parent.parent / "scenarios"
-MAX_TURNS     = 20
-TIMEOUT_S     = 300
-TEMPERATURE   = 0
+MAX_TURNS      = 20
+TIMEOUT_S      = 300   # timeout para comandos bash (run_bash)
+OLLAMA_TIMEOUT = 900   # timeout por chamada à API Ollama (15min — cobre modelos 27B+)
+TEMPERATURE    = 0
 HTTP_MAX_CHARS = 4000   # truncamento de respostas HTTP para evitar context overflow
 
 # Blocklist de comandos destrutivos para run_bash
@@ -440,7 +441,7 @@ def call_ollama(model: str, messages: list) -> dict:
         headers={"Content-Type": "application/json"}
     )
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT_S) as r:
+        with urllib.request.urlopen(req, timeout=OLLAMA_TIMEOUT) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()[:300]
@@ -462,8 +463,33 @@ def extract_tool_calls(resp: dict) -> list:
     return calls
 
 
+def build_reflection_prompt(scenario: dict, workdir: Path, slug: str) -> str | None:
+    """Verifica artefatos file_exists ausentes e constrói prompt de autocrítica.
+    Retorna None se todos os artefatos obrigatórios já existem."""
+    missing = []
+    for label, check in scenario.get("checks", {}).items():
+        if check.get("type") != "file_exists":
+            continue
+        path_tpl = check.get("path", "")
+        path_str = path_tpl.replace("{model_slug}", slug)
+        if not (workdir / path_str).exists():
+            missing.append(path_str)
+
+    if not missing:
+        return None
+
+    lista = "\n".join(f"  - {f}" for f in missing)
+    return (
+        f"VERIFICAÇÃO DO HARNESS: Os seguintes artefatos ainda não foram criados:\n"
+        f"{lista}\n\n"
+        f"Por favor, crie agora esses arquivos para completar a tarefa. "
+        f"Use write_file para cada um deles."
+    )
+
+
 # ── Loop principal do agente ──────────────────────────────────
 def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
+              scenario: dict | None = None,
               read_max_chars: int | None = None) -> dict:
     messages       = [{"role": "user", "content": prompt}]
     t_start        = time.time()
@@ -472,7 +498,10 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
     final_response = ""
     error          = None
     tok_total      = 0
-    cleanup_ports  = []   # Fix CLEANUP: portas a encerrar após o run
+    cleanup_ports  = []
+    reflected      = False   # flag: turno de reflexão já foi injetado
+
+    slug = model.replace(":", "-").replace("/", "_")
 
     print(f"\n  [agente] iniciando loop (max {MAX_TURNS} turns)")
 
@@ -494,6 +523,16 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
             tc_list   = extract_tool_calls(resp)
 
             if not tc_list:
+                # Tentar reflexão uma única vez antes de encerrar
+                if not reflected and scenario and turns < MAX_TURNS - 1:
+                    reflection = build_reflection_prompt(scenario, workdir, slug)
+                    if reflection:
+                        print(f"resposta parcial ({len(content)} chars) → [reflexão]")
+                        messages.append({"role": "assistant", "content": content})
+                        messages.append({"role": "user",      "content": reflection})
+                        reflected = True
+                        continue
+
                 final_response = content
                 print(f"resposta final ({len(content)} chars)")
                 messages.append({"role": "assistant", "content": content})
@@ -540,6 +579,7 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
         "tok_total":      tok_total,
         "loop_exhausted": turns >= MAX_TURNS and not final_response,
         "cleanup_ports":  cleanup_ports,
+        "reflected":      reflected,
     }
 
 
@@ -854,6 +894,7 @@ def main():
 
             read_max = scenario.get("read_max_chars")
             agent_result = run_agent(model, sid, prompt, workdir,
+                                     scenario=scenario,
                                      read_max_chars=read_max)
             auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug,
                                          extra_vars={"port": port})
@@ -863,7 +904,8 @@ def main():
             run_summaries.append({**auto_eval, "error": agent_result["error"],
                                    "loop_exhausted": agent_result["loop_exhausted"]})
 
-            print(f"\n  Auto score : {auto_eval['score']}/{auto_eval['max_score']} ({auto_eval['pct']}%)")
+            reflected_tag = " [com reflexão]" if agent_result.get("reflected") else ""
+            print(f"\n  Auto score : {auto_eval['score']}/{auto_eval['max_score']} ({auto_eval['pct']}%){reflected_tag}")
             for label, c in auto_eval["checks"].items():
                 mark = "✓" if c["passed"] else "✗"
                 print(f"    {mark} {label}: {c['detail']}")
