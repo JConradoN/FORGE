@@ -544,6 +544,40 @@ def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str) 
             passed = needle.lower() in agent_result["final_response"].lower()
             detail = f"'{needle}' {'encontrado' if passed else 'NÃO encontrado'} na resposta final"
 
+        elif ctype == "file_size_min":
+            path_resolved = _resolve(check["path"])
+            p   = workdir / path_resolved
+            min_bytes = check["min_bytes"]
+            if p.exists():
+                size   = p.stat().st_size
+                passed = size >= min_bytes
+                detail = f"{path_resolved}: {size} bytes ({'≥' if passed else '<'} {min_bytes})"
+            else:
+                detail = f"arquivo não encontrado: {path_resolved}"
+
+        elif ctype == "file_contains_count":
+            path_resolved = _resolve(check["path"])
+            p         = workdir / path_resolved
+            needle    = check["needle"]
+            min_count = check.get("min_count", 1)
+            if p.exists():
+                content = p.read_text(errors="replace")
+                count   = content.lower().count(needle.lower())
+                passed  = count >= min_count
+                detail  = f"'{needle}' aparece {count}x em {path_resolved} (mín {min_count})"
+            else:
+                detail = f"arquivo não encontrado: {path_resolved}"
+
+        elif ctype == "port_open":
+            import socket
+            port = int(_resolve(str(check["port"])))
+            try:
+                with socket.create_connection(("localhost", port), timeout=3):
+                    passed = True
+                    detail = f"porta {port} aberta"
+            except OSError:
+                detail = f"porta {port} fechada"
+
         elif ctype == "no_error":
             passed = agent_result["error"] is None
             detail = agent_result["error"] or "sem erro"

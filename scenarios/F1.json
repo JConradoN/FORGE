@@ -1,42 +1,56 @@
 {
   "id": "F1",
-  "name": "Web — Página Imobiliária Completa",
-  "description": "Gera uma página HTML/CSS completa para uma agência imobiliária, sobe um servidor web e verifica que está acessível.",
-  "difficulty": "medium",
-  "expected_turns": "5-10",
+  "name": "Web — Agência Imobiliária (full-stack frontend)",
+  "description": "Cria um site imobiliário com dados em JSON separado, filtro interativo JS, design com paleta definida, responsividade real e servidor ativo. Mede planejamento multi-arquivo, JS funcional e fidelidade a spec.",
+  "difficulty": "hard",
+  "expected_turns": "8-15",
+  "version": 2,
+  "supersedes": "F1-v1.json",
 
-  "prompt": "Você é um agente de desenvolvimento web rodando em um servidor Linux.\n\nSua tarefa:\n1. Crie uma página web completa em HTML e CSS para uma agência imobiliária chamada 'Casa Certa Imóveis'.\n   - A página deve ter: header com logo e navegação, seção hero com chamada para ação, grade de pelo menos 3 imóveis com foto placeholder (pode usar placehold.co), seção 'Sobre Nós', formulário de contato, footer.\n   - O CSS deve estar inline na própria página (um único arquivo index.html).\n   - O design deve ser profissional e responsivo.\n2. Salve a página em './index.html' usando a ferramenta write_file.\n3. Inicie um servidor HTTP simples na porta {port} para servir a página.\n   Use: python3 -m http.server {port} --directory . &\n   Aguarde 2 segundos e verifique que o servidor está rodando com: curl -s -o /dev/null -w '%{{http_code}}' http://localhost:{port}/\n4. Confirme que a página está acessível respondendo com: 'PÁGINA PUBLICADA: http://localhost:{port}/'",
+  "prompt": "Você é um agente de desenvolvimento web rodando em um servidor Linux.\n\nSua tarefa é criar um site imobiliário completo e funcional em dois arquivos.\n\n## Especificação\n\n### 1. Arquivo de dados: `imoveis.json`\nCrie um JSON com exatamente 6 imóveis. Cada imóvel deve ter os campos:\n  id, tipo (um de: Apartamento, Casa, Terreno), titulo, endereco, preco (número), area_m2, quartos, foto (use https://placehold.co/400x300)\n\nDistribuição mínima: 2 Apartamentos, 2 Casas, 2 Terrenos.\n\n### 2. Página principal: `index.html`\nCrie um HTML completo e auto-contido que:\n\n**Design:**\n- Paleta obrigatória: primária `#1B4332`, secundária `#40916C`, fundo claro `#D8F3DC`, texto escuro `#081C15`\n- Tipografia: fonte do Google Fonts (qualquer sans-serif moderna)\n- Layout responsivo com breakpoint em 768px\n- Mobile: hamburger menu que abre/fecha navegação\n\n**Seções obrigatórias (com IDs):**\n- `id=\"hero\"` — hero com headline forte e CTA\n- `id=\"imoveis\"` — grade de imóveis carregados do `imoveis.json` via `fetch()`\n- `id=\"sobre\"` — seção Sobre Nós da agência 'Casa Certa Imóveis'\n- `id=\"contato\"` — formulário de contato\n\n**JavaScript obrigatório:**\n- `fetch('./imoveis.json')` para carregar os dados (não hardcode o array no HTML)\n- Botões de filtro por tipo: `[Todos] [Apartamento] [Casa] [Terreno]`\n- Formulário com validação: nome obrigatório, e-mail com formato válido, mensagem obrigatória; exibir erro inline se inválido\n\n**Responsividade:**\n- `@media (max-width: 768px)` para grid de imóveis (1 coluna) e menu mobile\n\n### 3. Servidor e verificação\n- Inicie: `nohup python3 -m http.server {port} --directory . > /dev/null 2>&1 &`\n- Aguarde 2 segundos\n- Verifique: `curl -s -o /dev/null -w '%{{http_code}}' http://localhost:{port}/`\n- Confirme com: `PÁGINA PUBLICADA: http://localhost:{port}/`\n\n## Ordem de execução\n1. Escreva `imoveis.json`\n2. Escreva `index.html`\n3. Suba o servidor\n4. Verifique e confirme",
 
   "prompt_vars": {},
 
-  "aurelia_prompt": "Preciso que você crie e publique uma página web completa.\n\n1. Crie uma página HTML+CSS profissional para a agência imobiliária 'Casa Certa Imóveis'. A página deve ter: header com logo e navegação, seção hero com chamada para ação, grade de pelo menos 3 imóveis com imagens placeholder (use https://placehold.co/400x300), seção 'Sobre Nós', formulário de contato e footer. Todo o CSS deve estar na própria página, responsivo.\n\n2. Salve o arquivo em: {workdir}/index.html\n\n3. Inicie um servidor web na porta {port} servindo esse diretório. Use: nohup python3 -m http.server {port} --directory {workdir} > /dev/null 2>&1 &\n   Aguarde 2 segundos e verifique: curl -s -o /dev/null -w '%{{http_code}}' http://localhost:{port}/\n\n4. Quando a página estiver acessível, responda com: PÁGINA PUBLICADA: http://localhost:{port}/",
+  "aurelia_prompt": "Preciso de um site imobiliário completo, com dados em arquivo separado e filtro interativo.\n\n## O que criar\n\n### Arquivo 1: `{workdir}/imoveis.json`\nJSON com exatamente 6 imóveis, cada um com: id, tipo (Apartamento/Casa/Terreno), titulo, endereco, preco, area_m2, quartos, foto (https://placehold.co/400x300). Mínimo: 2 Apartamentos, 2 Casas, 2 Terrenos.\n\n### Arquivo 2: `{workdir}/index.html`\nSite completo da agência **Casa Certa Imóveis** com:\n\n**Design obrigatório:**\n- Paleta: primária `#1B4332`, secundária `#40916C`, fundo `#D8F3DC`, texto `#081C15`\n- Google Fonts (qualquer sans-serif moderna)\n- Responsivo com breakpoint 768px + hamburger menu mobile\n\n**Seções (com IDs):** `#hero`, `#imoveis`, `#sobre`, `#contato`\n\n**JavaScript obrigatório:**\n- Carregue os imóveis via `fetch('./imoveis.json')` (não hardcode)\n- Botões de filtro: Todos / Apartamento / Casa / Terreno\n- Validação do formulário: nome obrigatório, e-mail com formato válido, mensagem obrigatória; erro inline\n\n**CSS:** `@media (max-width: 768px)` para grid e menu mobile\n\n## Depois de criar os dois arquivos\nInicie um servidor HTTP na porta {port}:\n```\nnohup python3 -m http.server {port} --directory {workdir} > /dev/null 2>&1 &\n```\nAguarde 2s, verifique com curl e responda: **PÁGINA PUBLICADA: http://localhost:{port}/**",
 
   "aurelia_auto_checks": [
-    {"type": "file_exists",       "label": "index.html criado",     "path": "index.html",  "weight": 2},
-    {"type": "file_contains",     "label": "contém 'Casa Certa'",   "path": "index.html",  "needle": "Casa Certa", "weight": 1},
-    {"type": "file_contains",     "label": "contém tag <html>",     "path": "index.html",  "needle": "<html",      "weight": 1},
-    {"type": "file_contains",     "label": "contém CSS",            "path": "index.html",  "needle": "<style",     "weight": 1},
-    {"type": "file_contains",     "label": "contém formulário",     "path": "index.html",  "needle": "<form",      "weight": 1},
-    {"type": "response_contains", "label": "confirmou publicação",  "needle": "PÁGINA PUBLICADA", "weight": 2},
-    {"type": "no_error",          "label": "sem erro de API",                               "weight": 1}
+    {"type": "file_exists",          "label": "index.html criado",        "path": "index.html",                            "weight": 2},
+    {"type": "file_exists",          "label": "imoveis.json criado",      "path": "imoveis.json",                          "weight": 3},
+    {"type": "file_contains",        "label": "carrega JSON via fetch",   "path": "index.html",  "needle": "fetch(",       "weight": 3},
+    {"type": "file_contains",        "label": "botões de filtro",         "path": "index.html",  "needle": "Apartamento",  "weight": 2},
+    {"type": "file_contains",        "label": "paleta #1B4332",           "path": "index.html",  "needle": "#1B4332",      "weight": 1},
+    {"type": "file_contains",        "label": "media query 768px",        "path": "index.html",  "needle": "768px",        "weight": 2},
+    {"type": "file_contains",        "label": "validação de formulário",  "path": "index.html",  "needle": "validity",     "weight": 2},
+    {"type": "file_contains_count",  "label": "6 fotos placehold.co",     "path": "imoveis.json","needle": "placehold.co", "min_count": 6, "weight": 2},
+    {"type": "file_size_min",        "label": "index.html > 15 KB",       "path": "index.html",  "min_bytes": 15000,       "weight": 2},
+    {"type": "http_ok",              "label": "servidor respondendo",     "url": "http://localhost:{port}/",                "weight": 3},
+    {"type": "response_contains",    "label": "confirmou publicação",     "needle": "PÁGINA PUBLICADA",                    "weight": 1},
+    {"type": "no_error",             "label": "sem erro de API",                                                            "weight": 1}
   ],
 
   "auto_checks": [
-    {"type": "file_exists",    "label": "index.html criado",          "path": "index.html",         "weight": 2},
-    {"type": "file_contains",  "label": "contém 'Casa Certa'",        "path": "index.html", "needle": "Casa Certa", "weight": 1},
-    {"type": "file_contains",  "label": "contém tag <html>",          "path": "index.html", "needle": "<html",      "weight": 1},
-    {"type": "file_contains",  "label": "contém CSS",                 "path": "index.html", "needle": "<style",     "weight": 1},
-    {"type": "file_contains",  "label": "contém formulário",          "path": "index.html", "needle": "<form",      "weight": 1},
-    {"type": "tool_called",    "label": "usou write_file",            "tool": "write_file",          "weight": 1},
-    {"type": "tool_called",    "label": "usou run_bash",              "tool": "run_bash",             "weight": 1},
-    {"type": "response_contains", "label": "confirmou publicação",    "needle": "PÁGINA PUBLICADA",  "weight": 1},
-    {"type": "no_error",       "label": "sem erro de API",                                            "weight": 1}
+    {"type": "file_exists",          "label": "index.html criado",        "path": "index.html",                            "weight": 2},
+    {"type": "file_exists",          "label": "imoveis.json criado",      "path": "imoveis.json",                          "weight": 3},
+    {"type": "file_contains",        "label": "carrega JSON via fetch",   "path": "index.html",  "needle": "fetch(",       "weight": 3},
+    {"type": "file_contains",        "label": "botões de filtro",         "path": "index.html",  "needle": "Apartamento",  "weight": 2},
+    {"type": "file_contains",        "label": "paleta #1B4332",           "path": "index.html",  "needle": "#1B4332",      "weight": 1},
+    {"type": "file_contains",        "label": "media query 768px",        "path": "index.html",  "needle": "768px",        "weight": 2},
+    {"type": "file_contains",        "label": "validação de formulário",  "path": "index.html",  "needle": "validity",     "weight": 2},
+    {"type": "file_contains_count",  "label": "6 fotos placehold.co",     "path": "imoveis.json","needle": "placehold.co", "min_count": 6, "weight": 2},
+    {"type": "file_size_min",        "label": "index.html > 15 KB",       "path": "index.html",  "min_bytes": 15000,       "weight": 2},
+    {"type": "port_open",            "label": "servidor na porta {port}", "port": "{port}",                                "weight": 3},
+    {"type": "tool_called",          "label": "usou write_file",          "tool": "write_file",                            "weight": 1},
+    {"type": "tool_called",          "label": "usou run_bash",            "tool": "run_bash",                              "weight": 1},
+    {"type": "response_contains",    "label": "confirmou publicação",     "needle": "PÁGINA PUBLICADA",                    "weight": 1},
+    {"type": "no_error",             "label": "sem erro de API",                                                            "weight": 1}
   ],
 
   "judge_rubric": {
-    "completeness": "A página tem todas as seções pedidas? (0-4)",
-    "html_quality": "O HTML é semântico e bem estruturado? (0-4)",
-    "css_quality":  "O CSS é limpo, responsivo, tem algum design intencional? (0-4)",
-    "aesthetic":    "AVALIAÇÃO HUMANA — O design parece profissional? (0-4)"
+    "data_architecture": "O imoveis.json tem estrutura completa e consistente? fetch() carrega e renderiza corretamente? (0-4)",
+    "filter_functionality": "O filtro por tipo funciona? Mostra/oculta cards corretamente? Estado ativo nos botões? (0-4)",
+    "form_validation": "A validação do formulário mostra erros inline? Cobre todos os campos exigidos? (0-4)",
+    "design_fidelity": "A paleta #1B4332/#40916C/#D8F3DC foi aplicada coerentemente? Tipografia intencional? (0-4)",
+    "responsive_quality": "O layout 768px funciona? Hamburger menu abre/fecha? Grid de 1 coluna no mobile? (0-4)",
+    "aesthetic": "AVALIAÇÃO HUMANA — O resultado parece um produto real, não um template genérico? (0-4)"
   }
 }
