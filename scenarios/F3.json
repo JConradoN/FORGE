@@ -9,6 +9,19 @@
 
   "prompt_vars": {},
   "_fixture_note": "Snapshot 2026-06-04. Usar --mock para reproducibilidade entre runs.",
+
+  "aurelia_prompt": "Preciso de uma análise de mercado atualizada.\n\n1. Busque as cotações atuais de:\n   - Dólar: curl 'https://economia.awesomeapi.com.br/json/last/USD-BRL'\n   - Euro: curl 'https://economia.awesomeapi.com.br/json/last/EUR-BRL'\n   - Bitcoin: curl 'https://economia.awesomeapi.com.br/json/last/BTC-BRL'\n   - Ethereum: curl 'https://economia.awesomeapi.com.br/json/last/ETH-BRL'\n   Para cada um, extraia: bid (compra), ask (venda), pctChange (variação %).\n\n2. Busque o histórico de 7 dias do dólar:\n   curl 'https://economia.awesomeapi.com.br/json/daily/USD-BRL/7'\n   Identifique a tendência: alta, queda ou estável.\n\n3. Gere um relatório com:\n   - COTAÇÕES ATUAIS (tabela com as 4 moedas)\n   - TENDÊNCIA DO DÓLAR (baseada no histórico de 7 dias)\n   - ANÁLISE DE VOLATILIDADE (comparação de variação % entre ativos)\n   - RECOMENDAÇÃO (uma frase por ativo: comprar/vender/aguardar)\n   - DATA/HORA DA ANÁLISE\n\n4. Salve em: {workdir}/analise-mercado-aurelia.md\n\n5. Me envie um resumo pelo Telegram com as cotações principais e a tendência do dólar.\n\n6. Responda com: ANÁLISE CONCLUÍDA: USD=[valor], BTC=[valor], tendência dólar=[alta/queda/estável]",
+
+  "aurelia_auto_checks": [
+    {"type": "file_exists",       "label": "relatório criado",            "path": "analise-mercado-aurelia.md", "weight": 2},
+    {"type": "file_contains",     "label": "relatório tem COTAÇÕES",      "path": "analise-mercado-aurelia.md", "needle": "COTAÇÕES",    "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem TENDÊNCIA",     "path": "analise-mercado-aurelia.md", "needle": "TEND",        "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem RECOMENDAÇÃO",  "path": "analise-mercado-aurelia.md", "needle": "RECOMEND",    "weight": 1},
+    {"type": "file_contains",     "label": "menciona USD",                "path": "analise-mercado-aurelia.md", "needle": "USD",         "weight": 1},
+    {"type": "file_contains",     "label": "menciona BTC",                "path": "analise-mercado-aurelia.md", "needle": "BTC",         "weight": 1},
+    {"type": "response_contains", "label": "confirmou conclusão",         "needle": "ANÁLISE CONCLUÍDA",        "weight": 2},
+    {"type": "no_error",          "label": "sem erro de API",                                                   "weight": 1}
+  ],
   "prompt_mock": "Você é um agente de análise financeira rodando em um servidor Linux.\n\nSua tarefa:\n1. Busque as cotações do snapshot de mercado (2026-06-04) de:\n   - Dólar (USD/BRL): use http://localhost:9900/mock/usd-brl\n   - Euro (EUR/BRL): use http://localhost:9900/mock/eur-brl\n   - Bitcoin (BTC/BRL): use http://localhost:9900/mock/btc-brl\n   - Ethereum (ETH/BRL): use http://localhost:9900/mock/eth-brl\n   Use http_get para cada URL. Extraia os campos: bid (compra), ask (venda), pctChange (variação %), timestamp.\n\n2. Busque o histórico de 7 dias para o Dólar:\n   http://localhost:9900/mock/usd-brl-7d\n   Use para identificar a tendência (alta/queda/estável).\n\n3. Gere um relatório de análise com as seções:\n   - COTAÇÕES ATUAIS (tabela com todas as 4 moedas)\n   - TENDÊNCIA DO DÓLAR (baseada no histórico de 7 dias)\n   - ANÁLISE DE VOLATILIDADE (comparar variação % entre os 4 ativos)\n   - RECOMENDAÇÃO (uma frase objetiva por ativo: momento de compra/venda/aguardar)\n   - DATA/HORA DA ANÁLISE\n\n4. Salve em './analise-mercado-{model_slug}.md' usando write_file.\n\n5. Envie um resumo via send_claudio com: as cotações principais e a tendência do dólar.\n\n6. Responda com: 'ANÁLISE CONCLUÍDA: USD=[valor], BTC=[valor], tendência dólar=[alta/queda/estável]'",
 
   "auto_checks": [

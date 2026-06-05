@@ -9,6 +9,18 @@
 
   "prompt_vars": {},
 
+  "aurelia_prompt": "Preciso que você crie e publique uma página web completa.\n\n1. Crie uma página HTML+CSS profissional para a agência imobiliária 'Casa Certa Imóveis'. A página deve ter: header com logo e navegação, seção hero com chamada para ação, grade de pelo menos 3 imóveis com imagens placeholder (use https://placehold.co/400x300), seção 'Sobre Nós', formulário de contato e footer. Todo o CSS deve estar na própria página, responsivo.\n\n2. Salve o arquivo em: {workdir}/index.html\n\n3. Inicie um servidor web na porta {port} servindo esse diretório. Use: nohup python3 -m http.server {port} --directory {workdir} > /dev/null 2>&1 &\n   Aguarde 2 segundos e verifique: curl -s -o /dev/null -w '%{{http_code}}' http://localhost:{port}/\n\n4. Quando a página estiver acessível, responda com: PÁGINA PUBLICADA: http://localhost:{port}/",
+
+  "aurelia_auto_checks": [
+    {"type": "file_exists",       "label": "index.html criado",     "path": "index.html",  "weight": 2},
+    {"type": "file_contains",     "label": "contém 'Casa Certa'",   "path": "index.html",  "needle": "Casa Certa", "weight": 1},
+    {"type": "file_contains",     "label": "contém tag <html>",     "path": "index.html",  "needle": "<html",      "weight": 1},
+    {"type": "file_contains",     "label": "contém CSS",            "path": "index.html",  "needle": "<style",     "weight": 1},
+    {"type": "file_contains",     "label": "contém formulário",     "path": "index.html",  "needle": "<form",      "weight": 1},
+    {"type": "response_contains", "label": "confirmou publicação",  "needle": "PÁGINA PUBLICADA", "weight": 2},
+    {"type": "no_error",          "label": "sem erro de API",                               "weight": 1}
+  ],
+
   "auto_checks": [
     {"type": "file_exists",    "label": "index.html criado",          "path": "index.html",         "weight": 2},
     {"type": "file_contains",  "label": "contém 'Casa Certa'",        "path": "index.html", "needle": "Casa Certa", "weight": 1},

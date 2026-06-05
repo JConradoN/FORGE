@@ -280,7 +280,8 @@ def exec_write_file(path: str, content: str, workdir: Path) -> str:
         return "[ERRO] Caminho fora do diretório de trabalho."
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(content, encoding="utf-8")
-    return f"Arquivo escrito: {path} ({len(content)} chars)"
+    # Confirmação curta — evitar injetar o conteúdo de volta no contexto
+    return f"OK: {path} ({len(content)} chars, {content.count(chr(10))+1} linhas)"
 
 
 def exec_read_file(path: str, workdir: Path) -> str:

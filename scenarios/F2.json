@@ -15,6 +15,17 @@
   },
   "_fixture_note": "Snapshot 2026-06-04. Usar --mock para reproducibilidade entre runs.",
 
+  "aurelia_prompt": "Preciso de uma análise técnica de um repositório.\n\n1. Acesse e leia o conteúdo de: {target_url}\n\n2. Analise com foco em: tecnologias usadas, capacidades de IA/agentes, integrações disponíveis, casos de uso práticos.\n\n3. Gere um relatório de relevância para o nosso stack (Ollama local, agentes Go/Python, n8n, Qdrant, Docker, fox-server) com as seções:\n   - RESUMO\n   - TECNOLOGIAS IDENTIFICADAS\n   - RELEVÂNCIA PARA O STACK (Alta/Média/Baixa + justificativa)\n   - OPORTUNIDADES\n   - CONCLUSÃO\n\n4. Salve o relatório em: {workdir}/relatorio-aurelia.md\n\n5. Me envie uma mensagem pelo Telegram com o título do projeto, a classificação de relevância e o primeiro parágrafo do relatório.\n\n6. Responda com: ANÁLISE CONCLUÍDA: relevância=[Alta/Média/Baixa], relatório salvo, Claudio notificado.",
+
+  "aurelia_auto_checks": [
+    {"type": "file_exists",       "label": "relatório criado (.md)",      "path": "relatorio-aurelia.md",  "weight": 2},
+    {"type": "file_contains",     "label": "relatório tem RESUMO",        "path": "relatorio-aurelia.md",  "needle": "RESUMO",        "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem RELEVÂNCIA",    "path": "relatorio-aurelia.md",  "needle": "RELEV",         "weight": 1},
+    {"type": "file_contains",     "label": "relatório tem OPORTUNIDADES", "path": "relatorio-aurelia.md",  "needle": "OPORTUNIDADES", "weight": 1},
+    {"type": "response_contains", "label": "confirmou conclusão",         "needle": "ANÁLISE CONCLUÍDA",   "weight": 2},
+    {"type": "no_error",          "label": "sem erro de API",                                              "weight": 1}
+  ],
+
   "auto_checks": [
     {"type": "tool_called",       "label": "buscou a URL (http_get)",      "tool": "http_get",      "weight": 2},
     {"type": "file_exists",       "label": "relatório criado (.md)",       "path": "relatorio-{model_slug}.md", "weight": 2},

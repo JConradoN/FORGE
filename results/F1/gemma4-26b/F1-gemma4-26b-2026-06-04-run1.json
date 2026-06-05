@@ -1,0 +1,105 @@
+{
+  "scenario": "F1",
+  "scenario_name": "Web — Página Imobiliária Completa",
+  "model": "gemma4:26b",
+  "run_idx": 1,
+  "date": "2026-06-04",
+  "turns": 5,
+  "tool_calls_n": 4,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 395517,
+  "tok_total": 20363,
+  "tok_per_s": 51.5,
+  "auto_score": 10,
+  "auto_max": 10,
+  "auto_pct": 100,
+  "auto_checks": {
+    "index.html criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html existe"
+    },
+    "contém 'Casa Certa'": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'Casa Certa' encontrado em index.html"
+    },
+    "contém tag <html>": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<html' encontrado em index.html"
+    },
+    "contém CSS": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<style' encontrado em index.html"
+    },
+    "contém formulário": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<form' encontrado em index.html"
+    },
+    "usou write_file": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'write_file' chamada"
+    },
+    "usou run_bash": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'run_bash' chamada"
+    },
+    "confirmou publicação": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'PÁGINA PUBLICADA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "write_file",
+      "args": {
+        "content": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Casa Certa Imóveis | Encontre seu lar ideal<",
+        "path": "index.html"
+      },
+      "result": "OK: index.html (9184 chars, 329 linhas)"
+    },
+    {
+      "turn": 2,
+      "name": "run_bash",
+      "args": {
+        "command": "python3 -m http.server 8200 --directory . & sleep 2 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8200/"
+      },
+      "result": "[ERRO] Timeout após 300s"
+    },
+    {
+      "turn": 3,
+      "name": "run_bash",
+      "args": {
+        "command": "ps aux | grep python3 | grep http.server || true\npython3 -m http.server 8200 --directory . & sleep 2 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8200/"
+      },
+      "result": "conrado  2171947  0.0  0.0   7540  2040 ?        S    20:23   0:00 bash -c fuser -k 8200/tcp || true && python3 -m http.server 8201 --directory . & sleep 5 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8201/\nconrado  2171963  0.0  0.0 113460 23028 ?        S    20:23   0:00 python3 -m http.server 8201 --directory .\nconrado  2178495  0.0  0.0 113460 23016 ?        S    20:29   0:00 python3 -m http.server 8200 --directory .\nconrado  2183855  0.0  0.0   7540  3892 ?        S    20:34  "
+    },
+    {
+      "turn": 4,
+      "name": "run_bash",
+      "args": {
+        "command": "fuser -k 8200/tcp || true && python3 -m http.server 8200 --directory . & sleep 2 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8200/"
+      },
+      "result": " 2178495200"
+    }
+  ],
+  "final_response": "PÁGINA PUBLICADA: http://localhost:8200/",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}
