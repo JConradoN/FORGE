@@ -1,0 +1,134 @@
+{
+  "scenario": "F3",
+  "scenario_name": "Inteligência de Mercado — Câmbio e Cripto",
+  "model": "qwen3.5:9b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 8,
+  "tool_calls_n": 7,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 205926,
+  "tok_total": 21286,
+  "tok_per_s": 103.4,
+  "auto_score": 13,
+  "auto_max": 13,
+  "auto_pct": 100,
+  "auto_checks": {
+    "buscou USD (http_get)": {
+      "passed": true,
+      "weight": 2,
+      "detail": "tool 'http_get' chamada"
+    },
+    "relatório criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "analise-mercado-qwen3.5-9b.md existe"
+    },
+    "relatório tem COTAÇÕES": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'COTAÇÕES' encontrado em analise-mercado-qwen3.5-9b.md"
+    },
+    "relatório tem TENDÊNCIA": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'TEND' encontrado em analise-mercado-qwen3.5-9b.md"
+    },
+    "relatório tem RECOMENDAÇÃO": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'RECOMEND' encontrado em analise-mercado-qwen3.5-9b.md"
+    },
+    "menciona USD ou dólar": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'USD' encontrado em analise-mercado-qwen3.5-9b.md"
+    },
+    "menciona BTC ou Bitcoin": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'BTC' encontrado em analise-mercado-qwen3.5-9b.md"
+    },
+    "enviou pelo Claudio": {
+      "passed": true,
+      "weight": 2,
+      "detail": "tool 'send_claudio' chamada"
+    },
+    "confirmou conclusão": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'ANÁLISE CONCLUÍDA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "http_get",
+      "args": {
+        "url": "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+      },
+      "result": "{\"USDBRL\":{\"code\":\"USD\",\"codein\":\"BRL\",\"name\":\"Dólar Americano/Real Brasileiro\",\"high\":\"5.0657\",\"low\":\"5.05579\",\"varBid\":\"0.0034\",\"pctChange\":\"0.067186\",\"bid\":\"5.0641\",\"ask\":\"5.0671\",\"timestamp\":\"1780659077\",\"create_date\":\"2026-06-05 08:31:17\"}}"
+    },
+    {
+      "turn": 2,
+      "name": "http_get",
+      "args": {
+        "url": "https://economia.awesomeapi.com.br/json/last/EUR-BRL"
+      },
+      "result": "{\"EURBRL\":{\"code\":\"EUR\",\"codein\":\"BRL\",\"name\":\"Euro/Real Brasileiro\",\"high\":\"5.89275\",\"low\":\"5.87199\",\"varBid\":\"0.017292\",\"pctChange\":\"0.294479\",\"bid\":\"5.88928\",\"ask\":\"5.90319\",\"timestamp\":\"1780658173\",\"create_date\":\"2026-06-05 08:16:13\"}}"
+    },
+    {
+      "turn": 3,
+      "name": "http_get",
+      "args": {
+        "url": "https://economia.awesomeapi.com.br/json/last/BTC-BRL"
+      },
+      "result": "{\"BTCBRL\":{\"code\":\"BTC\",\"codein\":\"BRL\",\"name\":\"Bitcoin/Real Brasileiro\",\"high\":\"327418\",\"low\":\"310409\",\"varBid\":\"-734\",\"pctChange\":\"-0.231\",\"bid\":\"316784\",\"ask\":\"316893\",\"timestamp\":\"1780659316\",\"create_date\":\"2026-06-05 08:35:16\"}}"
+    },
+    {
+      "turn": 4,
+      "name": "http_get",
+      "args": {
+        "url": "https://economia.awesomeapi.com.br/json/last/ETH-BRL"
+      },
+      "result": "{\"ETHBRL\":{\"code\":\"ETH\",\"codein\":\"BRL\",\"name\":\"Ethereum/Real Brasileiro\",\"high\":\"9105.62\",\"low\":\"8254\",\"varBid\":\"-380.5\",\"pctChange\":\"-4.273\",\"bid\":\"8520.15\",\"ask\":\"8521.95\",\"timestamp\":\"1780659081\",\"create_date\":\"2026-06-05 08:31:21\"}}"
+    },
+    {
+      "turn": 5,
+      "name": "http_get",
+      "args": {
+        "url": "https://economia.awesomeapi.com.br/json/daily/USD-BRL/7"
+      },
+      "result": "[{\"code\":\"USD\",\"codein\":\"BRL\",\"name\":\"Dólar Americano/Real Brasileiro\",\"high\":\"5.0657\",\"low\":\"5.05579\",\"varBid\":\"0.0039\",\"pctChange\":\"0.077066\",\"bid\":\"5.0646\",\"ask\":\"5.0676\",\"timestamp\":\"1780657613\",\"create_date\":\"2026-06-05 08:06:53\"},{\"high\":\"5.0804\",\"low\":\"5.05323\",\"varBid\":\"-0.0167\",\"pctChange\":\"-0.328913\",\"bid\":\"5.0607\",\"ask\":\"5.0637\",\"timestamp\":\"1780612115\"},{\"high\":\"5.1037\",\"low\":\"4.99764\",\"varBid\":\"0.0567\",\"pctChange\":\"1.12933\",\"bid\":\"5.0774\",\"ask\":\"5.0804\",\"timestamp\":\"1780529959\"},{\"h"
+    },
+    {
+      "turn": 6,
+      "name": "write_file",
+      "args": {
+        "path": "analise-mercado-qwen3.5-9b.md",
+        "content": "# 📊 RELATÓRIO DE ANÁLISE MERCADOLÓGIA - QWEN 3.5\n\n**Data/Hora da Análise:** 2026-06-05 08:31:17 (UTC)  \n**Fonte de Dados:** AwesomeAPI Brasil  \n\n---\n\n## 💱 COTAÇÕES ATUAIS\n\n| Ativo | Compra (Bid) | Ven"
+      },
+      "result": "OK: analise-mercado-qwen3.5-9b.md (3422 chars, 80 linhas)"
+    },
+    {
+      "turn": 7,
+      "name": "send_claudio",
+      "args": {
+        "message": "📊 **RESUMO DA ANÁLISE MERCADOLÓGIA** 💱\n\n### 🌍 COTAÇÕES PRINCIPAIS:\n- **Dólar (USD/BRL):** R$ 5,0641 | Variação: +0.07% ⬆️\n- **Euro (EUR/BRL):** R$ 5,8893 | Variação: +0.29% ⬆️  \n- **Bitcoin (BTC/BRL):"
+      },
+      "result": "Mensagem enviada. message_id=2787"
+    }
+  ],
+  "final_response": "ANÁLISE CONCLUÍDA: USD=R$5,0641, BTC=R$316.784, tendência dólar=estável com leve alta",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

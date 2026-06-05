@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Certa Imóveis - Encontre seu Lar dos Sonhos</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #1B4332;
+      --secondary: #40916C;
+      --background-light: #D8F3DC;
+      --text-dark: #081C15;
+      --white: #ffffff;
+      --gray-100: #f7fafc;
+      --gray-200: #edf2f7;
+      --error: #e53e3e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* Header & Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--primary);
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 0.5rem;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    /* Navigation Links */
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s ease;
+    }
+
+    nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      left: -100%;
+      width: 250px;
+      height: calc(100vh - 70px);
+      background-color: var(--primary);
+      padding: 2rem;
+      transition: left 0.3s ease;
+      z-index: 999;
+    }
+
+    .mobile-menu.active {
+      left: 0;
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+    }
+
+    /* Hero Section */
+    #hero {
+      background: linear-gradient(rgba(27, 67, 50, 0.8), rgba(27, 67, 50, 0.9)), 
+                  url('https://placehold.co/1920x600') center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 70px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    #hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    #hero p {
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--background-light);
+      margin-bottom: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: var(--secondary);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(64, 145, 108, 0.4);
+    }
+
+    /* Filter Section */
+    #imoveis {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--primary);
+      margin-bottom: 2rem;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      background-color: var(--white);
+      border: 2px solid var(--secondary);
+      color: var(--primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .filter-button:hover,
+    .filter-button.active {
+      background-color: var(--secondary);
+      color: var(--white);
+    }
+
+    /* Properties Grid */
+    #imoveis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .property-card {
+      background-color: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .property-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(27, 67, 50, 0.2);
+    }
+
+    .property-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .property-info {
+      padding: 1.5rem;
+    }
+
+    .property-type {
+      display: inline-block;
+      background-color: var(--background-light);
+      color: var(--primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .property-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .property-address {
+      color: #666;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .property-details {
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gray-200);
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .property-price {
+      margin-top: 1rem;
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--gray-200);
+    }
+
+    .price-value {
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* About Section */
+    #sobre {
+      background-color: var(--white);
+      padding: 4rem 2rem;
+    }
+
+    .about-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #sobre h2 {
+      color: var(--primary);
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-content {
+      display: grid;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .about-content {
+        grid-template-columns: repeat(3, 1fr);
+        text-align: left;
+      }
+      
+      #sobre h2 {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .about-item {
+      padding: 0.5rem;
+    }
+
+    /* Contact Section */
+    #contato {
+      background-color: var(--primary);
+      padding: 4rem 2rem;
+    }
+
+    .contact-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #contato h2 {
+      color: var(--white);
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 2rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    input, textarea {
+      padding: 1rem;
+      border-radius: 8px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.9);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.875rem;
+      display: none;
+    }
+
+    input.error, textarea.error {
+      border-color: var(--error);
+      background-color: #fff5f5;
+    }
+
+    .submit-button {
+      background-color: var(--secondary);
+      color: var(--white);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .submit-button:hover {
+      background-color: #2d7a5b;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(64, 145, 108, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--text-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      nav ul {
+        display: none;
+      }
+
+      #imoveis-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">Casa Certa Imóveis</a>
+      
+      <button class="hamburger" id="menu-toggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav>
+        <ul id="main-nav">
+          <li><a href="#hero">Início</a></li>
+          <li><a href="#imoveis">Imóveis</a></li>
+          <li><a href="#sobre">Sobre Nós</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="#hero">Início</a>
+        <a href="#imoveis">Imóveis</a>
+        <a href="#sobre">Sobre Nós</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Encontre o Imóvel dos Seus Sonhos</h1>
+      <p>A Casa Certa Imóveis conecta você ao lar perfeito com a melhor seleção de apartamentos, casas e terrenos.</p>
+      <a href="#imoveis" class="cta-button">Ver Imóveis Disponíveis</a>
+    </div>
+  </section>
+
+  <!-- Properties Section -->
+  <section id="imoveis">
+    <h2 class="section-title">Nossos Imóveis Exclusivos</h2>
+    
+    <!-- Filters -->
+    <div class="filters" role="tablist">
+      <button class="filter-button active" data-filter="todos">Todos</button>
+      <button class="filter-button" data-filter="Apartamento">Apartamento</button>
+      <button class="filter-button" data-filter="Casa">Casa</button>
+      <button class="filter-button" data-filter="Terreno">Terreno</button>
+    </div>
+
+    <!-- Properties Grid -->
+    <div id="imoveis-grid"></div>
+  </section>
+
+  <!-- About Section -->
+  <section id="sobre">
+    <h2>Sobre a Casa Certa Imóveis</h2>
+    <div class="about-content">
+      <div class="about-item">
+        <h3>Nossa Missão</h3>
+        <p>Trazemos você mais perto do seu lar ideal com uma seleção cuidadosa de imóveis que combinam conforto, localização e valor.</p>
+      </div>
+      
+      <div class="about-item">
+        <h3>Nosso Compromisso</h3>
+        <p>Transparência, honestidade e dedicação em cada negociação. Sua satisfação é nossa prioridade absoluta desde o primeiro contato até a entrega das chaves.</p>
+      </div>
+
+      <div class="about-item">
+        <h3>Nossa Experiência</h3>
+        <p>Mais de 15 anos no mercado imobiliário, ajudando milhares de famílias a encontrarem seus sonhos. Conheça nossa história e conheça quem faz parte da equipe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contato">
+    <h2>Fale Conosco</h2>
+    
+    <form class="contact-form" id="contactForm">
+      <div class="form-group">
+        <label for="nome">Nome *</label>
+        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+        <span class="error-message" id="erro-nome"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+        <span class="error-message" id="erro-email"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+      </div>
+
+      <div class="form-group">
+        <label for="mensagem">Mensagem *</label>
+        <textarea id="mensagem" name="mensagem" required placeholder="Como podemos ajudar você?"></textarea>
+        <span class="error-message" id="erro-mensagem"></span>
+      </div>
+
+      <button type="submit" class="submit-button">Enviar Mensagem</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Casa Certa Imóveis. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+      
+      // Animate hamburger to X
+      const spans = menuToggle.querySelectorAll('span');
+      if (mobileMenu.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(6px, 7px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(6px, -7px)';
+      } else {
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      }
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#main-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        
+        const spans = menuToggle.querySelectorAll('span');
+        spans[0].style.transform = '';
+        spans[1].style.opacity = '';
+        spans[2].style.transform = '';
+      });
+    });
+
+    // Fetch and display properties
+    async function loadProperties() {
+      try {
+        const response = await fetch('./imoveis.json');
+        
+        if (!response.ok) {
+          throw new Error('Erro ao carregar imóveis: ' + response.status);
+        }
+
+        const properties = await response.json();
+        displayProperties(properties);
+      } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('imoveis-grid').innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+            <p style="color: var(--primary); font-size: 1.25rem;">⚠️ Não foi possível carregar os imóveis no momento.</p>
+            <p style="margin-top: 0.5rem; color: #666;">Verifique se o arquivo imoveis.json está presente e acessível.</p>
+          </div>`;
+      }
+    }
+
+    // Display properties with filtering
+    function displayProperties(properties) {
+      const grid = document.getElementById('imoveis-grid');
+      
+      if (properties.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+            <p>Nenhum imóvel encontrado para este filtro.</p>
+          </div>`;
+        return;
+      }
+
+      const propertyHTML = properties.map(property => {
+        // Format price with BRL formatting
+        const formattedPrice = new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(property.preco);
+
+        return `
+          <article class="property-card">
+            <img src="${property.foto}" alt="${property.titulo} - ${property.tipo}" class="property-image" loading="lazy">
+            <div class="property-info">
+              <span class="property-type">${property.tipo}</span>
+              <h3 class="property-title">${property.titulo}</h3>
+              <p class="property-address">${property.endereco}</p>
+              
+              <div class="property-details">
+                <span>${property.area_m2} m²</span>
+                <span>🛏️ ${property.quartos} quartos</span>
+              </div>
+
+              <div class="property-price">
+                <span class="price-value">${formattedPrice}</span>
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+
+      grid.innerHTML = propertyHTML;
+    }
+
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-button');
+    
+    function applyFilter(filterType) {
+      // Update active button state
+      filterButtons.forEach(button => {
+        if (button.dataset.filter === filterType || 
+            (filterType === 'todos' && button.textContent === 'Todos')) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+
+      // Filter properties
+      let filteredProperties;
+      
+      if (filterType === 'todos') {
+        filteredProperties = [];
+        
+        fetch('./imoveis.json').then(res => res.json()).then(data => {
+          displayProperties(data);
+        }).catch(err => console.error('Erro ao carregar imóveis:', err));
+      } else {
+        // Fetch all properties and filter client-side for better UX
+        if (window.properties) {
+          filteredProperties = window.properties.filter(p => p.tipo === filterType);
+          displayProperties(filteredProperties);
+        }
+      }
+    }
+
+    // Load initial data on page load
+    let window_properties;
+    
+    fetch('./imoveis.json')
+      .then(res => res.json())
+      .then(data => {
+        window.properties = data;
+        window_properties = data;
+        displayProperties(window_properties);
+        
+        // Set first filter button as active
+        document.querySelector('.filter-button[data-filter="todos"]').classList.add('active');
+      })
+      .catch(err => console.error('Erro ao carregar imóveis:', err));
+
+    // Add event listeners to filter buttons
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filterType = button.dataset.filter;
+        
+        if (filterType === 'todos') {
+          applyFilter(filterType);
+        } else {
+          window.properties = data || []; // Ensure we have the latest data
+          filteredProperties = window.properties ? 
+            window.properties.filter(p => p.tipo === filterType) : [];
+          
+          displayProperties(filteredProperties);
+        }
+      });
+    });
+
+    // Contact Form Validation and Submission
+    const contactForm = document.getElementById('contactForm');
+    
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showError(input, errorId, message) {
+      input.classList.add('error');
+      const errorElement = document.getElementById(errorId);
+      
+      if (errorElement && message) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        
+        // Clear previous errors on next valid value
+        input.addEventListener('input', () => {
+          input.classList.remove('error');
+          const errorEl = document.getElementById(errorId);
+          if (errorEl) errorEl.style.display = 'none';
+        }, { once: true });
+      } else {
+        // Clear all errors on any input
+        contactForm.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        contactForm.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+      }
+    }
+
+    function validateForm() {
+      let isValid = true;
+      
+      // Validate name
+      const nomeInput = document.getElementById('nome');
+      if (!nomeInput.value.trim()) {
+        showError(nomeInput, 'erro-nome', 'Por favor, digite seu nome.');
+        isValid = false;
+      } else {
+        showMessageElement('erro-nome').style.display = 'none';
+      }
+
+      // Validate email
+      const emailInput = document.getElementById('email');
+      if (!validateEmail(emailInput.value)) {
+        showError(emailInput, 'erro-email', 'Por favor, digite um e-mail válido.');
+        isValid = false;
+      } else {
+        showMessageElement('erro-email').style.display = 'none';
+      }
+
+      // Validate message
+      const mensagemInput = document.getElementById('mensagem');
+      if (!mensagemInput.value.trim()) {
+        showError(mensagemInput, 'erro-mensagem', 'Por favor, digite uma mensagem.');
+        isValid = false;
+      } else {
+        showMessageElement('erro-mensagem').style.display = 'none';
+      }
+
+      return isValid;
+    }
+
+    function showMessageElement(errorId) {
+      const errorEl = document.getElementById(errorId);
+      if (errorEl && !errorEl.style.display || errorEl.textContent === '') {
+        // Element exists but might be hidden, show it with message
+        errorEl.style.display = 'block';
+      } else if (!errorEl) {
+        console.error('Elemento de erro não encontrado:', errorId);
+      }
+      
+      return errorEl;
+    }
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const isValid = validateForm();
+      
+      if (isValid) {
+        // Simulate form submission success
+        alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+        
+        // Reset form
+        contactForm.reset();
+        
+        // Remove error classes and messages
+        contactForm.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        contactForm.querySelectorAll('.error-message').forEach(el => {
+          if (el) el.style.display = 'none';
+        });
+      } else {
+        alert('Por favor, corrija os erros no formulário.');
+      }
+    });
+
+    // Real-time validation on input blur
+    const inputs = contactForm.querySelectorAll('input[required], textarea[required]');
+    
+    inputs.forEach(input => {
+      input.addEventListener('blur', () => validateForm());
+      
+      if (input.type === 'email') {
+        input.addEventListener('input', () => {
+          // Clear email error on typing
+          const errorMsg = document.getElementById('erro-email');
+          if (errorMsg) errorMsg.style.display = 'none';
+          
+          // Validate immediately after typing stops for a moment
+          setTimeout(() => validateForm(), 300);
+        });
+      } else {
+        input.addEventListener('input', () => {
+          const errorMsg = document.getElementById(input.id === 'nome' ? 'erro-nome' : 
+                                                    input.id === 'mensagem' ? 'erro-mensagem' : '');
+          
+          if (errorMsg) errorMsg.style.display = 'none';
+        });
+      }
+    });
+
+  </script>
+</body>
+</html>

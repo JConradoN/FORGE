@@ -1,0 +1,86 @@
+{
+  "scenario": "F5",
+  "scenario_name": "Code Review + Implementação — FORGE Scripts",
+  "model": "opencode-qwen35-9b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 0,
+  "tool_calls_n": 0,
+  "loop_exhausted": false,
+  "error": "opencode exit 1: ",
+  "duration_ms": 1864,
+  "tok_total": 0,
+  "tok_per_s": 0.0,
+  "auto_score": 3,
+  "auto_max": 18,
+  "auto_pct": 17,
+  "auto_checks": {
+    "code_review.md criado": {
+      "passed": false,
+      "weight": 2,
+      "detail": "code_review.md NÃO existe"
+    },
+    "plano_correcoes.md criado": {
+      "passed": false,
+      "weight": 2,
+      "detail": "plano_correcoes.md NÃO existe"
+    },
+    "quality_report.md criado": {
+      "passed": false,
+      "weight": 2,
+      "detail": "quality_report.md NÃO existe"
+    },
+    "review cobre forge_runner": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "review cobre claude_runner": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "review cobre mock_server": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "review cobre telegram": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "plano tem prioridades": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: plano_correcoes.md"
+    },
+    "code_review.md > 3 KB": {
+      "passed": false,
+      "weight": 2,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "forge_runner.py importa OK": {
+      "passed": true,
+      "weight": 3,
+      "detail": "exit 0: "
+    },
+    "confirmou conclusão": {
+      "passed": false,
+      "weight": 1,
+      "detail": "'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": false,
+      "weight": 1,
+      "detail": "opencode exit 1: "
+    }
+  },
+  "tool_calls_log": [],
+  "final_response": "",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

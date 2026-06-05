@@ -1,0 +1,3242 @@
+[00:38:50] ═══ FASE 0: Controle Claude Sonnet 4.6 ═══
+
+================================================================
+  FORGE — Claude Provider
+  Modelo    : claude-sonnet-4-6 (slug: claude-sonnet-4-6)
+  Cenários  : F5
+  Runs/cen. : 1
+  Mock URLs : NÃO
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/claude-sonnet-4-6/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [claude] modelo=claude-sonnet-4-6 | max_turns=20
+  [turn 1] chamando API Anthropic... 2 tool(s): ['read_file', 'run_bash']
+    → read_file(['path']) ... (2249 chars)
+    → run_bash(['command']) ... (377 chars)
+  [turn 2] chamando API Anthropic... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (31064 chars)
+    → read_file(['path']) ... (12528 chars)
+    → read_file(['path']) ... (4982 chars)
+    → read_file(['path']) ... (10772 chars)
+  [turn 3] chamando API Anthropic... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (873 chars)
+  [turn 4] chamando API Anthropic... 3 tool(s): ['run_bash', 'run_bash', 'run_bash']
+    → run_bash(['command']) ... (135 chars)
+    → run_bash(['command']) ... (352 chars)
+    → run_bash(['command']) ... (490 chars)
+  [turn 5] chamando API Anthropic... 4 tool(s): ['run_bash', 'run_bash', 'run_bash', 'run_bash']
+    → run_bash(['command']) ... (760 chars)
+    → run_bash(['command']) ... (1001 chars)
+    → run_bash(['command']) ... (505 chars)
+    → run_bash(['command']) ... (3445 chars)
+  [turn 6] chamando API Anthropic... 3 tool(s): ['run_bash', 'run_bash', 'run_bash']
+    → run_bash(['command']) ... (1948 chars)
+    → run_bash(['command']) ... (4148 chars)
+    → run_bash(['command']) ... (2360 chars)
+  [turn 7] chamando API Anthropic... 4 tool(s): ['run_bash', 'run_bash', 'run_bash', 'run_bash']
+    → run_bash(['command']) ... (3001 chars)
+    → run_bash(['command']) ... (1095 chars)
+    → run_bash(['command']) ... (434 chars)
+    → run_bash(['command']) ... (2552 chars)
+  [turn 8] chamando API Anthropic... 3 tool(s): ['run_bash', 'run_bash', 'run_bash']
+    → run_bash(['command']) ... (1873 chars)
+    → run_bash(['command']) ... (1771 chars)
+    → run_bash(['command']) ... (1739 chars)
+  [turn 9] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 10] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 11] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 12] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 13] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 14] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 15] chamando API Anthropic... 1 tool(s): ['write_file']
+    → write_file(['path']) ... (38 chars)
+  [turn 16] chamando API Anthropic... ERRO API: Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': "This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 9dda36c9-a122-4805-a200-83cb98c287ed, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Reduce the prompt length or the maximum tokens requested, or try again later. View your current limits at https://console.anthropic.com/settings/limits. To raise this limit, purchase credits to advance to the next usage tier at https://console.anthropic.com/settings/billing."}, 'request_id': 'req_011CbjRymJmbxFnaHcamZW2e'}
+
+  Auto score : 5/18 (28%)
+  Tokens     : 395488 in + 24122 out
+  Custo est. : ~$1.5483 USD (Sonnet pricing)
+    ✓ code_review.md criado: code_review.md existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: 'forge_runner' NÃO encontrado em code_review.md
+    ✗ review cobre claude_runner: 'claude_runner' NÃO encontrado em code_review.md
+    ✗ review cobre mock_server: 'mock_server' NÃO encontrado em code_review.md
+    ✗ review cobre telegram: 'telegram' NÃO encontrado em code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: code_review.md: 0 bytes (< 3000)
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': "This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 9dda36c9-a122-4805-a200-83cb98c287ed, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Reduce the prompt length or the maximum tokens requested, or try again later. View your current limits at https://console.anthropic.com/settings/limits. To raise this limit, purchase credits to advance to the next usage tier at https://console.anthropic.com/settings/billing."}, 'request_id': 'req_011CbjRymJmbxFnaHcamZW2e'}
+  Salvo em   : F5-claude-sonnet-4-6-2026-06-05-run1.json
+
+================================================================
+
+[00:50:06] Sonnet: 5/18 (28%)
+[00:50:06] 
+[00:50:06] ═══ FASE 1: FORGE Direct (19 modelos) ═══
+[00:50:06] ── direct: gemma4:26b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : gemma4:26b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/gemma4-26b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (147 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 3] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (85 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 6] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 7] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 8] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content']) ... (38 chars)
+  [turn 9] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (46 chars)
+  [turn 10] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (73 chars)
+  [turn 11] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (74 chars)
+  [turn 12] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (152 chars)
+  [turn 13] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (60 chars)
+  [turn 14] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 15] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 16] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 17] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 18] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (157 chars)
+  [turn 19] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (44 chars)
+  [turn 20] chamando API... resposta final (75 chars)
+
+  Auto score : 10/18 (56%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✓ plano_correcoes.md criado: plano_correcoes.md existe
+    ✓ quality_report.md criado: quality_report.md existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✓ plano tem prioridades: 'Alta' encontrado em plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✓ confirmou conclusão: 'REVISÃO CONCLUÍDA' encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-gemma4-26b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[00:52:13]   → gemma4:26b (direct): 10/18 (56%)
+[00:52:13] ── direct: granite4.1:30b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : granite4.1:30b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/granite4.1-30b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... ERRO: timed out
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timed out
+  Salvo em   : F5-granite4.1-30b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[00:59:10]   → granite4.1:30b (direct): no result
+[00:59:10] ── direct: qwen3.6:27b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3.6:27b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3.6-27b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 2 tool(s): ['read_file', 'run_bash']
+    → read_file(['path']) ... (2249 chars)
+    → run_bash(['command']) ... (159 chars)
+  [turn 2] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (31064 chars)
+    → read_file(['path']) ... (12528 chars)
+    → read_file(['path']) ... (4982 chars)
+    → read_file(['path']) ... (10772 chars)
+  [turn 3] chamando API... 1 tool(s): ['write_file']
+    → write_file(['path', 'content']) ... (44 chars)
+  [turn 4] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (46 chars)
+  [turn 5] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (177 chars)
+  [turn 6] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (63 chars)
+  [turn 7] chamando API... ERRO: timed out
+
+  Auto score : 14/18 (78%)
+    ✓ code_review.md criado: code_review.md existe
+    ✓ plano_correcoes.md criado: plano_correcoes.md existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✓ review cobre forge_runner: 'forge_runner' encontrado em code_review.md
+    ✓ review cobre claude_runner: 'claude_runner' encontrado em code_review.md
+    ✓ review cobre mock_server: 'mock_server' encontrado em code_review.md
+    ✓ review cobre telegram: 'telegram' encontrado em code_review.md
+    ✓ plano tem prioridades: 'Alta' encontrado em plano_correcoes.md
+    ✓ code_review.md > 3 KB: code_review.md: 13317 bytes (≥ 3000)
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timed out
+  Salvo em   : F5-qwen3.6-27b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:11:34]   → qwen3.6:27b (direct): no result
+[01:11:34] ── direct: qwen3.5:27b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3.5:27b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3.5-27b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (31064 chars)
+    → read_file(['path']) ... (12528 chars)
+    → read_file(['path']) ... (4982 chars)
+    → read_file(['path']) ... (10772 chars)
+  [turn 3] chamando API... ERRO: timed out
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timed out
+  Salvo em   : F5-qwen3.5-27b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:17:16]   → qwen3.5:27b (direct): no result
+[01:17:16] ── direct: devstral-small-2:24b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : devstral-small-2:24b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/devstral-small-2-24b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... ERRO: timed out
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timed out
+  Salvo em   : F5-devstral-small-2-24b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:23:22]   → devstral-small-2:24b (direct): 3/18 (17%)
+[01:23:22] ── direct: lfm2:24b-a2b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : lfm2:24b-a2b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/lfm2-24b-a2b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (45 chars)
+    → read_file(['path']) ... (45 chars)
+    → read_file(['path']) ... (45 chars)
+    → read_file(['path']) ... (45 chars)
+  [turn 2] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (62 chars)
+  [turn 3] chamando API... resposta final (211 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-lfm2-24b-a2b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:23:45]   → lfm2:24b-a2b (direct): 4/18 (22%)
+[01:23:45] ── direct: gemma4:e4b-it-q4_K_M
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : gemma4:e4b-it-q4_K_M
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/gemma4-e4b-it-q4_K_M/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (54 chars)
+  [turn 7] chamando API... resposta final (8968 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-gemma4-e4b-it-q4_K_M-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:25:09]   → gemma4:e4b-it-q4_K_M (direct): 4/18 (22%)
+[01:25:09] ── direct: qwen3:14b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3:14b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3-14b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... resposta final (7910 chars)
+
+  Auto score : 5/18 (28%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✓ confirmou conclusão: 'REVISÃO CONCLUÍDA' encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-qwen3-14b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:27:14]   → qwen3:14b (direct): 5/18 (28%)
+[01:27:14] ── direct: ministral-3:14b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : ministral-3:14b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/ministral-3-14b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 5 tool(s): ['read_file', 'read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (48 chars)
+    → read_file(['path']) ... (44 chars)
+    → read_file(['path']) ... (46 chars)
+    → read_file(['path']) ... (45 chars)
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 3] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (52 chars)
+    → read_file(['path']) ... (59 chars)
+    → read_file(['path']) ... (57 chars)
+    → read_file(['path']) ... (61 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (44 chars)
+  [turn 5] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (63 chars)
+  [turn 6] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (224 chars)
+  [turn 7] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (387 chars)
+  [turn 8] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 9] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 10] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 11] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 12] chamando API... 1 tool(s): ['write_file']
+    → write_file(['path', 'content']) ... (47 chars)
+  [turn 13] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (56 chars)
+  [turn 14] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (46 chars)
+  [turn 15] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (63 chars)
+  [turn 16] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 17] chamando API... 1 tool(s): ['write_file']
+    → write_file(['content', 'path']) ... (61 chars)
+  [turn 18] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 19] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [turn 20] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12 chars)
+  [agente] loop expirado após 20 turns
+
+  Auto score : 1/18 (6%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✗ forge_runner.py importa OK: exit 1: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys; sys.path.insert(0,"forge-scrip
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-ministral-3-14b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:34:27]   → ministral-3:14b (direct): 1/18 (6%)
+[01:34:27] ── direct: phi4-tools:14b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : phi4-tools:14b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/phi4-tools-14b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 5 tool(s): ['read_file', 'read_file', 'read_file', 'read_file', 'send_claudio']
+    → read_file(['path']) ... (44 chars)
+    → read_file(['path']) ... (39 chars)
+    → read_file(['path']) ... (40 chars)
+    → read_file(['path']) ... (39 chars)
+    → send_claudio(['message']) ... (33 chars)
+  [turn 2] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (124 chars)
+  [turn 3] chamando API... 2 tool(s): ['read_file', 'run_bash']
+    → read_file(['path']) ... (2249 chars)
+    → run_bash(['command']) ... (85 chars)
+  [turn 4] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (31064 chars)
+    → read_file(['path']) ... (12528 chars)
+    → read_file(['path']) ... (4982 chars)
+    → read_file(['path']) ... (10772 chars)
+  [turn 5] chamando API... resposta final (2322 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-phi4-tools-14b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:36:18]   → phi4-tools:14b (direct): 4/18 (22%)
+[01:36:19] ── direct: phi4:14b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : phi4:14b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/phi4-14b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... ERRO: HTTP 400: {"error":"registry.ollama.ai/library/phi4:14b does not support tools"}
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: HTTP 400: {"error":"registry.ollama.ai/library/phi4:14b does not support tools"}
+  Salvo em   : F5-phi4-14b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:36:21]   → phi4:14b (direct): 3/18 (17%)
+[01:36:21] ── direct: qwen3.5:9b-48k
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3.5:9b-48k
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3.5-9b-48k/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (224 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 3] chamando API... 4 tool(s): ['read_file', 'read_file', 'read_file', 'read_file']
+    → read_file(['path']) ... (31064 chars)
+    → read_file(['path']) ... (12528 chars)
+    → read_file(['path']) ... (4982 chars)
+    → read_file(['path']) ... (10772 chars)
+  [turn 4] chamando API... ERRO: timed out
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timed out
+  Salvo em   : F5-qwen3.5-9b-48k-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:41:42]   → qwen3.5:9b-48k (direct): no result
+[01:41:42] ── direct: qwen3.5:9b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3.5:9b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3.5-9b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (224 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 6] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 7] chamando API... 1 tool(s): ['write_file']
+    → write_file(['path', 'content']) ... (44 chars)
+  [turn 8] chamando API... 1 tool(s): ['write_file']
+    → write_file(['path', 'content']) ... (46 chars)
+  [turn 9] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (203 chars)
+  [turn 10] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path', 'content']) ... (31064 chars)
+  [turn 11] chamando API... resposta final (197 chars)
+
+  Auto score : 15/18 (83%)
+    ✓ code_review.md criado: code_review.md existe
+    ✓ plano_correcoes.md criado: plano_correcoes.md existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✓ review cobre forge_runner: 'forge_runner' encontrado em code_review.md
+    ✓ review cobre claude_runner: 'claude_runner' encontrado em code_review.md
+    ✓ review cobre mock_server: 'mock_server' encontrado em code_review.md
+    ✓ review cobre telegram: 'telegram' encontrado em code_review.md
+    ✓ plano tem prioridades: 'Alta' encontrado em plano_correcoes.md
+    ✓ code_review.md > 3 KB: code_review.md: 15011 bytes (≥ 3000)
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-qwen3.5-9b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:45:37]   → qwen3.5:9b (direct): no result
+[01:45:37] ── direct: ministral-3:8b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : ministral-3:8b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/ministral-3-8b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... resposta final (8803 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-ministral-3-8b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:47:21]   → ministral-3:8b (direct): 4/18 (22%)
+[01:47:21] ── direct: granite4.1:8b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : granite4.1:8b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/granite4.1-8b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (12528 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (4982 chars)
+  [turn 5] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (10772 chars)
+  [turn 6] chamando API... resposta final (11051 chars)
+
+  Auto score : 5/18 (28%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✓ confirmou conclusão: 'REVISÃO CONCLUÍDA' encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-granite4.1-8b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:49:12]   → granite4.1:8b (direct): no result
+[01:49:12] ── direct: qwen3:8b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : qwen3:8b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/qwen3-8b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (128 chars)
+  [turn 2] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (2249 chars)
+  [turn 3] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (31064 chars)
+  [turn 4] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12528 chars)
+  [turn 5] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (4982 chars)
+  [turn 6] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (10772 chars)
+  [turn 7] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (2249 chars)
+  [turn 8] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (56 chars)
+  [turn 9] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (60 chars)
+  [turn 10] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (59 chars)
+  [turn 11] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (31064 chars)
+  [turn 12] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (12528 chars)
+  [turn 13] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (4982 chars)
+  [turn 14] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (10772 chars)
+  [turn 15] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (31064 chars)
+  [turn 16] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (10772 chars)
+  [turn 17] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (31064 chars)
+  [turn 18] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (10772 chars)
+  [turn 19] chamando API... resposta final (1946 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-qwen3-8b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:51:20]   → qwen3:8b (direct): 4/18 (22%)
+[01:51:20] ── direct: lfm2.5:8b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : lfm2.5:8b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/lfm2.5-8b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (224 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 3] chamando API... 1 tool(s): ['run_bash']
+    → run_bash(['command']) ... (387 chars)
+  [turn 4] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 5] chamando API... resposta final (2529 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-lfm2.5-8b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:51:39]   → lfm2.5:8b (direct): no result
+[01:51:39] ── direct: rnj-1:8b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : rnj-1:8b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/rnj-1-8b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (2249 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (31064 chars)
+  [turn 3] chamando API... resposta final (1022 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-rnj-1-8b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:52:14]   → rnj-1:8b (direct): 4/18 (22%)
+[01:52:14] ── direct: granite4.1:3b
+
+==============================================================
+  FORGE v0.2 — Framework for Open Real-world Generic Evaluation
+  Modelo    : granite4.1:3b
+  Cenários  : F5
+  Runs/cen. : 1
+  Max turns : 20
+  Mock URLs : NÃO (URLs reais)
+==============================================================
+
+  ⚠ AVISO: --runs 1 — recomendado --runs 3 para resultados estáveis.
+
+
+──────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/ → forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/granite4.1-3b/workdir
+  prompt  : Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework ...
+
+  [agente] iniciando loop (max 20 turns)
+  [turn 1] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (39 chars)
+  [turn 2] chamando API... 1 tool(s): ['read_file']
+    → read_file(['path']) ... (41 chars)
+  [turn 3] chamando API... resposta final (4135 chars)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-granite4.1-3b-2026-06-05-run1.json
+
+==============================================================
+  Pipeline concluído.
+==============================================================
+
+[01:52:38]   → granite4.1:3b (direct): no result
+[01:52:38] 
+[01:52:38] ═══ FASE 2: opencode (19 modelos) ═══
+[01:52:38] ── opencode: gemma4:26b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/gemma4:26b
+  Slug      : opencode-gemma4-26b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-gemma4-26b/workdir
+
+  [opencode] modelo=ollama-cloud/gemma4:26b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-gemma4-26b/workdir
+  [opencode] executando..... done (5 steps, 127377 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-gemma4-26b-2026-06-05-run1.json
+
+================================================================
+
+[01:54:55]   → gemma4:26b (opencode): 4/18 (22%)
+[01:54:55] ── opencode: granite4.1:30b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/granite4.1:30b
+  Slug      : opencode-granite41-30b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-granite41-30b/workdir
+
+  [opencode] modelo=ollama-cloud/granite4.1:30b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-granite41-30b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-granite41-30b-2026-06-05-run1.json
+
+================================================================
+
+[01:54:59]   → granite4.1:30b (opencode): no result
+[01:54:59] ── opencode: qwen3.6:27b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3.6:27b
+  Slug      : opencode-qwen36-27b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen36-27b/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3.6:27b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen36-27b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-qwen36-27b-2026-06-05-run1.json
+
+================================================================
+
+[01:55:04]   → qwen3.6:27b (opencode): no result
+[01:55:04] ── opencode: qwen3.5:27b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3.5:27b
+  Slug      : opencode-qwen35-27b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-27b/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3.5:27b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-27b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-qwen35-27b-2026-06-05-run1.json
+
+================================================================
+
+[01:55:08]   → qwen3.5:27b (opencode): no result
+[01:55:08] ── opencode: devstral-small-2:24b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/devstral-small-2:24b
+  Slug      : opencode-devstral-small-2-24b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-devstral-small-2-24b/workdir
+
+  [opencode] modelo=ollama-cloud/devstral-small-2:24b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-devstral-small-2-24b/workdir
+  [opencode] executando...... done (6 steps, 152573 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-devstral-small-2-24b-2026-06-05-run1.json
+
+================================================================
+
+[02:00:51]   → devstral-small-2:24b (opencode): 4/18 (22%)
+[02:00:51] ── opencode: lfm2:24b-a2b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/lfm2:24b-a2b
+  Slug      : opencode-lfm2-24b-a2b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-lfm2-24b-a2b/workdir
+
+  [opencode] modelo=ollama-cloud/lfm2:24b-a2b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-lfm2-24b-a2b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-lfm2-24b-a2b-2026-06-05-run1.json
+
+================================================================
+
+[02:00:55]   → lfm2:24b-a2b (opencode): 3/18 (17%)
+[02:00:55] ── opencode: gemma4:e4b-it-q4_K_M
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/gemma4:e4b-it-q4_K_M
+  Slug      : opencode-gemma4-e4b-it-q4_K_M
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-gemma4-e4b-it-q4_K_M/workdir
+
+  [opencode] modelo=ollama-cloud/gemma4:e4b-it-q4_K_M
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-gemma4-e4b-it-q4_K_M/workdir
+  [opencode] executando.... done (4 steps, 103689 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-gemma4-e4b-it-q4_K_M-2026-06-05-run1.json
+
+================================================================
+
+[02:02:51]   → gemma4:e4b-it-q4_K_M (opencode): 4/18 (22%)
+[02:02:51] ── opencode: qwen3:14b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3:14b
+  Slug      : opencode-qwen3-14b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen3-14b/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3:14b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen3-14b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-qwen3-14b-2026-06-05-run1.json
+
+================================================================
+
+[02:02:55]   → qwen3:14b (opencode): 3/18 (17%)
+[02:02:55] ── opencode: ministral-3:14b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/ministral-3:14b
+  Slug      : opencode-ministral-3-14b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-ministral-3-14b/workdir
+
+  [opencode] modelo=ollama-cloud/ministral-3:14b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-ministral-3-14b/workdir
+  [opencode] executando. done (1 steps, 24594 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-ministral-3-14b-2026-06-05-run1.json
+
+================================================================
+
+[02:03:29]   → ministral-3:14b (opencode): 4/18 (22%)
+[02:03:29] ── opencode: phi4-tools:14b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/phi4-tools:14b
+  Slug      : opencode-phi4-tools-14b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-phi4-tools-14b/workdir
+
+  [opencode] modelo=ollama-cloud/phi4-tools:14b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-phi4-tools-14b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-phi4-tools-14b-2026-06-05-run1.json
+
+================================================================
+
+[02:03:33]   → phi4-tools:14b (opencode): 3/18 (17%)
+[02:03:33] ── opencode: phi4:14b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/phi4:14b
+  Slug      : opencode-phi4-14b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-phi4-14b/workdir
+
+  [opencode] modelo=ollama-cloud/phi4:14b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-phi4-14b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-phi4-14b-2026-06-05-run1.json
+
+================================================================
+
+[02:03:37]   → phi4:14b (opencode): 3/18 (17%)
+[02:03:37] ── opencode: qwen3.5:9b-48k
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3.5:9b-48k
+  Slug      : opencode-qwen35-9b-48k
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-9b-48k/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3.5:9b-48k
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-9b-48k/workdir
+  [opencode] executando....... done (7 steps, 250971 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-qwen35-9b-48k-2026-06-05-run1.json
+
+================================================================
+
+[02:07:17]   → qwen3.5:9b-48k (opencode): no result
+[02:07:17] ── opencode: qwen3.5:9b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3.5:9b
+  Slug      : opencode-qwen35-9b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-9b/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3.5:9b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen35-9b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-qwen35-9b-2026-06-05-run1.json
+
+================================================================
+
+[02:07:22]   → qwen3.5:9b (opencode): no result
+[02:07:22] ── opencode: ministral-3:8b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/ministral-3:8b
+  Slug      : opencode-ministral-3-8b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-ministral-3-8b/workdir
+
+  [opencode] modelo=ollama-cloud/ministral-3:8b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-ministral-3-8b/workdir
+  [opencode] executando........ done (8 steps, 222663 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-ministral-3-8b-2026-06-05-run1.json
+
+================================================================
+
+[02:09:50]   → ministral-3:8b (opencode): 4/18 (22%)
+[02:09:50] ── opencode: granite4.1:8b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/granite4.1:8b
+  Slug      : opencode-granite41-8b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-granite41-8b/workdir
+
+  [opencode] modelo=ollama-cloud/granite4.1:8b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-granite41-8b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-granite41-8b-2026-06-05-run1.json
+
+================================================================
+
+[02:09:55]   → granite4.1:8b (opencode): no result
+[02:09:55] ── opencode: qwen3:8b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/qwen3:8b
+  Slug      : opencode-qwen3-8b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-qwen3-8b/workdir
+
+  [opencode] modelo=ollama-cloud/qwen3:8b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-qwen3-8b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-qwen3-8b-2026-06-05-run1.json
+
+================================================================
+
+[02:09:59]   → qwen3:8b (opencode): 3/18 (17%)
+[02:09:59] ── opencode: lfm2.5:8b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/lfm2.5:8b
+  Slug      : opencode-lfm25-8b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-lfm25-8b/workdir
+
+  [opencode] modelo=ollama-cloud/lfm2.5:8b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-lfm25-8b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-lfm25-8b-2026-06-05-run1.json
+
+================================================================
+
+[02:10:03]   → lfm2.5:8b (opencode): no result
+[02:10:03] ── opencode: rnj-1:8b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/rnj-1:8b
+  Slug      : opencode-rnj-1-8b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-rnj-1-8b/workdir
+
+  [opencode] modelo=ollama-cloud/rnj-1:8b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-rnj-1-8b/workdir
+  [opencode] executando. done (1 steps, 23756 tok)
+
+  Auto score : 4/18 (22%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✓ sem erro de API: sem erro
+  Salvo em   : F5-opencode-rnj-1-8b-2026-06-05-run1.json
+
+================================================================
+
+[02:10:30]   → rnj-1:8b (opencode): 4/18 (22%)
+[02:10:30] ── opencode: granite4.1:3b
+
+================================================================
+  FORGE — opencode Provider
+  Modelo    : ollama-cloud/granite4.1:3b
+  Slug      : opencode-granite41-3b
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/opencode-granite41-3b/workdir
+
+  [opencode] modelo=ollama-cloud/granite4.1:3b
+  [opencode] workdir=/home/conrado/repos/estudo/forge/results/F5/opencode-granite41-3b/workdir
+  [opencode] executando done (0 steps, 0 tok)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: opencode exit 1: 
+  Salvo em   : F5-opencode-granite41-3b-2026-06-05-run1.json
+
+================================================================
+
+[02:10:34]   → granite4.1:3b (opencode): no result
+[02:10:34] 
+[02:10:35] ═══ FASE 3: OpenHands (19 modelos) ═══
+[02:10:35] ── openhands: gemma4:26b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/gemma4:26b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+Traceback (most recent call last):
+  File "/home/conrado/repos/estudo/forge/scripts/forge_openhands_runner.py", line 357, in <module>
+    main()
+    ~~~~^^
+  File "/home/conrado/repos/estudo/forge/scripts/forge_openhands_runner.py", line 292, in main
+    shutil.rmtree(dst)
+    ~~~~~~~~~~~~~^^^^^
+  File "/usr/lib/python3.14/shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/shutil.py", line 721, in _rmtree_safe_fd
+    _rmtree_safe_fd_step(stack, onexc)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/shutil.py", line 802, in _rmtree_safe_fd_step
+    onexc(func, path, err)
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/shutil.py", line 795, in _rmtree_safe_fd_step
+    onexc(os.unlink, fullname, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/shutil.py", line 791, in _rmtree_safe_fd_step
+    os.unlink(entry.name, dir_fd=topfd)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: PosixPath('/home/conrado/repos/estudo/forge/results/F5/openhands-gemma4-26b/workdir/forge-scripts')
+[02:10:37]   → gemma4:26b (openhands): no result
+[02:10:37] ── openhands: granite4.1:30b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/granite4.1:30b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-granite4-1-30b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-granite4-1-30b-2026-06-05-run1.json
+
+================================================================
+
+[02:20:55]   → granite4.1:30b (openhands): 3/18 (17%)
+[02:20:55] ── openhands: qwen3.6:27b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3.6:27b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-6-27b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-6-27b-2026-06-05-run1.json
+
+================================================================
+
+[02:31:11]   → qwen3.6:27b (openhands): 3/18 (17%)
+[02:31:11] ── openhands: qwen3.5:27b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3.5:27b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-5-27b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-5-27b-2026-06-05-run1.json
+
+================================================================
+
+[02:41:27]   → qwen3.5:27b (openhands): 3/18 (17%)
+[02:41:27] ── openhands: devstral-small-2:24b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/devstral-small-2:24b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-devstral-small-2-24b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-devstral-small-2-24b-2026-06-05-run1.json
+
+================================================================
+
+[02:51:43]   → devstral-small-2:24b (openhands): 3/18 (17%)
+[02:51:43] ── openhands: lfm2:24b-a2b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/lfm2:24b-a2b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-lfm2-24b-a2b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-lfm2-24b-a2b-2026-06-05-run1.json
+
+================================================================
+
+[03:01:58]   → lfm2:24b-a2b (openhands): 3/18 (17%)
+[03:01:58] ── openhands: gemma4:e4b-it-q4_K_M
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/gemma4:e4b-it-q4_K_M
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-gemma4-e4b-it-q4_K_M/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-gemma4-e4b-it-q4_K_M-2026-06-05-run1.json
+
+================================================================
+
+[03:12:14]   → gemma4:e4b-it-q4_K_M (openhands): 3/18 (17%)
+[03:12:14] ── openhands: qwen3:14b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3:14b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-14b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-14b-2026-06-05-run1.json
+
+================================================================
+
+[03:22:30]   → qwen3:14b (openhands): 3/18 (17%)
+[03:22:30] ── openhands: ministral-3:14b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/ministral-3:14b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-ministral-3-14b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-ministral-3-14b-2026-06-05-run1.json
+
+================================================================
+
+[03:32:46]   → ministral-3:14b (openhands): 3/18 (17%)
+[03:32:46] ── openhands: phi4-tools:14b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/phi4-tools:14b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-phi4-tools-14b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-phi4-tools-14b-2026-06-05-run1.json
+
+================================================================
+
+[03:43:04]   → phi4-tools:14b (openhands): 3/18 (17%)
+[03:43:04] ── openhands: phi4:14b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/phi4:14b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-phi4-14b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-phi4-14b-2026-06-05-run1.json
+
+================================================================
+
+[03:53:20]   → phi4:14b (openhands): 3/18 (17%)
+[03:53:20] ── openhands: qwen3.5:9b-48k
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3.5:9b-48k
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-5-9b-48k/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-5-9b-48k-2026-06-05-run1.json
+
+================================================================
+
+[04:03:36]   → qwen3.5:9b-48k (openhands): 3/18 (17%)
+[04:03:36] ── openhands: qwen3.5:9b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3.5:9b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-5-9b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-5-9b-2026-06-05-run1.json
+
+================================================================
+
+[04:13:54]   → qwen3.5:9b (openhands): 3/18 (17%)
+[04:13:54] ── openhands: ministral-3:8b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/ministral-3:8b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-ministral-3-8b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-ministral-3-8b-2026-06-05-run1.json
+
+================================================================
+
+[04:24:10]   → ministral-3:8b (openhands): 3/18 (17%)
+[04:24:10] ── openhands: granite4.1:8b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/granite4.1:8b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-granite4-1-8b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-granite4-1-8b-2026-06-05-run1.json
+
+================================================================
+
+[04:34:25]   → granite4.1:8b (openhands): 3/18 (17%)
+[04:34:25] ── openhands: qwen3:8b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/qwen3:8b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-qwen3-8b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-qwen3-8b-2026-06-05-run1.json
+
+================================================================
+
+[04:44:41]   → qwen3:8b (openhands): 3/18 (17%)
+[04:44:41] ── openhands: lfm2.5:8b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/lfm2.5:8b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-lfm2-5-8b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-lfm2-5-8b-2026-06-05-run1.json
+
+================================================================
+
+[04:54:59]   → lfm2.5:8b (openhands): 3/18 (17%)
+[04:54:59] ── openhands: rnj-1:8b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/rnj-1:8b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-rnj-1-8b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-rnj-1-8b-2026-06-05-run1.json
+
+================================================================
+
+[05:05:15]   → rnj-1:8b (openhands): 3/18 (17%)
+[05:05:15] ── openhands: granite4.1:3b
+
+================================================================
+  FORGE — OpenHands Provider
+  LLM       : ollama/granite4.1:3b
+  Container : ghcr.io/all-hands-ai/openhands:0.42
+  Runtime   : ghcr.io/all-hands-ai/runtime:0.42-nikolaik
+  Cenários  : F5
+  Runs/cen. : 1
+================================================================
+
+────────────────────────────────────────────────────────────────
+  [fixture] copiado: forge-scripts/
+  [prd] copiado: F5.md → TASK.md
+  [F5] Code Review + Implementação — FORGE Scripts
+  workdir : /home/conrado/repos/estudo/forge/results/F5/openhands-granite4-1-3b/workdir
+
+  [openhands] iniciando container (workdir=workdir)
+  [openhands] aguardando serviço... ok
+  [openhands] enviando tarefa (131 chars)....
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+.
+  [openhands] poll error: timed out
+ ERRO (0 tool calls)
+
+  Auto score : 3/18 (17%)
+    ✗ code_review.md criado: code_review.md NÃO existe
+    ✗ plano_correcoes.md criado: plano_correcoes.md NÃO existe
+    ✗ quality_report.md criado: quality_report.md NÃO existe
+    ✗ review cobre forge_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre claude_runner: arquivo não encontrado: code_review.md
+    ✗ review cobre mock_server: arquivo não encontrado: code_review.md
+    ✗ review cobre telegram: arquivo não encontrado: code_review.md
+    ✗ plano tem prioridades: arquivo não encontrado: plano_correcoes.md
+    ✗ code_review.md > 3 KB: arquivo não encontrado: code_review.md
+    ✓ forge_runner.py importa OK: exit 0: 
+    ✗ confirmou conclusão: 'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final
+    ✗ sem erro de API: timeout 600s
+  Salvo em   : F5-openhands-granite4-1-3b-2026-06-05-run1.json
+
+================================================================
+
+[05:15:33]   → granite4.1:3b (openhands): 3/18 (17%)
+[05:15:33] 
+[05:15:33] ═══ RELATÓRIO FINAL ═══
+# FORGE F5 — Overnight Results
+Executado: Fri Jun  5 05:15:33 AM -03 2026
+
+## Controle
+| Modelo | Harness | Score |
+|--------|---------|-------|
+| claude-sonnet-4-6 | Claude API | 5/18 (28%) |
+
+## Resultados por modelo
+
+| Modelo | FORGE direct | opencode | OpenHands | Melhor |
+|--------|-------------|----------|-----------|--------|
+| `gemma4:26b` | 10/18 (56%) | 4/18 (22%) | no result | direct: 10/18 (56%) |
+| `granite4.1:30b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `qwen3.6:27b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `qwen3.5:27b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `devstral-small-2:24b` | 3/18 (17%) | 4/18 (22%) | 3/18 (17%) | opencode: 4/18 (22%) |
+| `lfm2:24b-a2b` | 4/18 (22%) | 3/18 (17%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `gemma4:e4b-it-q4_K_M` | 4/18 (22%) | 4/18 (22%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `qwen3:14b` | 5/18 (28%) | 3/18 (17%) | 3/18 (17%) | direct: 5/18 (28%) |
+| `ministral-3:14b` | 1/18 (6%) | 4/18 (22%) | 3/18 (17%) | opencode: 4/18 (22%) |
+| `phi4-tools:14b` | 4/18 (22%) | 3/18 (17%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `phi4:14b` | 3/18 (17%) | 3/18 (17%) | 3/18 (17%) | direct: 3/18 (17%) |
+| `qwen3.5:9b-48k` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `qwen3.5:9b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `ministral-3:8b` | 4/18 (22%) | 4/18 (22%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `granite4.1:8b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `qwen3:8b` | 4/18 (22%) | 3/18 (17%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `lfm2.5:8b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+| `rnj-1:8b` | 4/18 (22%) | 4/18 (22%) | 3/18 (17%) | direct: 4/18 (22%) |
+| `granite4.1:3b` | no result | no result | 3/18 (17%) | openhands: 3/18 (17%) |
+
+## Modelos com score ≥ 50% (algum harness)
+
+  - `gemma4:26b`: 10/18 (56%)
+[05:15:34] Batch concluído. Resumo: logs/f5_summary_2026-06-05_00-38.md

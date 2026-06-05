@@ -255,7 +255,9 @@ def main():
             # limpa outputs do run anterior (preserva apenas fixtures externas)
             for f in workdir.glob("*"):
                 if f.is_file() and f.name != "TASK.md":
-                    f.unlink()
+                    # Only delete if it is not a known fixture or config
+                    if f.name not in ["config.json", "settings.py"]:
+                        f.unlink()
 
             agent_result = run_telegram_agent(
                 sid, scenario, workdir, port, prompt_vars,

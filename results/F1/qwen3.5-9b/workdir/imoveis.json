@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Luxuoso Apartamento no Centro",
+    "endereco": "Av. Paulista, 1000 - São Paulo/SP",
+    "preco": 850000,
+    "area_m2": 75,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Studio Moderno com Vista",
+    "endereco": "Rua das Flores, 250 - Rio de Janeiro/RJ",
+    "preco": 450000,
+    "area_m2": 35,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Charme Casa no Jardins",
+    "endereco": "Rua dos Pinheiros, 500 - São Paulo/SP",
+    "preco": 1200000,
+    "area_m2": 300,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Cottage de Verão Aconchegante",
+    "endereco": "Rua da Praia, 120 - Florianópolis/SC",
+    "preco": 680000,
+    "area_m2": 150,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Oportunidade Terreno Loteado",
+    "endereco": "Av. Brasil, 800 - Curitiba/PR",
+    "preco": 120000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Grande Terreno para Construção",
+    "endereco": "Rua do Sol, 350 - Belo Horizonte/MG",
+    "preco": 280000,
+    "area_m2": 1000,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

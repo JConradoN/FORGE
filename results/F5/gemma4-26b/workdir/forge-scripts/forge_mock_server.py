@@ -70,9 +70,12 @@ class MockHandler(BaseHTTPRequestHandler):
         self._respond(200, content_type, path.read_text(encoding="utf-8"))
 
     def _load_market(self) -> dict:
-        f = FIXTURES / "market" / "market-snapshot.json"
-        if f.exists():
-            return json.loads(f.read_text())
+        try:
+            f = FIXTURES / "market" / "market-snapshot.json"
+            if f.exists():
+                return json.loads(f.read_text())
+        except Exception:
+            pass
         return {}
 
     def _respond(self, code: int, content_type: str, body: str):

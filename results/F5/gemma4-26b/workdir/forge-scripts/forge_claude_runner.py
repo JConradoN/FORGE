@@ -182,7 +182,10 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
             text_parts  = []
             tool_uses   = []
 
-            for block in resp.content:
+            if not hasattr(resp, "content") or not resp.content:
+                pass
+            else:
+                for block in resp.content:
                 if block.type == "text":
                     text_parts.append(block.text)
                 elif block.type == "tool_use":
@@ -333,6 +336,7 @@ def main():
             run_summaries.append({**auto_eval, "error": agent_result["error"],
                                    "loop_exhausted": agent_result["loop_exhausted"]})
 
+            # Using Sonnet pricing as baseline
             cost_est = (agent_result["tok_input"] * 3 + agent_result["tok_output"] * 15) / 1_000_000
             print(f"\n  Auto score : {auto_eval['score']}/{auto_eval['max_score']} ({auto_eval['pct']}%)")
             print(f"  Tokens     : {agent_result['tok_input']} in + {agent_result['tok_output']} out")

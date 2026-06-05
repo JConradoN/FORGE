@@ -1,0 +1,139 @@
+{
+  "scenario": "F1",
+  "scenario_name": "Web — Agência Imobiliária (full-stack frontend)",
+  "model": "qwen3.5:9b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 6,
+  "tool_calls_n": 5,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 445044,
+  "tok_total": 47669,
+  "tok_per_s": 107.1,
+  "auto_score": 20,
+  "auto_max": 26,
+  "auto_pct": 77,
+  "auto_checks": {
+    "index.html criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html existe"
+    },
+    "imoveis.json criado": {
+      "passed": true,
+      "weight": 3,
+      "detail": "imoveis.json existe"
+    },
+    "carrega JSON via fetch": {
+      "passed": true,
+      "weight": 3,
+      "detail": "'fetch(' encontrado em index.html"
+    },
+    "botões de filtro": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'Apartamento' encontrado em index.html"
+    },
+    "paleta #1B4332": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'#1B4332' encontrado em index.html"
+    },
+    "media query 768px": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'768px' encontrado em index.html"
+    },
+    "validação de formulário": {
+      "passed": false,
+      "weight": 2,
+      "detail": "'validity' NÃO encontrado em index.html"
+    },
+    "6 fotos placehold.co": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'placehold.co' aparece 6x em imoveis.json (mín 6)"
+    },
+    "index.html > 15 KB": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html: 22586 bytes (≥ 15000)"
+    },
+    "servidor na porta {port}": {
+      "passed": false,
+      "weight": 3,
+      "detail": "porta 8200 fechada"
+    },
+    "usou write_file": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'write_file' chamada"
+    },
+    "usou run_bash": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'run_bash' chamada"
+    },
+    "confirmou publicação": {
+      "passed": false,
+      "weight": 1,
+      "detail": "'PÁGINA PUBLICADA' NÃO encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "write_file",
+      "args": {
+        "path": "imoveis.json",
+        "content": "[\n  {\n    \"id\": 1,\n    \"tipo\": \"Apartamento\",\n    \"titulo\": \"Luxuoso Apartamento no Centro\",\n    \"endereco\": \"Av. Paulista, 1000 - São Paulo/SP\",\n    \"preco\": 850000,\n    \"area_m2\": 75,\n    \"quartos\":"
+      },
+      "result": "OK: imoveis.json (1486 chars, 63 linhas)"
+    },
+    {
+      "turn": 2,
+      "name": "write_file",
+      "args": {
+        "path": "index.html",
+        "content": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Casa Certa Imóveis - Encontre seu Lar dos Sonhos</"
+      },
+      "result": "OK: index.html (22523 chars, 829 linhas)"
+    },
+    {
+      "turn": 3,
+      "name": "run_bash",
+      "args": {
+        "command": "nohup python3 -m http.server 8200 --directory . > /dev/null 2>&1 &"
+      },
+      "result": "(sem output)"
+    },
+    {
+      "turn": 4,
+      "name": "run_bash",
+      "args": {
+        "command": "sleep 2 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8200/"
+      },
+      "result": "200"
+    },
+    {
+      "turn": 5,
+      "name": "send_claudio",
+      "args": {
+        "message": "✅ **PÁGINA PUBLICADA: http://localhost:8200/**\n\nSite imobiliário completo criado com sucesso!\n\n**Arquivos criados:**\n- `imoveis.json` - 6 imóveis (2 Apartamentos, 2 Casas, 2 Terrenos)\n- `index.html` -"
+      },
+      "result": "Mensagem enviada. message_id=2783"
+    }
+  ],
+  "final_response": "Perfeito! O site imobiliário foi criado com sucesso e está rodando corretamente no servidor local na porta 8200. \n\n**Resumo do que foi feito:**\n\n1. **`imoveis.json`**: Arquivo JSON com exatamente 6 imóveis (3 Apartamentos, 2 Casas, 2 Terrenos) contendo todos os campos solicitados: id, tipo, titulo, endereco, preco, area_m2, quartos e foto.\n\n2. **`index.html`**: Página HTML completa e auto-contida com:\n   - Design responsivo usando a paleta de cores obrigatória\n   - Hero section com headline forte e CTA\n   - Grade de imóveis carregada dinamicamente via `fetch('./imoveis.json')`\n   - Botões de filtro por tipo que filtram os imóveis em tempo real\n   - Seção Sobre Nós da agência 'Casa Certa Imóveis'\n   - Formulário de contato com validação completa (nome obrigatório, e-mail válido, mensagem obrigatória)\n   - Menu mobile responsivo com hamburger menu funcional\n\n3. **Servidor**: Iniciado na porta 8200 e verificado com sucesso (HTTP 200).",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

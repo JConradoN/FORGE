@@ -811,7 +811,8 @@ def main():
             read_max = scenario.get("read_max_chars")
             agent_result = run_agent(model, sid, prompt, workdir,
                                      read_max_chars=read_max)
-            auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug)
+            auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug,
+                                         extra_vars={"port": port})
             out_file     = save_run_result(sid, model, run_idx, workdir,
                                            agent_result, auto_eval, scenario)
 

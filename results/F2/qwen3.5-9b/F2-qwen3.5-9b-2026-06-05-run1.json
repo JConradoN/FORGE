@@ -1,0 +1,92 @@
+{
+  "scenario": "F2",
+  "scenario_name": "Análise Web + Relatório + Notificação Claudio",
+  "model": "qwen3.5:9b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 4,
+  "tool_calls_n": 3,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 44593,
+  "tok_total": 12134,
+  "tok_per_s": 272.1,
+  "auto_score": 11,
+  "auto_max": 11,
+  "auto_pct": 100,
+  "auto_checks": {
+    "buscou a URL (http_get)": {
+      "passed": true,
+      "weight": 2,
+      "detail": "tool 'http_get' chamada"
+    },
+    "relatório criado (.md)": {
+      "passed": true,
+      "weight": 2,
+      "detail": "relatorio-qwen3.5-9b.md existe"
+    },
+    "relatório tem RESUMO": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'RESUMO' encontrado em relatorio-qwen3.5-9b.md"
+    },
+    "relatório tem RELEVÂNCIA": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'RELEV' encontrado em relatorio-qwen3.5-9b.md"
+    },
+    "relatório tem OPORTUNIDADES": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'OPORTUNIDADES' encontrado em relatorio-qwen3.5-9b.md"
+    },
+    "enviou pelo Claudio": {
+      "passed": true,
+      "weight": 2,
+      "detail": "tool 'send_claudio' chamada"
+    },
+    "confirmou conclusão": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'ANÁLISE CONCLUÍDA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "http_get",
+      "args": {
+        "url": "https://github.com/n8n-io/n8n"
+      },
+      "result": "\n\n\n\n\n\n<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.g"
+    },
+    {
+      "turn": 2,
+      "name": "write_file",
+      "args": {
+        "path": "relatorio-qwen3.5-9b.md",
+        "content": "# Relatório de Análise Técnica - n8n.io/n8n\n\n## RESUMO\nO repositório do n8n apresenta uma plataforma open-source de automação de workflows que se integra perfeitamente ao nosso stack tecnológico, ofer"
+      },
+      "result": "OK: relatorio-qwen3.5-9b.md (3295 chars, 46 linhas)"
+    },
+    {
+      "turn": 3,
+      "name": "send_claudio",
+      "args": {
+        "message": "🔍 **ANÁLISE TÉCNICA CONCLUÍDA**\n\n📄 *Página analisada*: n8n.io/n8n - Plataforma de automação workflows open-source\n\n⚡ *Classificação de Relevância*: **ALTA** 🟢\n\n📝 *Resumo inicial*: O repositório do n8n"
+      },
+      "result": "Mensagem enviada. message_id=2785"
+    }
+  ],
+  "final_response": "ANÁLISE CONCLUÍDA: relevância=Alta, relatório salvo, Claudio notificado.",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}
