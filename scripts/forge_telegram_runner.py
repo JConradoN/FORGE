@@ -170,7 +170,9 @@ def run_telegram_agent(scenario_id: str, scenario: dict, workdir: Path,
 
     _await_enter()
 
-    completed = wait_for_workdir(workdir, seed_files, timeout_s=TASK_TIMEOUT_S)
+    stable_s  = scenario.get("monitor_stable_s", 60)
+    completed = wait_for_workdir(workdir, seed_files, timeout_s=TASK_TIMEOUT_S,
+                                 stable_s=stable_s)
     if not completed:
         error = f"timeout {TASK_TIMEOUT_S}s — sem arquivos de output"
 
@@ -257,7 +259,8 @@ def main():
                 sid, scenario, workdir, port, prompt_vars,
                 response_override=args.response
             )
-            auto_eval = auto_evaluate(scenario, workdir, agent_result, TELEGRAM_SLUG)
+            auto_eval = auto_evaluate(scenario, workdir, agent_result, TELEGRAM_SLUG,
+                                      extra_vars={"port": port})
             out_file  = save_run_result(sid, TELEGRAM_SLUG, run_idx, workdir,
                                         agent_result, auto_eval, scenario)
 

@@ -1,0 +1,66 @@
+{
+  "scenario": "F3",
+  "scenario_name": "Inteligência de Mercado — Câmbio e Cripto",
+  "model": "telegram-gemma4-26b",
+  "run_idx": 1,
+  "date": "2026-06-04",
+  "turns": 1,
+  "tool_calls_n": 0,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 90000,
+  "tok_total": 0,
+  "tok_per_s": 0.0,
+  "auto_score": 10,
+  "auto_max": 10,
+  "auto_pct": 100,
+  "auto_checks": {
+    "relatório criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "analise-mercado-aurelia.md existe"
+    },
+    "relatório tem COTAÇÕES": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'COTAÇÕES' encontrado em analise-mercado-aurelia.md"
+    },
+    "relatório tem TENDÊNCIA": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'TEND' encontrado em analise-mercado-aurelia.md"
+    },
+    "relatório tem RECOMENDAÇÃO": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'RECOMEND' encontrado em analise-mercado-aurelia.md"
+    },
+    "menciona USD": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'USD' encontrado em analise-mercado-aurelia.md"
+    },
+    "menciona BTC": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'BTC' encontrado em analise-mercado-aurelia.md"
+    },
+    "confirmou conclusão": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'ANÁLISE CONCLUÍDA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [],
+  "final_response": "ANÁLISE CONCLUÍDA: USD=5.0637, BTC=324041, tendência dólar=queda",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

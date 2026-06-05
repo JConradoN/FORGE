@@ -1,0 +1,61 @@
+{
+  "scenario": "F1",
+  "scenario_name": "Web — Página Imobiliária Completa",
+  "model": "telegram-gemma4-26b",
+  "run_idx": 1,
+  "date": "2026-06-04",
+  "turns": 1,
+  "tool_calls_n": 0,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 60000,
+  "tok_total": 0,
+  "tok_per_s": 0.0,
+  "auto_score": 9,
+  "auto_max": 9,
+  "auto_pct": 100,
+  "auto_checks": {
+    "index.html criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html existe"
+    },
+    "contém 'Casa Certa'": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'Casa Certa' encontrado em index.html"
+    },
+    "contém tag <html>": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<html' encontrado em index.html"
+    },
+    "contém CSS": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<style' encontrado em index.html"
+    },
+    "contém formulário": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'<form' encontrado em index.html"
+    },
+    "confirmou publicação": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'PÁGINA PUBLICADA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [],
+  "final_response": "PÁGINA PUBLICADA: http://localhost:8500/",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

@@ -486,15 +486,20 @@ def load_scenario(scenario_id: str) -> dict:
 
 
 # ── Avaliação automática ──────────────────────────────────────
-def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str) -> dict:
+def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str,
+                  extra_vars: dict | None = None) -> dict:
     """
     Executa os checks automáticos definidos no cenário.
-    Fix BUG: recebe 'slug' e substitui {model_slug} nos paths dos checks.
+    extra_vars permite substituir variáveis adicionais (ex: port, workdir).
     """
     checks    = scenario.get("auto_checks", [])
     results   = {}
     score     = 0
     max_score = 0
+
+    fmt_vars = {"model_slug": slug, "workdir": str(workdir)}
+    if extra_vars:
+        fmt_vars.update(extra_vars)
 
     for check in checks:
         ctype  = check["type"]
@@ -504,9 +509,13 @@ def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str) 
         passed = False
         detail = ""
 
-        # Fix BUG: substituir {model_slug} no path e outros campos do check
         def _resolve(s: str) -> str:
-            return s.format(model_slug=slug) if isinstance(s, str) else s
+            if not isinstance(s, str):
+                return s
+            try:
+                return s.format(**fmt_vars)
+            except KeyError:
+                return s  # deixa a variável não-resolvida intacta
 
         if ctype == "file_exists":
             path_resolved = _resolve(check["path"])

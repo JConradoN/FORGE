@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Studio Moderno",
+    "endereco": "Rua das Flores, 123",
+    "preco": 350000,
+    "area_m2": 45,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Cobertura Vista Mar",
+    "endereco": "Av. Beira Mar, 500",
+    "preco": 1200000,
+    "area_m2": 180,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa de Condomínio",
+    "endereco": "Alameda das Palmeiras, 88",
+    "preco": 750000,
+    "area_m2": 220,
+    "quartos": 4,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Casarão Histórico",
+    "endereco": "Praça da Sé, 10",
+    "preco": 950000,
+    "area_m2": 350,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Lote Residencial",
+    "endereco": "Estrada Rural, s/n",
+    "preco": 150000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno Industrial",
+    "endereco": "Distrito Industrial, Lote 12",
+    "preco": 500000,
+    "area_m2": 2000,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]
