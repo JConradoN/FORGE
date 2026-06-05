@@ -29,7 +29,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 from forge_runner import (
     dispatch_tool, auto_evaluate, save_run_result, aggregate_runs,
-    load_scenario, RESULTS_BASE, MAX_TURNS, _kill_port, _extract_server_port,
+    load_scenario, RESULTS_BASE, MAX_TURNS, WALL_TIMEOUT_S, STUCK_WINDOW, HARNESS_VERSION,
+    _kill_port, _extract_server_port,
     _check_bash_safety,
 )
 
@@ -161,6 +162,7 @@ SYSTEM_PROMPT = (
 
 # ── Loop do agente Claude ─────────────────────────────────────
 def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path,
+                     scenario: dict | None = None,
                      read_max_chars: int | None = None) -> dict:
     api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY_FOXDEV")
     if not api_key:
@@ -178,20 +180,31 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
     tok_output     = 0
     cleanup_ports  = []
 
-    print(f"\n  [claude] modelo={model_id} | max_turns={MAX_TURNS}")
+    wall_timeout = int((scenario or {}).get("wall_timeout_s", WALL_TIMEOUT_S))
+    stuck_window = int((scenario or {}).get("stuck_window",   STUCK_WINDOW))
+
+    print(f"\n  [claude] modelo={model_id} | wall_timeout={wall_timeout}s")
+
+    stop_reason  = None
+    recent_calls = []
 
     try:
         current_prompt = prompt
 
-        while turns < MAX_TURNS:
+        while True:
+            elapsed = time.time() - t_start
+            if elapsed >= wall_timeout:
+                stop_reason = "wall_timeout"
+                print(f"\n  [claude] wall_timeout após {elapsed:.0f}s / {turns} turns")
+                break
+
             turns += 1
             print(f"  [turn {turns}] chamando API Anthropic...", end=" ", flush=True)
 
-            # Construir mensagens no formato Anthropic
             if not messages:
                 messages = [{"role": "user", "content": current_prompt}]
 
-            # Retry com backoff exponencial em 429 (rate limit)
+            resp = None
             for attempt in range(5):
                 try:
                     resp = client.messages.create(
@@ -202,7 +215,7 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
                         messages=messages,
                     )
                     break
-                except anthropic.RateLimitError as e:
+                except anthropic.RateLimitError:
                     wait = (2 ** attempt) * 10 + random.uniform(0, 5)
                     print(f"\n  [429] rate limit — aguardando {wait:.0f}s (tentativa {attempt+1}/5)...")
                     time.sleep(wait)
@@ -213,14 +226,16 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
             else:
                 error = "429 rate limit após 5 tentativas"
                 print(f"  ABORTANDO: {error}")
+
+            if resp is None:
+                stop_reason = "api_error"
                 break
 
             tok_input  += resp.usage.input_tokens
             tok_output += resp.usage.output_tokens
 
-            # Processar conteúdo da resposta
-            text_parts  = []
-            tool_uses   = []
+            text_parts = []
+            tool_uses  = []
 
             for block in resp.content:
                 if block.type == "text":
@@ -232,6 +247,7 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
 
             if resp.stop_reason == "end_turn" and not tool_uses:
                 final_response = text_content
+                stop_reason    = "converged"
                 print(f"resposta final ({len(final_response)} chars)")
                 messages.append({"role": "assistant", "content": resp.content})
                 break
@@ -265,9 +281,20 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
                     "content":     str(result)
                 })
 
+                sig = f"{name}:{list(args.values())[0][:80] if args else ''}"
+                recent_calls.append(sig)
+                if len(recent_calls) > stuck_window:
+                    recent_calls.pop(0)
+                if len(recent_calls) == stuck_window and len(set(recent_calls)) == 1:
+                    stop_reason = "stuck_loop"
+                    error = f"Loop preso detectado: {stuck_window} chamadas idênticas a '{sig}'"
+                    print(f"\n  [claude] STUCK: {error}")
+                    break
+
             messages.append({"role": "user", "content": tool_results})
-        else:
-            print(f"  [claude] loop expirado após {MAX_TURNS} turns")
+
+            if stop_reason == "stuck_loop":
+                break
 
     finally:
         for port in cleanup_ports:
@@ -286,9 +313,9 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
         "tok_total":      tok_total,
         "tok_input":      tok_input,
         "tok_output":     tok_output,
-        "loop_exhausted": turns >= MAX_TURNS and not final_response,
+        "stop_reason":    stop_reason,
+        "loop_exhausted": stop_reason in ("wall_timeout", "stuck_loop"),
         "cleanup_ports":  cleanup_ports,
-        # Claude não tem tok/s no mesmo sentido — registrar latência
         "provider":       "anthropic",
     }
 
@@ -382,6 +409,7 @@ def main():
 
             read_max = scenario.get("read_max_chars")
             agent_result = run_claude_agent(model_id, sid, prompt, workdir,
+                                            scenario=scenario,
                                             read_max_chars=read_max)
             auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug,
                                          extra_vars={"port": port})

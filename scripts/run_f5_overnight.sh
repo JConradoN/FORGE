@@ -19,7 +19,7 @@ TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
 LOG_FILE="logs/f5_overnight_${TIMESTAMP}.log"
 SUMMARY_FILE="logs/f5_summary_${TIMESTAMP}.md"
 
-PYTHON_VENV="/home/conrado/.venv/bin/python3"
+PYTHON_VENV="python3"
 PYTHON_SYS="python3"
 
 log() { echo "[$(date +%H:%M:%S)] $*" | tee -a "$LOG_FILE"; }

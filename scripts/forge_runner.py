@@ -34,7 +34,24 @@ from pathlib import Path
 OLLAMA_URL    = "http://localhost:11434/api/chat"
 RESULTS_BASE   = Path(__file__).parent.parent / "results"
 SCENARIOS_BASE = Path(__file__).parent.parent / "scenarios"
-MAX_TURNS      = 20
+HARNESS_VERSION = "v4"  # v1=original, v2=reflexão+timeout, v3=wall_timeout+stuck, v4=workdir_clean+num_predict+erros_com_exemplos
+
+def _get_ollama_version() -> str:
+    try:
+        result = subprocess.run(
+            ["docker", "exec", "ollama", "ollama", "--version"],
+            capture_output=True, text=True, timeout=5
+        )
+        import re as _re
+        m = _re.search(r"[\d]+\.[\d]+\.[\d]+", result.stdout)
+        return m.group(0) if m else "unknown"
+    except Exception:
+        return "unknown"
+
+OLLAMA_VERSION = _get_ollama_version()
+MAX_TURNS      = 20    # mantido apenas como fallback — preferir wall_timeout_s por cenário
+WALL_TIMEOUT_S = 7200  # timeout de parede padrão: 2h (previne loops infinitos)
+STUCK_WINDOW   = 5     # aborta se as últimas N tool calls forem idênticas (loop preso)
 TIMEOUT_S      = 300   # timeout para comandos bash (run_bash)
 OLLAMA_TIMEOUT = 900   # timeout por chamada à API Ollama (15min — cobre modelos 27B+)
 TEMPERATURE    = 0
@@ -309,9 +326,9 @@ _PROTECTED_FILES = {"validate.py", "TASK.md"}
 
 def exec_write_file(path: str, content: str, workdir: Path) -> str:
     if not path or not path.strip():
-        return "[ERRO] Parâmetro 'path' é obrigatório."
+        return "[ERRO] Parâmetro 'path' é obrigatório. Exemplo correto: write_file(path='relatorio.md', content='# Conteúdo')"
     if not content:
-        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio. Inclua o conteúdo completo do arquivo no parâmetro 'content'."
+        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio. Exemplo correto: write_file(path='relatorio.md', content='# Conteúdo')"
     target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
@@ -326,9 +343,9 @@ def exec_write_file(path: str, content: str, workdir: Path) -> str:
 
 def exec_append_file(path: str, content: str, workdir: Path) -> str:
     if not path or not path.strip():
-        return "[ERRO] Parâmetro 'path' é obrigatório."
+        return "[ERRO] Parâmetro 'path' é obrigatório. Exemplo correto: append_file(path='relatorio.md', content='# Mais conteúdo')"
     if not content:
-        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio."
+        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio. Exemplo correto: append_file(path='relatorio.md', content='# Mais conteúdo')"
     target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
@@ -433,7 +450,7 @@ def call_ollama(model: str, messages: list) -> dict:
         "tools":    TOOLS,
         "stream":   False,
         "think":    False,
-        "options":  {"temperature": TEMPERATURE}
+        "options":  {"temperature": TEMPERATURE, "num_predict": -1}
     }
     data = json.dumps(payload).encode()
     req = urllib.request.Request(
@@ -496,10 +513,25 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
 
     slug = model.replace(":", "-").replace("/", "_")
 
-    print(f"\n  [agente] iniciando loop (max {MAX_TURNS} turns)")
+    # Limite de tempo de parede por cenário (padrão: 2h). Não limitar por turns —
+    # o benchmark mede CAPACIDADE de completar a tarefa, não velocidade.
+    wall_timeout = int((scenario or {}).get("wall_timeout_s", WALL_TIMEOUT_S))
+    stuck_window = int((scenario or {}).get("stuck_window",   STUCK_WINDOW))
+
+    print(f"\n  [agente] iniciando loop (wall_timeout={wall_timeout}s, stuck_window={stuck_window})")
+
+    stop_reason   = None   # "converged" | "wall_timeout" | "stuck_loop" | "api_error" | "reflection_exhausted"
+    recent_calls  = []     # últimas N assinaturas de tool call — detecta loop preso
 
     try:
-        while turns < MAX_TURNS:
+        while True:
+            # ── Verificação de tempo de parede ───────────────────────
+            elapsed = time.time() - t_start
+            if elapsed >= wall_timeout:
+                stop_reason = "wall_timeout"
+                print(f"\n  [agente] wall_timeout após {elapsed:.0f}s / {turns} turns")
+                break
+
             turns += 1
             print(f"  [turn {turns}] chamando API...", end=" ", flush=True)
 
@@ -507,6 +539,7 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
                 resp = call_ollama(model, messages)
             except RuntimeError as e:
                 error = str(e)
+                stop_reason = "api_error"
                 print(f"ERRO: {error}")
                 break
 
@@ -519,12 +552,13 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
                 # Agente satisfeito → encerra
                 if "REVISÃO CONCLUÍDA" in content:
                     final_response = content
+                    stop_reason    = "converged"
                     print(f"resposta final ({len(content)} chars) ✓ satisfeito")
                     messages.append({"role": "assistant", "content": content})
                     break
 
                 # Ainda há rounds de reflexão disponíveis → injeta prompt autônomo
-                if reflection_rounds < MAX_REFLECTION and turns < MAX_TURNS - 1:
+                if reflection_rounds < MAX_REFLECTION:
                     reflection_rounds += 1
                     print(f"resposta ({len(content)} chars) → [reflexão {reflection_rounds}/{MAX_REFLECTION}]")
                     messages.append({"role": "assistant", "content": content})
@@ -533,6 +567,7 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
 
                 # Rounds esgotados → encerra com o que tem
                 final_response = content
+                stop_reason    = "reflection_exhausted"
                 print(f"resposta final ({len(content)} chars)")
                 messages.append({"role": "assistant", "content": content})
                 break
@@ -559,24 +594,37 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
                     "result": str(result)[:500]
                 })
                 messages.append({"role": "tool", "content": str(result)})
-        else:
-            print(f"  [agente] loop expirado após {MAX_TURNS} turns")
+
+                # ── Detector de loop preso ────────────────────────────
+                # Assinatura = nome + primeiro argumento (path/command)
+                sig = f"{name}:{list(args.values())[0][:80] if args else ''}"
+                recent_calls.append(sig)
+                if len(recent_calls) > stuck_window:
+                    recent_calls.pop(0)
+                if len(recent_calls) == stuck_window and len(set(recent_calls)) == 1:
+                    stop_reason = "stuck_loop"
+                    error = f"Loop preso detectado: {stuck_window} chamadas idênticas a '{sig}'"
+                    print(f"\n  [agente] STUCK: {error}")
+                    break
+
+            if stop_reason == "stuck_loop":
+                break
 
     finally:
-        # Fix CLEANUP: encerrar servidores iniciados durante o run
         for port in cleanup_ports:
             print(f"  [cleanup] encerrando servidor na porta {port}")
             _kill_port(port)
 
     duration_ms = int((time.time() - t_start) * 1000)
     return {
-        "turns":          turns,
-        "tool_calls":     tool_calls_log,
-        "final_response": final_response,
-        "error":          error,
-        "duration_ms":    duration_ms,
-        "tok_total":      tok_total,
-        "loop_exhausted":    turns >= MAX_TURNS and not final_response,
+        "turns":             turns,
+        "tool_calls":        tool_calls_log,
+        "final_response":    final_response,
+        "error":             error,
+        "duration_ms":       duration_ms,
+        "tok_total":         tok_total,
+        "stop_reason":       stop_reason,
+        "loop_exhausted":    stop_reason in ("wall_timeout", "stuck_loop", "reflection_exhausted"),
         "cleanup_ports":     cleanup_ports,
         "reflection_rounds": reflection_rounds,
     }
@@ -754,14 +802,19 @@ def save_run_result(scenario_id: str, model: str, run_idx: int, workdir: Path,
     out_dir.mkdir(parents=True, exist_ok=True)
 
     summary = {
-        "scenario":       scenario_id,
-        "scenario_name":  scenario.get("name", ""),
-        "model":          model,
-        "run_idx":        run_idx,
-        "date":           ts,
+        "scenario":        scenario_id,
+        "scenario_name":   scenario.get("name", ""),
+        "harness_version": HARNESS_VERSION,
+        "ollama_version":  OLLAMA_VERSION,
+        "prompt_version":  scenario.get("prompt_version", "v1"),
+        "model":           model,
+        "run_idx":         run_idx,
+        "date":            ts,
         "turns":          agent_result["turns"],
         "tool_calls_n":   len(agent_result["tool_calls"]),
-        "loop_exhausted": agent_result["loop_exhausted"],
+        "loop_exhausted":    agent_result["loop_exhausted"],
+        "stop_reason":       agent_result.get("stop_reason"),
+        "reflection_rounds": agent_result.get("reflection_rounds", 0),
         "error":          agent_result["error"],
         "duration_ms":    agent_result["duration_ms"],
         "tok_total":      agent_result["tok_total"],
@@ -849,10 +902,14 @@ def main():
 
         port    = args.port_base + i
         workdir = RESULTS_BASE / sid / slug / "workdir"
+
+        # Limpar workdir antes de cada run para evitar contaminação de runs anteriores
+        import shutil
+        if workdir.exists():
+            shutil.rmtree(workdir)
         workdir.mkdir(parents=True, exist_ok=True)
 
         # Copiar fixtures de diretório para o workdir
-        import shutil
         for fixture_rel in scenario.get("fixture_dirs", []):
             src = SCENARIOS_BASE / fixture_rel
             dst = workdir / src.name

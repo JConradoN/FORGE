@@ -21,7 +21,6 @@ Endpoints:
 
 import argparse
 import json
-import os
 import signal
 import subprocess
 import sys
@@ -106,7 +105,8 @@ def stop():
         return
     pid = int(PID_FILE.read_text().strip())
     try:
-        os.kill(pid, signal.SIGTERM)
+        import os as _os
+        _os.kill(pid, signal.SIGTERM)
         PID_FILE.unlink(missing_ok=True)
         print(f"[forge_mock] Servidor (PID {pid}) encerrado.")
     except ProcessLookupError:
@@ -126,6 +126,8 @@ def status():
     except Exception as e:
         print(f"[forge_mock] PID {pid} registrado mas servidor não responde: {e}")
 
+
+import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="FORGE Mock Server")

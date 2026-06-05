@@ -25,6 +25,7 @@ import json
 import shutil
 import time
 from pathlib import Path
+import signal
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -87,14 +88,16 @@ def wait_for_workdir(workdir: Path, seed_files: set,
 
 
 def _await_enter():
+    # Fix: tratamento de erro para sistemas headless com timeout reduzido e feedback claro
     try:
         with open("/dev/tty", "r") as tty:
             print("  >> Pressione ENTER após enviar as mensagens no Telegram... ",
                   end="", flush=True)
             tty.readline()
     except OSError:
-        print("  >> (sem TTY — aguardando 20s automaticamente...)")
-        time.sleep(20)
+        # Sem TTY — aguardar tempo reduzido (10s em vez de indefinido) e continuar automaticamente
+        print("  >> (sem TTY — prosseguindo após 10s...)")
+        time.sleep(10)
     print()
 
 

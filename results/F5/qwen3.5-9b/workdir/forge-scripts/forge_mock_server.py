@@ -21,6 +21,7 @@ Endpoints:
 
 import argparse
 import json
+import os as _os
 import signal
 import subprocess
 import sys
@@ -72,8 +73,13 @@ class MockHandler(BaseHTTPRequestHandler):
     def _load_market(self) -> dict:
         f = FIXTURES / "market" / "market-snapshot.json"
         if f.exists():
-            return json.loads(f.read_text())
-        return {}
+            try:
+                return json.loads(f.read_text())
+            except Exception as e:
+                print(f"[forge_mock] Aviso: erro ao ler fixture {f}: {e}", file=sys.stderr)
+                return {}
+        # Fix: retornar estrutura padrão vazia mas consistente se arquivo não existir
+        return {"pairs": {}, "usd_history_7d": []}
 
     def _respond(self, code: int, content_type: str, body: str):
         data = body.encode("utf-8")
@@ -105,7 +111,7 @@ def stop():
         return
     pid = int(PID_FILE.read_text().strip())
     try:
-        import os as _os
+        # Fix: usar _os já importado no topo do arquivo (não importa inline)
         _os.kill(pid, signal.SIGTERM)
         PID_FILE.unlink(missing_ok=True)
         print(f"[forge_mock] Servidor (PID {pid}) encerrado.")
@@ -126,8 +132,6 @@ def status():
     except Exception as e:
         print(f"[forge_mock] PID {pid} registrado mas servidor não responde: {e}")
 
-
-import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="FORGE Mock Server")

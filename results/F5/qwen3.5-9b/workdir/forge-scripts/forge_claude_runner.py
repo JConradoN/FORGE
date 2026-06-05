@@ -134,6 +134,9 @@ CLAUDE_TOOLS = [
 
 # ── Loop do agente Claude ─────────────────────────────────────
 def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path) -> dict:
+    # Fix: inicializar todas variáveis no topo para evitar AttributeError com APIs diferentes
+    text_parts  = []
+    tool_uses   = []
     api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY_FOXDEV")
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY ou ANTHROPIC_API_KEY_FOXDEV não definida.")
@@ -206,8 +209,22 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
                 args = dict(tu.input)
                 print(f"    → {name}({list(args.keys())})", end=" ... ", flush=True)
 
-                result = dispatch_tool(name, args, workdir, cleanup_ports)
-                print(f"({len(str(result))} chars)")
+                raw_result = dispatch_tool(name, args, workdir, cleanup_ports)
+                
+                # Fix: tratar mensagens de bloqueio como erros explícitos
+                if "[BLOQUEADO]" in str(raw_result):
+                    error_msg = f"[ERRO] Comando '{name}' foi bloqueado pelo blocklist."
+                    tool_calls_log.append({{
+                        "turn":   turns,
+                        "name":   name,
+                        "args":   {{k: str(v)[:200] for k, v in args.items()}},
+                        "result": error_msg + ": " + raw_result[:300],
+                        "_blocked": True  # marcar como erro de bloqueio
+                    }})
+                    print(f"    → {name} BLOQUEADO")
+                    break
+                
+                result = str(raw_result)
 
                 tool_calls_log.append({
                     "turn":   turns,

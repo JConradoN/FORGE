@@ -16,6 +16,7 @@ Uso:
 
 import argparse
 import json
+import os
 import urllib.request
 from pathlib import Path
 
@@ -41,21 +42,31 @@ Responda APENAS com JSON válido, sem texto fora do JSON:
 }"""
 
 
-def call_judge(task_context: str, artifact_content: str,
-               rubric: dict, model: str) -> dict | None:
-    rubric_text = "\n".join(
-        f"- {k} (0-3): {v}" for k, v in rubric.items()
-    )
-    max_score = len(rubric) * 3
+def _parse_judge_response(content: str, rubric: dict, max_score: int) -> dict | None:
+    # Remove markdown code fences se presentes
+    stripped = content.strip()
+    if stripped.startswith("```"):
+        lines = stripped.splitlines()
+        stripped = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
+    # Tenta parse direto primeiro, depois fallback por { }
+    for candidate in [stripped, content]:
+        start = candidate.find("{")
+        end   = candidate.rfind("}") + 1
+        if start >= 0 and end > start:
+            try:
+                result = json.loads(candidate[start:end])
+                scores = result.get("scores", {})
+                total  = sum(scores.values())
+                result["total"] = total
+                result["max"]   = max_score
+                result["pct"]   = round(total / max_score * 100) if max_score else 0
+                return result
+            except json.JSONDecodeError:
+                continue
+    return None
 
-    prompt = (
-        f"CONTEXTO DA TAREFA (TASK.md):\n{task_context[:2000]}\n\n"
-        f"ARTEFATO A AVALIAR:\n{artifact_content[:8000]}\n\n"
-        f"RUBRICA (escala 0-3 por critério, total máximo {max_score}):\n"
-        f"{rubric_text}\n\n"
-        f"Avalie o artefato e responda em JSON."
-    )
 
+def _call_judge_ollama(prompt: str, model: str) -> str:
     payload = {
         "model":    model,
         "messages": [
@@ -66,26 +77,74 @@ def call_judge(task_context: str, artifact_content: str,
         "think":   False,
         "options": {"temperature": 0},
     }
+    data = json.dumps(payload).encode()
+    req  = urllib.request.Request(
+        OLLAMA_URL, data=data,
+        headers={"Content-Type": "application/json"}
+    )
+    with urllib.request.urlopen(req, timeout=180) as r:
+        raw = json.loads(r.read())
+        return raw.get("message", {}).get("content", "")
+
+
+def _call_judge_claude(prompt: str, model: str) -> str:
     try:
-        data = json.dumps(payload).encode()
-        req  = urllib.request.Request(
-            OLLAMA_URL, data=data,
-            headers={"Content-Type": "application/json"}
-        )
-        with urllib.request.urlopen(req, timeout=180) as r:
-            raw     = json.loads(r.read())
-            content = raw.get("message", {}).get("content", "")
-            start   = content.find("{")
-            end     = content.rfind("}") + 1
-            if start >= 0 and end > start:
-                result = json.loads(content[start:end])
-                # Garantir campos calculados
-                scores = result.get("scores", {})
-                total  = sum(scores.values())
-                result["total"] = total
-                result["max"]   = max_score
-                result["pct"]   = round(total / max_score * 100) if max_score else 0
-                return result
+        import anthropic
+    except ImportError:
+        raise RuntimeError("anthropic SDK não instalado: pip install anthropic")
+    api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY_FOXDEV")
+    if not api_key:
+        raise RuntimeError("ANTHROPIC_API_KEY não definida")
+    client = anthropic.Anthropic(api_key=api_key)
+    resp = client.messages.create(
+        model=model,
+        max_tokens=2048,
+        system=JUDGE_SYSTEM,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return resp.content[0].text if resp.content else ""
+
+
+def _call_judge_gemini(prompt: str, model: str) -> str:
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY não definida")
+    url     = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+    payload = {
+        "systemInstruction": {"parts": [{"text": JUDGE_SYSTEM}]},
+        "contents":          [{"parts": [{"text": prompt}]}],
+        "generationConfig":  {
+            "temperature": 0,
+            "maxOutputTokens": 2048,
+            "thinkingConfig": {"thinkingBudget": 0},
+        },
+    }
+    data = json.dumps(payload).encode()
+    req  = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        raw = json.loads(r.read())
+        return raw["candidates"][0]["content"]["parts"][0]["text"]
+
+
+def call_judge(task_context: str, artifact_content: str,
+               rubric: dict, model: str) -> dict | None:
+    rubric_text = "\n".join(f"- {k} (0-3): {v}" for k, v in rubric.items())
+    max_score   = len(rubric) * 3
+    prompt = (
+        f"CONTEXTO DA TAREFA (TASK.md):\n{task_context[:2000]}\n\n"
+        f"ARTEFATO A AVALIAR:\n{artifact_content[:8000]}\n\n"
+        f"RUBRICA (escala 0-3 por critério, total máximo {max_score}):\n"
+        f"{rubric_text}\n\n"
+        f"Avalie o artefato e responda em JSON."
+    )
+    try:
+        if model.startswith("claude-"):
+            content = _call_judge_claude(prompt, model)
+        elif model.startswith("gemini-"):
+            content = _call_judge_gemini(prompt, model)
+        else:
+            content = _call_judge_ollama(prompt, model)
+        return _parse_judge_response(content, rubric, max_score)
     except Exception as e:
         print(f"  [judge] ERRO: {e}")
     return None

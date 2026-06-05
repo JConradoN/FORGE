@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Workdirs — gerados em runtime, não versionar
+results/*/workdir/
+
+# Logs de batch
+/tmp/forge_*.log
+*.log
+
+# Segredos
+.env
+.env.*
+*.secrets
+
+# OS
+.DS_Store

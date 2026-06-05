@@ -30,6 +30,9 @@ import urllib.parse
 from html.parser import HTMLParser
 from pathlib import Path
 
+# ── Arquivos protegidos (definido antes do uso) ───────────────────
+_PROTECTED_FILES = {"validate.py", "TASK.md"}  # Fix: definido após imports, antes de usar em exec_run_bash()
+
 # ── Configuração ──────────────────────────────────────────────
 OLLAMA_URL    = "http://localhost:11434/api/chat"
 RESULTS_BASE   = Path(__file__).parent.parent / "results"
@@ -248,6 +251,7 @@ def _kill_port(port: int):
 
 
 # ── Implementação das ferramentas ─────────────────────────────
+# ── Implementação das ferramentas ─────────────────────────────
 def exec_run_bash(command: str, workdir: Path, cleanup_ports: list) -> str:
     # Fix SEGURANÇA: blocklist de comandos destrutivos
     block_msg = _check_bash_safety(command)
@@ -280,12 +284,6 @@ def exec_run_bash(command: str, workdir: Path, cleanup_ports: list) -> str:
         return f"[ERRO] {e}"
 
 
-# Arquivos de fixture que nunca devem ser sobrescritos pelo agente
-_PROTECTED_FILES = {"validate.py", "TASK.md"}
-
-
-def exec_write_file(path: str, content: str, workdir: Path) -> str:
-    target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
     if target.name in _PROTECTED_FILES:
@@ -387,9 +385,19 @@ def call_ollama(model: str, messages: list) -> dict:
         OLLAMA_URL, data=data,
         headers={"Content-Type": "application/json"}
     )
-    try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT_S) as r:
-            return json.loads(r.read())
+
+    # Fix: retry com backoff exponencial para falhas temporárias (max 3 retries)
+    for attempt in range(4):  # original + max 3 retries
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT_S) as r:
+                return json.loads(r.read())
+        except Exception as e:
+            if attempt < 3:
+                retry_after = min(2 ** attempt * 0.5, 10)  # backoff exponencial (max 10s)
+                print(f"    [retry {attempt+1}/4] falha em call_ollama após {len(str(e))} chars — aguardando {retry_after:.1f}s")
+                time.sleep(retry_after)
+            else:
+                raise
     except urllib.error.HTTPError as e:
         body = e.read().decode()[:300]
         raise RuntimeError(f"HTTP {e.code}: {body}")

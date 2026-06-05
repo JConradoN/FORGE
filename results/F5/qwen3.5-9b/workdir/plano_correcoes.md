@@ -1,80 +1,127 @@
 # Plano de Correções — FORGE Scripts
 
 ## Visão Geral
-- **Total de problemas identificados:** 15
-- **Correções de Alta prioridade (impactam segurança/robustez):** 3
-- **Correções de Média prioridade (qualidade/testabilidade):** 8  
-- **Correções de Baixa prioridade (melhorias menores):** 4
+- **Total de problemas identificados:** 12 (3 por arquivo)
+- **Alta prioridade:** 6 → implementar imediatamente
+- **Média prioridade:** 4 → planejar para próximo sprint
+- **Baixa prioridade:** 2 → registrar como melhorias futuras
 
 ---
 
-## Priorização por Categoria e Impacto
+## Alta Prioridade — Implementar Agora ⚠️
 
-### Alta — Crítico para produção ou pode causar falhas imediatas
-1. `forge_runner.py`: Problema 1 & 2 — Variável `_PROTECTED_FILES` não definida antes do uso
-   - **Impacto:** Runner falha ao tentar proteger arquivos de fixture importantes (`validate.py`, `TASK.md`)
-   - **Correção necessária:** Mover declaração para topo do arquivo
-   
-2. `forge_runner.py`: Problema 3 — Falta de tratamento adequado em `_kill_port` e limpeza pós-run
-   - **Impacto:** Servidores iniciados durante runs podem continuar rodando após interrupções, causando vazamento de recursos
-   
-### Média — Degradação significativa ou manutenção difícil
-1. `forge_runner.py`: Problema 4 — Função `_resolve` definida dentro do loop (má prática)
-   - **Impacto:** Código difícil de manter e testar; overhead desnecessário em cenários com muitos checks
-   
-2. `forge_claude_runner.py`: Problema 7 — Falta de tratamento ao carregar API key ausente
-   - **Impacto:** Runner falha abruptamente sem mensagens claras sobre como configurar credenciais
-   
-3. `forge_mock_server.py`: Problema 11 — Falta de tratamento de erro ao carregar fixture JSON corrompido/ausente
-   - **Impacto:** Cenários que dependem desses fixtures podem falhar silenciosamente com respostas incompletas
+### forge_runner.py (3 problemas)
 
-4. `forge_telegram_runner.py`: Problema 13 — `_workdir_snapshot` pode falhar silenciosamente com arquivos problemáticos
-   - **Impacto:** Monitoramento do workdir para detectar mudanças de output pode parar abruptamente
-   
-5. `forge_claude_runner.py`: Problema 9 — Falta de verificação se porta foi liberada antes do próximo run
-   - **Impacto:** Conflitos de porta entre runs consecutivos podem causar falhas silenciosas
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | `_PROTECTED_FILES` definido após uso | Crash imediato ao rodar runner, cenários F2/F3 falham | Mover definição para topo do arquivo (após imports) | 203 → ~56 |
+| 2 | Falta tratamento de erro em `exec_http_get` com HTML inválido | Perda de dados importantes na resposta LLM | Adicionar logging e fallback mais robusto no parser HTML | 195-203, 247 |
+| 3 | Timeout fixo sem retry automático em `call_ollama` | Abortos completos por falhas transitórias | Implementar retry com backoff exponencial (max 3 retries) | 407-421 |
 
-6. `forge_telegram_runner.py`: Problema 14 — Limpeza inadequada do workdir (ignora subdiretórios)
-   - **Impacto:** Acúmulo de lixo e conflitos em cenários complexos com estrutura de diretória profunda
-   
-7. `forge_claude_runner.py`: Problema 6 — Importação circular potencial entre módulos FORGE
-   - **Impacto:** Refatorações futuras podem quebrar dependências mútuas não documentadas
+### forge_claude_runner.py (3 problemas)
 
-8. `forge_mock_server.py`: Problema 12 — Falta de logging estruturado em operações críticas
-   - **Impacto:** Dificuldade para troubleshooting e auditoria sem logs detalhados
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | `CLAUDE_TOOLS` não valida tipos de input antes de dispatch | Comportamento inconsistente entre modelos LLM | Adicionar validação básica em `dispatch_tool` (ex: command deve ser string) | 95, ~203 |
+| 2 | Mensagens de erro de bloqueio não tratadas como erros no log | Resultados falsos positivos nos cenários F1-F3 | Tratar mensagens com "[BLOQUEADO]" explicitamente e marcar como error | 95-103 |
+| 3 | Variáveis não inicializadas para fallbacks de API response | Crash ao usar versões diferentes da API Anthropic | Inicializar todas variáveis no topo + tratamento de estrutura inesperada | 78-90, ~120 |
 
-### Baixa — Melhorias menores, estilo ou convenções
-- Podem ser implementadas após as correções de Alta/Média serem concluídas.
+### forge_mock_server.py (1 problema)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | Falta import `os` usado em função stop() mas não declarado | Comando --stop falha imediatamente, processo zumbi rodando | Mover `import os` para topo do arquivo e remover inline redundante | ~54 → topo |
+
+### forge_telegram_runner.py (2 problemas)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | Falta import `signal` usado em função stop() mas não declarado | Comando --stop falha com NameError, processo zumbi rodando | Adicionar `import signal` no topo do arquivo junto com outros imports | ~54 → topo |
+| 2 | `_await_enter()` pode travar indefinidamente sem feedback claro | Runner fica bloqueado em sistemas headless consumindo recursos | Adicionar timeout reduzido (10s) e logging de status durante espera | 103-114, ~68 |
+
+---
+
+## Média Prioridade — Planejar para Próximo Sprint 📋
+
+### forge_runner.py (2 problemas)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | Falta tratamento de erro em `exec_http_get` com HTML inválido | Perda de dados importantes na resposta LLM | Adicionar logging e fallback mais robusto no parser HTML | 195-203, 247 |
+| 2 | Timeout fixo sem retry automático em `call_ollama` | Abortos completos por falhas transitórias | Implementar retry com backoff exponencial (max 3 retries) | 407-421 |
+
+### forge_claude_runner.py (1 problema)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | `CLAUDE_TOOLS` não valida tipos de input antes de dispatch | Comportamento inconsistente entre modelos LLM | Adicionar validação básica em `dispatch_tool` (ex: command deve ser string) | 95, ~203 |
+
+### forge_mock_server.py (1 problema)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | `_load_market()` retorna dict vazio sem tratamento de erro downstream | Cenários F3 podem falhar silenciosamente com erro 500 no mock server | Adicionar tratamento de exceção ao ler arquivo e retornar estrutura padrão vazia mas consistente, logando aviso quando fixture está ausente | 37-48 |
+
+### forge_telegram_runner.py (1 problema)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | Função `_await_enter()` pode falhar silenciosamente em sistemas headless | Em CI/CD, runner fica travado aguardando input que nunca vem | Adicionar tratamento de exceção para OSError com logging claro e fallback automático sem bloqueio excessivo (timeout reduzido para 10s) | 103-114, ~68 |
+
+---
+
+## Baixa Prioridade — Melhorias Futuras 📝
+
+### forge_mock_server.py (2 problemas)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | Logs silenciosos impedem debugging em produção | Impossível debuggar problemas do mock server sem adicionar logging manual | Adicionar parâmetro opcional de log_level no handler que permita logs condicionais (ex: apenas erros por padrão) | 20, ~35 |
+
+### forge_telegram_runner.py (1 problema)
+
+| # | Problema | Impacto | Correção | Linhas afetadas |
+|---|----------|---------|----------|-----------------|
+| 1 | `wait_for_workdir` pode consumir recursos excessivos sem feedback adequado | Em cenários com agentes que fazem muitas operações de I/O, monitor consome CPU/mem desnecessariamente | Adicionar logging periódico do status (ex: "aguardando estabilidade... 120s/600s") e reduzir timeout padrão se necessário | 47-83 |
+
+---
+
+## Resumo por Arquivo
+
+| Arquivo | Alta | Média | Baixa | Total |
+|---------|------|-------|-------|-------|
+| forge_runner.py | 2 (retry, protected files) | 1 (HTML parser) | - | 3 |
+| forge_claude_runner.py | 3 (validação, bloqueio, vars) | 0 | - | 3 |
+| forge_mock_server.py | 1 (import os) | 1 (_load_market) | 2 (logging) | 4* |
+| forge_telegram_runner.py | 2 (signal, await_enter) | 1 (_await_enter headless) | 1 (wait_for_workdir logging) | 3 |
+
+*\*O problema de import os é crítico mas conta como Alta mesmo que pareça menor.*
 
 ---
 
 ## Ordem Recomendada de Implementação
 
-1. **Passo 1 (Crítico):** Corrigir problemas de Alta prioridade em `forge_runner.py`
-   - Mover `_PROTECTED_FILES` para topo do arquivo
-   
-2. **Passo 2:** Melhorar tratamento de erro no mock server (`forge_mock_server.py`)
-   
-3. **Passo 3:** Adicionar logging estruturado e melhorar limpeza entre runs
+### Fase 1 — Correções Críticas (Alta Prioridade)
+1. **forge_runner.py**: Mover `_PROTECTED_FILES` para topo + implementar retry em `call_ollama`
+2. **forge_claude_runner.py**: Tratar mensagens bloqueadas + inicializar variáveis de fallback
+3. **forge_mock_server.py**: Adicionar import os no topo do arquivo
 
-4. **Passo 4:** Refatorar funções definidas dentro de loops para melhor testabilidade
-   
-5. **Passo 5:** Implementar tratamento adequado ao carregar API keys ausentes
+### Fase 2 — Melhorias de Robustez (Média Prioridade)
+4. **forge_runner.py**: Melhorar tratamento de erro em `exec_http_get` com HTML inválido
+5. **forge_claude_runner.py**: Validar tipos de input antes de dispatch_tool
+6. **forge_mock_server.py**: Adicionar tratamento de exceção em `_load_market()`
 
-6. **Passo 6 (Opcional):** Melhorias de logging, documentação e convenções
+### Fase 3 — Logging e Feedback (Baixa Prioridade)
+7. **forge_mock_server.py**: Implementar logging condicional no handler HTTP
+8. **forge_telegram_runner.py**: Melhorar feedback do monitoramento de workdir
 
 ---
 
 ## Checklist de Verificação Pós-Correção
-- [ ] Todos os problemas de Alta prioridade corrigidos?
-- [ ] Testes unitários passam com as novas correções?
-- [ ] Logs estruturados estão funcionando corretamente?
-- [ ] Limpeza entre runs funciona em cenários complexos?
-- [ ] Tratamento de erro para fixtures ausentes/inválidos está presente?
 
----
-
-## Notas Adicionais
-- **Não alterar interface pública:** Manter nomes de funções exportadas e parâmetros existentes.
-- **Sem novas dependências:** Usar apenas bibliotecas já importadas (ex: `logging` padrão do Python).
-- **Correções minimamente invasivas:** Cada fix deve ser o menor possível para resolver o problema específico.
+- [ ] Todos os imports estão declarados no topo dos arquivos (sem inline)
+- [ ] Variáveis globais são definidas antes da primeira função que as usa
+- [ ] Mensagens de erro contendo "[BLOQUEADO]" são tratadas explicitamente como erros
+- [ ] Retry automático implementado para falhas HTTP temporárias
+- [ ] Logging adequado em pontos críticos (erros, timeouts, bloqueios)
+- [ ] Timeout máximo definido para loops que monitoram workdir

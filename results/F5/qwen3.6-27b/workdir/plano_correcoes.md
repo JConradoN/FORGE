@@ -1,46 +1,120 @@
 # Plano de Correções — FORGE Scripts
 
-## Prioridade ALTA (implementar agora)
+## Priorização Geral
 
-| # | Arquivo | Problema | Categoria | Esforço |
-|---|---------|----------|-----------|---------|
-| 1 | `forge_runner.py` | `_PROTECTED_FILES` referenciado antes da definição | Robustez/Bug | Trivial |
-| 2 | `forge_runner.py` | `run_command_ok` executa shell sem sanitização | Segurança | Baixo |
-| 9 | `forge_claude_runner.py` | API Key lida sem validação de formato | Segurança | Trivial |
-| 13 | `forge_mock_server.py` | `import os` no meio do arquivo | Qualidade/Bug | Trivial |
-| 16 | `forge_telegram_runner.py` | Limpeza de workdir entre runs incompleta | Robustez/Bug | Baixo |
-
-## Prioridade MÉDIA (backlog)
-
-| # | Arquivo | Problema | Categoria | Esforço |
-|---|---------|----------|-----------|---------|
-| 3 | `forge_runner.py` | Imports dentro do loop em `auto_evaluate` | Performance | Baixo |
-| 4 | `forge_runner.py` | `call_ollama` sem validação de URL base | Robustez | Médio |
-| 5 | `forge_runner.py` | `aggregate_runs` crash com lista vazia | Robustez | Trivial |
-| 10 | `forge_claude_runner.py` | Custo estimado hardcoded para Sonnet | Qualidade | Médio |
-| 12 | `forge_claude_runner.py` | Descrições de tools duplicadas | Manutenção | Médio |
-| 14 | `forge_mock_server.py` | PID_FILE pode ficar stale | Robustez | Baixo |
-| 17 | `forge_telegram_runner.py` | Fallback 20s insuficiente sem TTY | Robustez | Baixo |
-| 18 | `forge_telegram_runner.py` | Snapshots com caminhos absolutos | Qualidade | Baixo |
-
-## Prioridade BAIXA (nice-to-have)
-
-| # | Arquivo | Problema | Categoria | Esforço |
-|---|---------|----------|-----------|---------|
-| 6 | `forge_runner.py` | Divisão por zero em `tok_per_s` | Robustez | Trivial |
-| 7 | `forge_runner.py` | `_HTMLTextExtractor` tags auto-fechadas | Qualidade | Baixo |
-| 8 | `forge_runner.py` | Docstring mistura changelog com API docs | Qualidade | Baixo |
-| 11 | `forge_claude_runner.py` | `sys.path.insert` com string | Estilo | Trivial |
-| 15 | `forge_mock_server.py` | `_load_market` retorna {} silenciosamente | Robustez | Baixo |
-| 19 | `forge_telegram_runner.py` | Chave `aurelia_auto_checks` hardcoded | Qualidade | Baixo |
-| 20 | `forge_telegram_runner.py` | `response_override` vazio sem warning | Robustez | Baixo |
+| Prioridade | Critério | Ação |
+|------------|----------|------|
+| **Alta** | Impacta comportamento, causa bugs ou risco de segurança | Implementar agora |
+| **Média** | Degradação de qualidade, manutenção difícil, estimativas incorretas | Planejar para próximo sprint |
+| **Baixa** | Estilo, convenções, melhorias menores, documentação | Registrar como backlog |
 
 ---
 
-## Ordem de Implementação (Alta Prioridade)
+## 🔴 Alta Prioridade (9 problemas — implementar agora)
 
-1. **Problema 13** — Mover `import os` para o topo em `forge_mock_server.py`
-2. **Problema 1** — Mover `_PROTECTED_FILES` antes de `exec_run_bash` em `forge_runner.py`
-3. **Problema 9** — Validar API Key em `forge_claude_runner.py`
-4. **Problema 2** — Sanitizar comandos em `run_command_ok` em `forge_runner.py`
-5. **Problema 16** — Corrigir limpeza de workdir em `forge_telegram_runner.py`
+### 1. `forge_runner.py` — `_PROTECTED_FILES` referenciado antes da definição
+- **ID:** FR-01
+- **Arquivo:** `forge-scripts/forge_runner.py`
+- **Descrição:** Mover definição de `_PROTECTED_FILES` para antes de `exec_run_bash()`
+- **Esforço:** ~5 min
+- **Risco:** Baixo — apenas reordenação de código
+
+### 2. `forge_runner.py` — `run_command_ok` sem sanitização de segurança
+- **ID:** FR-02
+- **Arquivo:** `forge-scripts/forge_runner.py`
+- **Descrição:** Aplicar `_check_bash_safety()` no check `run_command_ok` dentro de `auto_evaluate()`
+- **Esforço:** ~10 min
+- **Risco:** Baixo — adiciona proteção existente a um caminho não protegido
+
+### 3. `forge_runner.py` — Divisão por zero em `tok_per_s`
+- **ID:** FR-03
+- **Arquivo:** `forge-scripts/forge_runner.py`
+- **Descrição:** Extrair cálculo para função `_safe_tok_per_s()` com proteção explícita contra zero
+- **Esforço:** ~10 min
+- **Risco:** Baixo — adiciona guard clause
+
+### 4. `forge_claude_runner.py` — `max_tokens=4096` insuficiente
+- **ID:** FC-02
+- **Arquivo:** `forge-scripts/forge_claude_runner.py`
+- **Descrição:** Aumentar para 16384 tokens de saída
+- **Esforço:** ~5 min
+- **Risco:** Baixo — apenas aumenta limite; custo marginal
+
+### 5. `forge_claude_runner.py` — Pricing hardcoded incorreto para Opus/Haiku
+- **ID:** FC-03
+- **Arquivo:** `forge-scripts/forge_claude_runner.py`
+- **Descrição:** Dicionário de preços por modelo; usar preço correto baseado no model_id
+- **Esforço:** ~15 min
+- **Risco:** Baixo — cálculo isolado, não afeta funcionalidade
+
+### 6. `forge_mock_server.py` — `import os` após uso em `start()`
+- **ID:** FM-01
+- **Arquivo:** `forge-scripts/forge_mock_server.py`
+- **Descrição:** Mover `import os` para o topo do arquivo
+- **Esforço:** ~2 min
+- **Risco:** Nulo — apenas reordenação
+
+### 7. `forge_mock_server.py` — `_load_market` sem tratamento de JSON inválido
+- **ID:** FM-02
+- **Arquivo:** `forge-scripts/forge_mock_server.py`
+- **Descrição:** Envolver `json.loads()` em try/except, retornar `{}` com aviso
+- **Esforço:** ~5 min
+- **Risco:** Baixo — adiciona resiliência
+
+### 8. `forge_telegram_runner.py` — Limpeza entre runs apaga fixtures
+- **ID:** FT-01
+- **Arquivo:** `forge-scripts/forge_telegram_runner.py`
+- **Descrição:** Preservar seed_files durante limpeza entre runs, ou re-copiar fixtures
+- **Esforço:** ~15 min
+- **Risco:** Médio — alterar lógica de limpeza requer cuidado
+
+### 9. `forge_telegram_runner.py` — `wait_for_workdir` pode estabilizar prematuramente
+- **ID:** FT-02
+- **Arquivo:** `forge-scripts/forge_telegram_runner.py`
+- **Descrição:** Adicionar tempo mínimo absoluto de monitoramento após primeiro arquivo
+- **Esforço:** ~10 min
+- **Risco:** Baixo — adiciona constraint adicional
+
+---
+
+## 🟡 Média Prioridade (5 problemas — planejar)
+
+### 10. `forge_runner.py` — Imports dentro do loop (`socket`, `hashlib`)
+- **ID:** FR-04
+- **Descrição:** Mover para topo do arquivo
+
+### 11. `forge_runner.py` — `_resolve` definido dentro do loop de checks
+- **ID:** FR-05
+- **Descrição:** Extrair para função auxiliar fora do loop
+
+### 12. `forge_claude_runner.py` — Validação de API key antes de criar client
+- **ID:** FC-01
+- **Descrição:** Validar e levantar erro imediatamente se ausente
+
+### 13. `forge_mock_server.py` — PID file stale sem verificação proativa
+- **ID:** FM-03
+- **Descrição:** Verificar existência do processo antes de enviar SIGTERM
+
+### 14. `forge_telegram_runner.py` — Warning quando `--response` ausente mas checks de texto existem
+- **ID:** FT-03
+- **Descrição:** Adicionar aviso no início do run
+
+---
+
+## 🟢 Baixa Prioridade (4 problemas — backlog)
+
+### 15. `forge_runner.py` — Docstring com changelog inline sem versão formal
+- **ID:** FR-06
+- **Descrição:** Adicionar `__version__` e mover para CHANGELOG.md
+
+### 16. `forge_claude_runner.py` — Importação via `sys.path.insert` frágil
+- **ID:** FC-04
+- **Descrição:** Converter para import relativo ou usar `importlib`
+
+### 17. `forge_mock_server.py` — Logs HTTP completamente silenciados
+- **ID:** FM-04
+- **Descrição:** Adicionar flag `--verbose` para debug
+
+### 18. `forge_telegram_runner.py` — Importação via `sys.path.insert` frágil
+- **ID:** FT-04
+- **Descrição:** Mesma correção de FC-04

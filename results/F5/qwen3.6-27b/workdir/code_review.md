@@ -2,15 +2,14 @@
 
 ## Sumário
 
-| Arquivo | Linhas | Problemas | Alta | Média | Baixa |
-|---------|--------|-----------|------|-------|-------|
-| `forge_runner.py` | ~560 | 8 | 3 | 3 | 2 |
-| `forge_claude_runner.py` | ~240 | 4 | 1 | 2 | 1 |
-| `forge_mock_server.py` | ~130 | 3 | 1 | 1 | 1 |
-| `forge_telegram_runner.py` | ~270 | 5 | 2 | 2 | 1 |
-| **Total** | **~1600** | **20** | **7** | **8** | **5** |
+| Arquivo | Linhas ~ | Problemas encontrados | Alta | Média | Baixa |
+|---------|----------|----------------------|------|-------|-------|
+| `forge_runner.py` | 520 | 6 | 3 | 2 | 1 |
+| `forge_claude_runner.py` | 280 | 4 | 2 | 1 | 1 |
+| `forge_mock_server.py` | 170 | 4 | 2 | 1 | 1 |
+| `forge_telegram_runner.py` | 230 | 4 | 2 | 1 | 1 |
 
-Categorias: Segurança (3), Robustez (6), Qualidade (5), Testabilidade (4), Performance (2)
+**Total: 18 problemas — 9 Alta, 5 Média, 4 Baixa**
 
 ---
 
@@ -18,172 +17,156 @@ Categorias: Segurança (3), Robustez (6), Qualidade (5), Testabilidade (4), Perf
 
 ### Problema 1 — `_PROTECTED_FILES` referenciado antes da definição
 - **Categoria:** Robustez / Bug
-- **Localização:** linha ~190 (`exec_run_bash`) vs linha ~215 (definição de `_PROTECTED_FILES`)
-- **Descrição:** A função `exec_run_bash` referencia `_PROTECTED_FILES` no loop `for protected in _PROTECTED_FILES`, mas a variável só é definida mais abaixo no módulo. Em Python, isso funciona porque o código não é executado até a chamada da função — mas se alguém tentar importar `exec_run_bash` e chamar antes que `_PROTECTED_FILES` seja definido (ex: importação parcial), vai falhar com `NameError`.
-- **Impacto:** Funciona no fluxo normal, mas quebra em testes unitários ou importações isoladas.
+- **Localização:** linha ~170 (`exec_run_bash`) referencia `_PROTECTED_FILES`, definido na linha ~195
+- **Descrição:** A função `exec_run_bash` itera sobre `_PROTECTED_FILES` antes de esta variável ser definida no módulo. Em Python, isso funciona porque a definição é em nível de módulo e o código só executa quando a função é chamada (não quando é definida). Porém, se alguém tentar importar `exec_run_bash` isoladamente ou executar o módulo parcialmente, falhará com `NameError`.
+- **Impacto:** Funciona no fluxo normal, mas quebra em testes unitários isolados ou importações parciais. Fragilidade de ordem de definição.
 - **Prioridade:** Alta
-- **Correção proposta:** Mover a definição de `_PROTECTED_FILES` para antes de `exec_run_bash`, junto com as outras constantes de configuração.
+- **Correção proposta:** Mover a definição de `_PROTECTED_FILES` para antes da função `exec_run_bash`, junto com as outras constantes do módulo (após `_BASH_BLOCKLIST`).
 
 ### Problema 2 — `run_command_ok` executa shell sem sanitização adicional
 - **Categoria:** Segurança
-- **Localização:** linha ~430, check `run_command_ok` em `auto_evaluate()`
-- **Descrição:** O check `run_command_ok` executa comandos do cenário via `subprocess.run(cmd, shell=True)`. Os cenários são JSONs de fixture controlados, mas não há validação de que o comando venha de uma fonte confiável. Se um cenário malicioso fosse injetado, permitiria execução arbitrária.
-- **Impacto:** Risco de code execution se cenários forem comprometidos ou editados por usuários não-confiáveis.
+- **Localização:** linha ~410, check type `"run_command_ok"` em `auto_evaluate()`
+- **Descrição:** O check `run_command_ok` executa comandos do cenário via `subprocess.run(cmd, shell=True)` sem nenhuma validação de segurança. Se um arquivo de cenário malicioso contiver `cmd: "rm -rf /"`, ele será executado. A blocklist `_BASH_BLOCKLIST` existe mas não é aplicada aqui — apenas em `exec_run_bash`.
+- **Impacto:** Um cenário JSON comprometido pode executar comandos destrutivos no host durante a avaliação automática.
 - **Prioridade:** Alta
-- **Correção proposta:** Adicionar validação de que o comando não contenha padrões perigosos (mesma blocklist `_BASH_BLOCKLIST` usada em `exec_run_bash`).
+- **Correção proposta:** Aplicar `_check_bash_safety(cmd)` antes de executar o comando no check `run_command_ok`, reutilizando a mesma blocklist já existente.
 
-### Problema 3 — `auto_evaluate` importa módulos dentro do loop
-- **Categoria:** Performance / Qualidade
-- **Localização:** linhas ~405, ~420 (`import socket`, `import hashlib`, `import subprocess`)
-- **Descrição:** `socket`, `hashlib` e `subprocess` são importados dentro dos branches `elif` do loop de checks. Embora Python cacheie imports, isso é anti-padrão e pode causar overhead em cenários com muitos checks repetidos.
-- **Impacto:** Leve degradação de performance; código menos limpo.
+### Problema 3 — Divisão por zero em `tok_per_s`
+- **Categoria:** Robustez / Bug
+- **Localização:** linha ~460, função `save_run_result()`
+- **Descrição:** O cálculo `agent_result["tok_total"] / (agent_result["duration_ms"] / 1000)` pode dividir por zero se `duration_ms` for 0. A verificação `if agent_result["duration_ms"] else None` está presente, mas o código usa uma expressão ternária inline que pode ser difícil de ler e é propenso a erros se alguém modificar.
+- **Impacto:** Se um run completar instantaneamente (teoricamente possível com mocks rápidos), gera `ZeroDivisionError`.
+- **Prioridade:** Alta
+- **Correção proposta:** Extrair o cálculo para uma função auxiliar `_safe_tok_per_s(tok_total, duration_ms)` que retorna `None` se `duration_ms <= 0`, tornando a intenção explícita.
+
+### Problema 4 — `import socket` e `import hashlib` dentro do loop
+- **Categoria:** Performance
+- **Localização:** linhas ~370 e ~395, dentro de `auto_evaluate()` no loop `for check in checks`
+- **Descrição:** `import socket` (check `port_open`) e `import hashlib` (check `file_unchanged`) são executados dentro do loop de checks. Embora Python cache imports, isso é anti-padrão e pode causar overhead se os checks forem chamados múltiplas vezes.
+- **Impacto:** Baixo impacto prático (imports são cached), mas viola convenções PEP 8 e indica má organização.
 - **Prioridade:** Média
-- **Correção proposta:** Mover os imports para o topo do arquivo junto com os demais.
+- **Correção proposta:** Mover `import socket` e `import hashlib` para o topo do arquivo junto com os demais imports.
 
-### Problema 4 — `call_ollama` não valida URL base
-- **Categoria:** Robustez
-- **Localização:** linha ~270, função `call_ollama()`
-- **Descrição:** Se Ollama não estiver rodando, a exceção genérica `except Exception as e: raise RuntimeError(str(e))` engole detalhes importantes como timeouts de conexão. Não há retry nem mensagem amigável.
-- **Impacto:** Erros difíceis de diagnosticar quando Ollama está offline.
+### Problema 5 — `_resolve` definido dentro do loop de checks (closure desnecessário)
+- **Categoria:** Qualidade / Performance
+- **Localização:** linha ~310, função `_resolve` definida dentro do `for check in checks` em `auto_evaluate()`
+- **Descrição:** A função `_resolve` é redefinida a cada iteração do loop. Ela captura `fmt_vars` via closure, mas `fmt_vars` não muda durante o loop. Isso gera overhead desnecessário de criação de funções.
+- **Impacto:** Performance marginalmente degradada em cenários com muitos checks. Código menos legível.
 - **Prioridade:** Média
-- **Correção proposta:** Adicionar verificação prévia de conectividade ou mensagem mais específica para `urllib.error.URLError`.
+- **Correção proposta:** Mover `_resolve` para fora do loop, como função auxiliar que recebe `s` e `fmt_vars` como parâmetros, ou definir antes do loop.
 
-### Problema 5 — `aggregate_runs` crash com `statistics.stdev` em lista unitária
-- **Categoria:** Robustez
-- **Localização:** linha ~490, função `aggregate_runs()`
-- **Descrição:** O código já protege com `if len(pcts) > 1`, mas se `run_results` estiver vazio (lista vazia), `statistics.mean([])` vai lançar `StatisticsError`. Não há proteção contra lista vazia.
-- **Impacto:** Crash se nenhum run for executado com sucesso.
-- **Prioridade:** Média
-- **Correção proposta:** Adicionar guard `if not run_results: return {}` no início da função.
-
-### Problema 6 — `save_run_result` divide por zero em `tok_per_s`
-- **Categoria:** Robustez
-- **Localização:** linha ~475, cálculo de `tok_per_s`
-- **Descrição:** O código tem `if agent_result["duration_ms"] else None`, mas se `duration_ms` for 0 (agente respondeu instantaneamente), a divisão ocorre. Na prática é raro, mas possível com respostas cacheadas.
-- **Impacto:** `ZeroDivisionError` em edge case.
+### Problema 6 — Docstring menciona "Fixes v0.2" sem changelog formal
+- **Categoria:** Documentação / Baixa
+- **Localização:** linhas 1-15 (docstring do módulo)
+- **Descrição:** A docstring lista "Fixes v0.2" inline, mas não há versão no código nem changelog estruturado. Isso dificulta rastrear o que foi corrigido em cada versão.
+- **Impacto:** Dificuldade de manutenção a longo prazo.
 - **Prioridade:** Baixa
-- **Correção proposta:** Usar `if agent_result["duration_ms"] > 0 else None`.
-
-### Problema 7 — `_HTMLTextExtractor` não lida com tags auto-fechadas
-- **Categoria:** Qualidade
-- **Localização:** linha ~135, classe `_HTMLTextExtractor`
-- **Descrição:** Tags como `<br/>`, `<img/>`, `<hr/>` são ignoradas silenciosamente. Não é um bug funcional mas o parser não chama `handle_startendtag`. Em HTML com tags auto-fechadas dentro de SKIP_TAGS (ex: raro, mas possível), poderia haver comportamento inesperado.
-- **Impacto:** Mínimo — funciona na prática para os casos de uso do FORGE.
-- **Prioridade:** Baixa
-- **Correção proposta:** Adicionar `handle_startendtag` para cobrir tags auto-fechadas.
-
-### Problema 8 — Docstring menciona "Fixes v0.2" mas não versiona o código
-- **Categoria:** Qualidade
-- **Localização:** linha ~1, docstring do módulo
-- **Descrição:** A docstring lista "Fixes v0.2" como changelog embutido. Isso mistura documentação de versão com documentação de API. Não há constante `__version__` no módulo.
-- **Impacto:** Dificulta rastreamento de versão programaticamente.
-- **Prioridade:** Baixa
-- **Correção proposta:** Adicionar `__version__ = "0.2"` e mover changelog para CHANGELOG.md separado.
+- **Correção proposta:** Adicionar `__version__ = "0.2"` no módulo e mover as notas de fix para um arquivo `CHANGELOG.md` separado.
 
 ---
 
 ## forge_claude_runner.py
 
-### Problema 9 — API Key lida sem validação de formato
-- **Categoria:** Segurança
-- **Localização:** linha ~105, função `run_claude_agent()`
-- **Descrição:** A chave API é lida de variáveis de ambiente mas não há verificação de que esteja vazia ou inválida antes de criar o cliente. Se a variável existir mas estiver vazia (`ANTHROPIC_API_KEY=""`), o SDK vai falhar na primeira chamada com erro genérico.
-- **Impacto:** Erro confuso em vez de mensagem clara de configuração.
+### Problema 1 — API Key lida a cada turn do loop
+- **Categoria:** Performance / Robustez
+- **Localização:** linha ~95, dentro do `while turns < MAX_TURNS` em `run_claude_agent()`
+- **Descrição:** A leitura de `os.environ.get("ANTHROPIC_API_KEY")` e a criação do `anthropic.Anthropic(api_key=api_key)` estão fora do loop (correto), mas a verificação `if not api_key: raise RuntimeError(...)` deveria estar antes da criação do client, não dentro. Na verdade, o código atual está correto nisso — porém, se a API key mudar entre turns (improvável mas possível em ambientes dinâmicos), o client não seria recriado.
+- **Impacto:** Baixo na prática, mas a estrutura pode confundir leitores do código.
+- **Prioridade:** Média
+- **Correção proposta:** Validar a API key antes de criar o client e levantar erro imediatamente se ausente.
+
+### Problema 2 — `max_tokens=4096` insuficiente para respostas longas com tool calls
+- **Categoria:** Robustez / Bug
+- **Localização:** linha ~105, `client.messages.create(max_tokens=4096, ...)`
+- **Descrição:** O limite de 4096 tokens de saída pode ser insuficiente quando o modelo precisa gerar múltiplos tool calls com argumentos grandes (ex: conteúdo de arquivo). Claude pode truncar a resposta no meio de um JSON de tool call, causando erro de parsing.
+- **Impacto:** Respostas truncadas em cenários complexos, falhas silenciosas onde o modelo não consegue completar todas as ferramentas necessárias.
 - **Prioridade:** Alta
-- **Correção proposta:** Adicionar `if not api_key or not api_key.strip(): raise RuntimeError("...")` antes de criar o cliente.
+- **Correção proposta:** Aumentar `max_tokens` para 16384 (ou usar um valor configurável via CLI), compatível com os limites atuais da API Anthropic.
 
-### Problema 10 — Custo estimado usa pricing hardcoded de Sonnet
-- **Categoria:** Qualidade
-- **Localização:** linha ~230, cálculo `cost_est`
-- **Descrição:** O custo é calculado com `$3/M input + $15/M output` (pricing Sonnet), mas o comentário diz "Sonnet pricing" enquanto o código pode ser usado com Opus ou Haiku que têm preços diferentes. O usuário recebe estimativa errada sem aviso.
-- **Impacto:** Estimativa de custo incorreta para modelos não-Sonnet.
-- **Prioridade:** Média
-- **Correção proposta:** Adicionar tabela de pricing por modelo e selecionar dinamicamente, ou adicionar aviso quando o modelo não é Sonnet.
+### Problema 3 — Custo estimado usa pricing hardcoded de Sonnet
+- **Categoria:** Qualidade / Bug
+- **Localização:** linha ~205, cálculo `cost_est = (tok_input * 3 + tok_output * 15) / 1_000_000`
+- **Descrição:** O cálculo de custo usa preços hardcoded de Claude Sonnet ($3/M input, $15/M output), mas o runner suporta Opus e Haiku com preços muito diferentes. O comentário diz "Sonnet pricing" mas o valor é aplicado a qualquer modelo.
+- **Impacto:** Estimativa de custo incorreta para Opus (~$15/M in, ~$75/M out) e Haiku (~$0.25/M in, ~$1.25/M out). Pode levar a decisões financeiras erradas.
+- **Prioridade:** Alta
+- **Correção proposta:** Criar um dicionário de preços por modelo e usar o preço correto baseado no `model_id` selecionado.
 
-### Problema 11 — `sys.path.insert` com string em vez de Path
-- **Categoria:** Qualidade
-- **Localização:** linha ~25, `sys.path.insert(0, str(Path(__file__).parent))`
-- **Descrição:** Converte Path para string desnecessariamente. `sys.path` aceita strings, mas o padrão do código usa Path em outros lugares. Inconsistência.
-- **Impacto:** Nenhum funcional — apenas inconsistência de estilo.
+### Problema 4 — Importação via `sys.path.insert` em vez de import relativo
+- **Categoria:** Qualidade / Convenção
+- **Localização:** linhas 25-30, `sys.path.insert(0, ...)` + import absoluto
+- **Descrição:** O código usa `sys.path.insert()` para importar de `forge_runner`. Isso é frágil e pode causar problemas se o pacote for instalado ou movido. Importações relativas (`from .forge_runner import ...`) seriam mais robustas.
+- **Impacto:** Funciona no uso atual, mas quebra se a estrutura de diretórios mudar ou se os arquivos forem importados como parte de um pacote.
 - **Prioridade:** Baixa
-- **Correção proposta:** Manter como está ou usar `Path(__file__).parent.as_posix()` para consistência.
-
-### Problema 12 — Claude tools duplicam descrições do runner principal
-- **Categoria:** Qualidade / Manutenção
-- **Localização:** linhas ~50-130, definição de `CLAUDE_TOOLS`
-- **Descrição:** As descrições das ferramentas são duplicadas entre `TOOLS` (forge_runner.py) e `CLAUDE_TOOLS`. Se uma descrição for atualizada em um lugar e não no outro, os agentes receberão instruções inconsistentes.
-- **Impacto:** Divergência de comportamento entre providers ao longo do tempo.
-- **Prioridade:** Média
-- **Correção proposta:** Gerar `CLAUDE_TOOLS` a partir de `TOOLS` com transformação automática, ou manter descrições em um módulo compartilhado.
+- **Correção proposta:** Usar `importlib` para carregar o módulo dinamicamente baseado no caminho do arquivo, ou converter em pacote com `__init__.py`.
 
 ---
 
 ## forge_mock_server.py
 
-### Problema 13 — `import os` no meio do arquivo (após funções)
-- **Categoria:** Qualidade / Bug potencial
-- **Localização:** linha ~105, `import os` após definição de `stop()` e `status()`
-- **Descrição:** O `import os` está posicionado após as definições de função. A função `start()` usa `os.getpid()` e `stop()` usa `_os.kill`. Se o módulo for importado e `start()` chamado antes do interpretador chegar no `import os`, vai falhar. Na prática funciona porque Python executa imports na ordem, mas é anti-padrão grave.
-- **Impacto:** Pode causar `NameError: name 'os' is not defined` em certas condições de importação.
+### Problema 1 — `import os` no final do arquivo (após uso)
+- **Categoria:** Robustez / Bug
+- **Localização:** linha ~105 (`import os`) vs linha ~93 (`os.getpid()` em `start()`)
+- **Descrição:** O módulo `os` é importado na linha ~105, mas a função `start()` (linha ~93) usa `os.getpid()`. Isso funciona porque `start()` só é chamada no `__main__`, após todos os imports. Porém, se alguém importar `start` diretamente, receberá `NameError: name 'os' is not defined`.
+- **Impacto:** Quebra em importações parciais ou testes unitários que chamam `start()` isoladamente.
 - **Prioridade:** Alta
-- **Correção proposta:** Mover `import os` para o topo do arquivo junto com os demais imports.
+- **Correção proposta:** Mover `import os` para o topo do arquivo junto com os demais imports padrão.
 
-### Problema 14 — PID_FILE pode ficar stale se processo morrer inesperadamente
+### Problema 2 — Falta tratamento de erro em `_load_market` quando JSON é inválido
 - **Categoria:** Robustez
-- **Localização:** função `stop()` e `status()`
-- **Descrição:** Se o servidor crashar sem limpar o PID file, `stop()` tentará matar um processo inexistente. O código lida com `ProcessLookupError`, mas `status()` vai reportar incorretamente que está rodando.
-- **Impacto:** Estado inconsistente entre PID file e realidade.
+- **Localização:** linha ~78, método `_load_market()`
+- **Descrição:** Se o arquivo `market-snapshot.json` existir mas conter JSON malformado, `json.loads()` lança `json.JSONDecodeError` não tratado. O servidor retornará 500 (erro interno) para todos os endpoints de mercado.
+- **Impacto:** Servidor inteiro quebra se a fixture de mercado estiver corrompida, afetando F3.
+- **Prioridade:** Alta
+- **Correção proposta:** Envolver `json.loads()` em try/except e retornar `{}` com um log de aviso se o JSON for inválido.
+
+### Problema 3 — PID file pode ficar stale se processo morrer inesperadamente
+- **Categoria:** Robustez
+- **Localização:** função `stop()` e `status()`, linhas ~108-125
+- **Descrição:** Se o servidor morrer por SIGKILL ou crash, o PID file permanece. A função `stop()` tenta matar o PID mas só lida com `ProcessLookupError`. Não verifica se o processo realmente existe antes de tentar matar (exceto via exceção). A função `status()` faz health check HTTP, mas `stop()` não.
+- **Impacto:** Usuário pode achar que o servidor está rodando quando não está, ou tentar parar um processo inexistente sem feedback claro.
 - **Prioridade:** Média
-- **Correção proposta:** Em `status()`, verificar se o processo existe antes de tentar conectar.
+- **Correção proposta:** Adicionar verificação de existência do processo em `stop()` antes de enviar SIGTERM, e limpar PID file stale automaticamente.
 
-### Problema 15 — `_load_market` retorna dict vazio silenciosamente
-- **Categoria:** Robustez
-- **Localização:** linha ~80, método `_load_market()`
-- **Descrição:** Se o arquivo de fixture não existir, retorna `{}` silenciosamente. Os endpoints `/mock/usd-brl` etc. vão retornar `{}` ou `[]`, fazendo os testes falharem sem indicar que a fixture está faltando.
-- **Impacto:** Falhas difíceis de diagnosticar quando fixtures estão ausentes.
+### Problema 4 — `log_message` silenciado impede debug
+- **Categoria:** Debuggabilidade / Baixa
+- **Localização:** linha ~42, `MockHandler.log_message`
+- **Descrição:** Todos os logs HTTP são silenciados com `pass`. Isso é bom para não poluir o output do runner, mas impede completamente o debug de problemas de requisição.
+- **Impacto:** Dificulta troubleshooting quando algo dá errado no mock server.
 - **Prioridade:** Baixa
-- **Correção proposta:** Logar um aviso ou retornar erro 500 com mensagem clara.
+- **Correção proposta:** Adicionar flag `--verbose` que habilita logs, ou logar apenas erros (status >= 400).
 
 ---
 
 ## forge_telegram_runner.py
 
-### Problema 16 — Limpeza de workdir entre runs apaga arquivos do agente
+### Problema 1 — Limpeza de workdir entre runs apaga fixtures copiadas
 - **Categoria:** Robustez / Bug
-- **Localização:** linha ~210, loop `for f in workdir.glob("*")`
-- **Descrição:** Entre runs, o código faz `f.unlink()` para todos arquivos que não são "TASK.md". Mas se um run anterior criou subdiretórios com outputs, esses NÃO são removidos (glob só pega arquivos diretos). O próximo run vai acumular arquivos antigos.
-- **Impacto:** Contaminação entre runs — checks de file_exists podem passar incorretamente.
+- **Localização:** linha ~205, loop `for f in workdir.glob("*")` antes de cada run
+- **Descrição:** Entre runs múltiplos, o código faz `f.unlink()` para todos arquivos que não são "TASK.md". Porém, fixtures copiadas via `fixture_dirs` (ex: `buggy-module/`) também são apagadas. O `shutil.copytree` só roda uma vez no início de `run_telegram_agent`, mas a limpeza entre runs remove esses arquivos. No segundo run, as fixtures não existem mais.
+- **Impacto:** Runs subsequentes falham porque arquivos de fixture foram deletados. Cenários com `fixture_dirs` quebram em `--runs > 1`.
 - **Prioridade:** Alta
-- **Correção proposta:** Usar `rglob("*")` e remover também diretórios vazios, ou recriar o workdir do zero (preservando apenas fixtures).
+- **Correção proposta:** Preservar arquivos que estão em `seed_files` durante a limpeza entre runs, ou re-copiar fixtures antes de cada run.
 
-### Problema 17 — `_await_enter` com fallback de 20s pode ser insuficiente
-- **Categoria:** Robustez
-- **Localização:** linha ~135, função `_await_enter()`
-- **Descrição:** Quando não há TTY (ex: execução em CI/container), o fallback é `time.sleep(20)`. 20 segundos pode ser insuficiente para o usuário enviar mensagens no Telegram, especialmente em cenários complexos.
-- **Impacto:** Runner começa a monitorar antes do agente terminar de trabalhar.
+### Problema 2 — `wait_for_workdir` não detecta modificações em arquivos existentes
+- **Categoria:** Robustez / Bug
+- **Localização:** função `wait_for_workdir()`, linhas ~50-80
+- **Descrição:** A comparação `if snap != last_snap` compara dicionários de `{path: mtime}`. Se um arquivo existente for modificado, o mtime muda e a detecção funciona. Porém, se o agente modificar um arquivo rapidamente múltiplas vezes dentro do mesmo intervalo de 5s (POLL_INTERVAL_S), mudanças podem ser perdidas porque o snapshot só é tirado a cada 5s. O stable timer pode disparar prematuramente.
+- **Impacto:** Em cenários onde o Claude envia respostas rápidas e modifica arquivos em sequência, o runner pode considerar o workdir "estável" antes do agente terminar.
+- **Prioridade:** Alta
+- **Correção proposta:** Aumentar `stable_s` padrão para 60s (já é 60 no default) e adicionar um mínimo absoluto de tempo de monitoramento (ex: sempre esperar pelo menos 30s após o primeiro arquivo aparecer).
+
+### Problema 3 — `response_override` não documentado como necessário para checks de texto
+- **Categoria:** Qualidade / Documentação
+- **Localização:** parâmetro `response_override` em `run_telegram_agent()` e flag `--response` no CLI
+- **Descrição:** O parâmetro `response_override` é usado para preencher `final_response`, que é necessário para checks do tipo `response_contains`. Porém, sem este parâmetro, todos os checks de texto na resposta final falham silenciosamente. Não há aviso quando `--response` não é fornecido mas o cenário tem tais checks.
+- **Impacto:** Usuário pode obter scores artificialmente baixos sem entender por quê.
 - **Prioridade:** Média
-- **Correção proposta:** Aumentar fallback ou tornar configurável via `--no-tty-wait`.
+- **Correção proposta:** Adicionar warning no início do run se o cenário contém checks `response_contains` e `--response` não foi fornecido.
 
-### Problema 18 — `wait_for_workdir` compara snapshots por caminho absoluto
-- **Categoria:** Qualidade
-- **Localização:** linha ~60, função `wait_for_workdir()`
-- **Descrição:** O snapshot usa caminhos absolutos (`str(f)`), mas a filtragem de seed_files usa nomes relativos. Se o workdir for um symlink ou se houver normalização diferente de caminho, a comparação pode falhar.
-- **Impacto:** Falso positivo/negativo na detecção de estabilidade.
-- **Prioridade:** Média
-- **Correção proposta:** Usar caminhos relativos ao workdir no snapshot para consistência.
-
-### Problema 19 — `checks_key = "aurelia_auto_checks"` hardcoded
-- **Categoria:** Qualidade
-- **Localização:** linha ~200, mapeamento de checks alternativos
-- **Descrição:** O código faz mapping de `"aurelia_auto_checks"` para `"auto_checks"`, acoplando o runner a uma convenção específica. Se outro provider usar outra chave, não funcionará.
-- **Impacto:** Baixa portabilidade entre providers.
+### Problema 4 — Importação via `sys.path.insert` (mesmo problema de claude_runner)
+- **Categoria:** Qualidade / Convenção
+- **Localização:** linhas 17-19, `sys.path.insert(0, ...)` + import absoluto
+- **Descrição:** Mesmo padrão frágil de importação usado em `forge_claude_runner.py`.
+- **Impacto:** Fragilidade se a estrutura mudar.
 - **Prioridade:** Baixa
-- **Correção proposta:** Tornar a chave alternativa configurável ou documentar como convenção do framework.
-
-### Problema 20 — `response_override` não é usado em checks de conteúdo quando vazio
-- **Categoria:** Robustez
-- **Localização:** função `run_telegram_agent()` e uso em `auto_evaluate`
-- **Descrição:** Quando `response_override` é string vazia (default), checks do tipo `response_contains` vão falhar silenciosamente pois a resposta final será `""`. Não há aviso de que o usuário deveria ter fornecido `--response`.
-- **Impacto:** Scores artificialmente baixos sem indicação clara do motivo.
-- **Prioridade:** Baixa (comportamento esperado para uso semi-manual)
-- **Correção proposta:** Adicionar warning se `response_override` está vazio e há checks de `response_contains`.
+- **Correção proposta:** Mesma correção sugerida para `forge_claude_runner.py`.
