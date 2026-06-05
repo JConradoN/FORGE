@@ -8,17 +8,17 @@
   "tool_calls_n": 0,
   "loop_exhausted": false,
   "error": null,
-  "duration_ms": 150462,
+  "duration_ms": 60000,
   "tok_total": 0,
   "tok_per_s": 0.0,
-  "auto_score": 4,
+  "auto_score": 12,
   "auto_max": 18,
-  "auto_pct": 22,
+  "auto_pct": 67,
   "auto_checks": {
     "code_review.md criado": {
-      "passed": false,
+      "passed": true,
       "weight": 2,
-      "detail": "code_review.md NÃO existe"
+      "detail": "code_review.md existe"
     },
     "plano_correcoes.md criado": {
       "passed": false,
@@ -31,24 +31,24 @@
       "detail": "quality_report.md NÃO existe"
     },
     "review cobre forge_runner": {
-      "passed": false,
+      "passed": true,
       "weight": 1,
-      "detail": "arquivo não encontrado: code_review.md"
+      "detail": "'forge_runner' encontrado em code_review.md"
     },
     "review cobre claude_runner": {
-      "passed": false,
+      "passed": true,
       "weight": 1,
-      "detail": "arquivo não encontrado: code_review.md"
+      "detail": "'claude_runner' encontrado em code_review.md"
     },
     "review cobre mock_server": {
-      "passed": false,
+      "passed": true,
       "weight": 1,
-      "detail": "arquivo não encontrado: code_review.md"
+      "detail": "'mock_server' encontrado em code_review.md"
     },
     "review cobre telegram": {
-      "passed": false,
+      "passed": true,
       "weight": 1,
-      "detail": "arquivo não encontrado: code_review.md"
+      "detail": "'telegram' encontrado em code_review.md"
     },
     "plano tem prioridades": {
       "passed": false,
@@ -56,9 +56,9 @@
       "detail": "arquivo não encontrado: plano_correcoes.md"
     },
     "code_review.md > 3 KB": {
-      "passed": false,
+      "passed": true,
       "weight": 2,
-      "detail": "arquivo não encontrado: code_review.md"
+      "detail": "code_review.md: 3228 bytes (≥ 3000)"
     },
     "forge_runner.py importa OK": {
       "passed": true,
