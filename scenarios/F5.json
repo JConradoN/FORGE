@@ -9,6 +9,7 @@
   "prd_file": "prds/F5.md",
   "fixture_dirs": ["fixtures/forge-scripts"],
   "monitor_stable_s": 120,
+  "read_max_chars": 35000,
 
   "prompt": "Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework FORGE (~1600 linhas Python, 4 arquivos). Leia todos os arquivos, faça um code review completo, gere os documentos pedidos e implemente as correções de Alta prioridade. Veja as instruções detalhadas em TASK.md.",
 

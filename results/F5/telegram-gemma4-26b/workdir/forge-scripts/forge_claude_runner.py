@@ -133,8 +133,7 @@ CLAUDE_TOOLS = [
 
 
 # ── Loop do agente Claude ─────────────────────────────────────
-def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path,
-                     read_max_chars: int | None = None) -> dict:
+def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path) -> dict:
     api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY_FOXDEV")
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY ou ANTHROPIC_API_KEY_FOXDEV não definida.")
@@ -207,8 +206,7 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
                 args = dict(tu.input)
                 print(f"    → {name}({list(args.keys())})", end=" ... ", flush=True)
 
-                result = dispatch_tool(name, args, workdir, cleanup_ports,
-                                      read_max_chars=read_max_chars)
+                result = dispatch_tool(name, args, workdir, cleanup_ports)
                 print(f"({len(str(result))} chars)")
 
                 tool_calls_log.append({
@@ -324,9 +322,7 @@ def main():
             if args.runs > 1:
                 print(f"\n  ── Run {run_idx}/{args.runs} ──")
 
-            read_max = scenario.get("read_max_chars")
-            agent_result = run_claude_agent(model_id, sid, prompt, workdir,
-                                            read_max_chars=read_max)
+            agent_result = run_claude_agent(model_id, sid, prompt, workdir)
             auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug)
 
             # Enriquecer com metadados do provider antes de salvar

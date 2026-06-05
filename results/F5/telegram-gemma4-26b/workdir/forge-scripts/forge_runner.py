@@ -296,19 +296,16 @@ def exec_write_file(path: str, content: str, workdir: Path) -> str:
     return f"OK: {path} ({len(content)} chars, {content.count(chr(10))+1} linhas)"
 
 
-READ_MAX_CHARS = 8_000   # padrão; sobrescrito por cenários que leem arquivos grandes
-
-
-def exec_read_file(path: str, workdir: Path, max_chars: int | None = None) -> str:
+def exec_read_file(path: str, workdir: Path) -> str:
     target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
     if not target.exists():
         return f"[ERRO] Arquivo não encontrado: {path}"
     content = target.read_text(encoding="utf-8")
-    limit = max_chars or READ_MAX_CHARS
-    if len(content) > limit:
-        content = content[:limit] + f"\n... [truncado — {len(content)} chars total]"
+    # Limitar leitura de arquivos grandes
+    if len(content) > 8000:
+        content = content[:8000] + f"\n... [truncado — {len(content)} chars total]"
     return content
 
 
@@ -359,14 +356,13 @@ def exec_send_claudio(message: str) -> str:
         return f"[ERRO] {e}"
 
 
-def dispatch_tool(name: str, args: dict, workdir: Path, cleanup_ports: list,
-                  read_max_chars: int | None = None) -> str:
+def dispatch_tool(name: str, args: dict, workdir: Path, cleanup_ports: list) -> str:
     if name == "run_bash":
         return exec_run_bash(args.get("command", ""), workdir, cleanup_ports)
     if name == "write_file":
         return exec_write_file(args.get("path", ""), args.get("content", ""), workdir)
     if name == "read_file":
-        return exec_read_file(args.get("path", ""), workdir, max_chars=read_max_chars)
+        return exec_read_file(args.get("path", ""), workdir)
     if name == "http_get":
         return exec_http_get(args.get("url", ""), args.get("headers", {}))
     if name == "http_post":
@@ -415,8 +411,7 @@ def extract_tool_calls(resp: dict) -> list:
 
 
 # ── Loop principal do agente ──────────────────────────────────
-def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
-              read_max_chars: int | None = None) -> dict:
+def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path) -> dict:
     messages       = [{"role": "user", "content": prompt}]
     t_start        = time.time()
     turns          = 0
@@ -462,8 +457,7 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
                 name   = tc["name"]
                 args   = tc["arguments"]
                 print(f"    → {name}({list(args.keys())})", end=" ... ", flush=True)
-                result = dispatch_tool(name, args, workdir, cleanup_ports,
-                                      read_max_chars=read_max_chars)
+                result = dispatch_tool(name, args, workdir, cleanup_ports)
                 print(f"({len(str(result))} chars)")
 
                 tool_calls_log.append({
@@ -789,9 +783,7 @@ def main():
             if args.runs > 1:
                 print(f"\n  ── Run {run_idx}/{args.runs} ──")
 
-            read_max = scenario.get("read_max_chars")
-            agent_result = run_agent(model, sid, prompt, workdir,
-                                     read_max_chars=read_max)
+            agent_result = run_agent(model, sid, prompt, workdir)
             auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug)
             out_file     = save_run_result(sid, model, run_idx, workdir,
                                            agent_result, auto_eval, scenario)
