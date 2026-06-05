@@ -463,28 +463,20 @@ def extract_tool_calls(resp: dict) -> list:
     return calls
 
 
-def build_reflection_prompt(scenario: dict, workdir: Path, slug: str) -> str | None:
-    """Verifica artefatos file_exists ausentes e constrói prompt de autocrítica.
-    Retorna None se todos os artefatos obrigatórios já existem."""
-    missing = []
-    for label, check in scenario.get("checks", {}).items():
-        if check.get("type") != "file_exists":
-            continue
-        path_tpl = check.get("path", "")
-        path_str = path_tpl.replace("{model_slug}", slug)
-        if not (workdir / path_str).exists():
-            missing.append(path_str)
-
-    if not missing:
-        return None
-
-    lista = "\n".join(f"  - {f}" for f in missing)
-    return (
-        f"VERIFICAÇÃO DO HARNESS: Os seguintes artefatos ainda não foram criados:\n"
-        f"{lista}\n\n"
-        f"Por favor, crie agora esses arquivos para completar a tarefa. "
-        f"Use write_file para cada um deles."
-    )
+# Prompt de reflexão autônoma — genérico, independente do cenário.
+# O agente relê o TASK.md, compara com o que entregou, e decide se está satisfeito.
+# Convergência: agente responde com "REVISÃO CONCLUÍDA" quando satisfeito.
+REFLECTION_PROMPT = (
+    "FASE DE REVISÃO AUTÔNOMA\n\n"
+    "Você declarou que terminou. Antes de encerrar definitivamente, faça:\n\n"
+    "1. Use read_file('TASK.md') para reler os requisitos completos da tarefa\n"
+    "2. Liste o que você entregou (arquivos criados, ações executadas)\n"
+    "3. Compare ponto a ponto com cada requisito do TASK.md\n"
+    "4. Se encontrar lacunas ou melhorias necessárias: execute-as agora\n"
+    "5. Repita a verificação até estar genuinamente satisfeito\n"
+    "6. Quando satisfeito com a entrega completa, responda exatamente: REVISÃO CONCLUÍDA\n\n"
+    "Não encerre antes de verificar cada requisito do TASK.md."
+)
 
 
 # ── Loop principal do agente ──────────────────────────────────
@@ -499,7 +491,8 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
     error          = None
     tok_total      = 0
     cleanup_ports  = []
-    reflected      = False   # flag: turno de reflexão já foi injetado
+    reflection_rounds = 0      # quantas vezes o loop de reflexão foi ativado
+    MAX_REFLECTION    = 3      # máximo de rounds de reflexão antes de encerrar
 
     slug = model.replace(":", "-").replace("/", "_")
 
@@ -523,16 +516,22 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
             tc_list   = extract_tool_calls(resp)
 
             if not tc_list:
-                # Tentar reflexão uma única vez antes de encerrar
-                if not reflected and scenario and turns < MAX_TURNS - 1:
-                    reflection = build_reflection_prompt(scenario, workdir, slug)
-                    if reflection:
-                        print(f"resposta parcial ({len(content)} chars) → [reflexão]")
-                        messages.append({"role": "assistant", "content": content})
-                        messages.append({"role": "user",      "content": reflection})
-                        reflected = True
-                        continue
+                # Agente satisfeito → encerra
+                if "REVISÃO CONCLUÍDA" in content:
+                    final_response = content
+                    print(f"resposta final ({len(content)} chars) ✓ satisfeito")
+                    messages.append({"role": "assistant", "content": content})
+                    break
 
+                # Ainda há rounds de reflexão disponíveis → injeta prompt autônomo
+                if reflection_rounds < MAX_REFLECTION and turns < MAX_TURNS - 1:
+                    reflection_rounds += 1
+                    print(f"resposta ({len(content)} chars) → [reflexão {reflection_rounds}/{MAX_REFLECTION}]")
+                    messages.append({"role": "assistant", "content": content})
+                    messages.append({"role": "user",      "content": REFLECTION_PROMPT})
+                    continue
+
+                # Rounds esgotados → encerra com o que tem
                 final_response = content
                 print(f"resposta final ({len(content)} chars)")
                 messages.append({"role": "assistant", "content": content})
@@ -577,9 +576,9 @@ def run_agent(model: str, scenario_id: str, prompt: str, workdir: Path,
         "error":          error,
         "duration_ms":    duration_ms,
         "tok_total":      tok_total,
-        "loop_exhausted": turns >= MAX_TURNS and not final_response,
-        "cleanup_ports":  cleanup_ports,
-        "reflected":      reflected,
+        "loop_exhausted":    turns >= MAX_TURNS and not final_response,
+        "cleanup_ports":     cleanup_ports,
+        "reflection_rounds": reflection_rounds,
     }
 
 
@@ -904,8 +903,9 @@ def main():
             run_summaries.append({**auto_eval, "error": agent_result["error"],
                                    "loop_exhausted": agent_result["loop_exhausted"]})
 
-            reflected_tag = " [com reflexão]" if agent_result.get("reflected") else ""
-            print(f"\n  Auto score : {auto_eval['score']}/{auto_eval['max_score']} ({auto_eval['pct']}%){reflected_tag}")
+            rounds = agent_result.get("reflection_rounds", 0)
+            ref_tag = f" [reflexão: {rounds} round(s)]" if rounds else ""
+            print(f"\n  Auto score : {auto_eval['score']}/{auto_eval['max_score']} ({auto_eval['pct']}%){ref_tag}")
             for label, c in auto_eval["checks"].items():
                 mark = "✓" if c["passed"] else "✗"
                 print(f"    {mark} {label}: {c['detail']}")
