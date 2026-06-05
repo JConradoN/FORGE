@@ -20,7 +20,7 @@ import urllib.request
 from pathlib import Path
 
 OLLAMA_URL  = "http://localhost:11434/api/chat"
-JUDGE_MODEL = "qwen3.5:9b"   # modelo padrão do judge — diferente do testado
+JUDGE_MODEL = "gemma4:26b"   # modelo padrão do judge — fora da lista de modelos testados
 
 JUDGE_SYSTEM = """Você é um avaliador técnico rigoroso de code reviews produzidos por agentes de IA.
 Avalie objetivamente o artefato fornecido usando a rubrica dada.
@@ -184,7 +184,11 @@ def main():
     print(f"Arquivos: {len(files)}\n")
 
     for f in files:
-        print(f"→ {f.relative_to(Path(__file__).parent.parent)}")
+        try:
+            label = f.relative_to(Path(__file__).parent.parent)
+        except ValueError:
+            label = f
+        print(f"→ {label}")
         evaluate_file(f, model=args.model)
         print()
 
