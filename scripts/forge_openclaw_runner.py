@@ -42,73 +42,27 @@ GATEWAY_PORT   = 19000   # porta padrão do OpenClaw Gateway
 _ENV = {**os.environ, "OLLAMA_API_KEY": "ollama-local"}
 
 
-def _gateway_running() -> bool:
-    try:
-        result = subprocess.run(
-            ["openclaw", "health"],
-            capture_output=True, text=True, timeout=5,
-            env=_ENV,
-        )
-        return result.returncode == 0
-    except Exception:
-        return False
-
-
-def _start_gateway() -> subprocess.Popen | None:
-    """Inicia o Gateway em background se não estiver rodando."""
-    if _gateway_running():
-        return None
-    proc = subprocess.Popen(
-        ["openclaw", "gateway", "run", "--force"],
-        env=_ENV,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    # Aguarda o Gateway subir
-    for _ in range(20):
-        time.sleep(1)
-        if _gateway_running():
-            return proc
-    return proc
-
-
 def run_openclaw_agent(scenario_id: str, prompt: str, workdir: Path) -> dict:
     """
-    Executa uma tarefa via openclaw agent.
-    Usa o subcomando `openclaw agent` que roda um turno pelo Gateway.
+    Executa via `openclaw agent --local --agent main`.
+    Modo local: sem Gateway, fala direto com Ollama.
     """
     t_start        = time.time()
     error          = None
     final_response = ""
     tool_calls_log = []
+    tok_total      = 0
 
-    print(f"\n  [openclaw] modelo={OPENCLAW_MODEL}")
+    print(f"\n  [openclaw] modelo={OPENCLAW_MODEL} (local)")
     print(f"  [openclaw] workdir={workdir}")
-
-    # Verifica / inicia Gateway
-    gateway_proc = None
-    if not _gateway_running():
-        print(f"  [openclaw] iniciando Gateway...", end="", flush=True)
-        gateway_proc = _start_gateway()
-        if _gateway_running():
-            print(" ok")
-        else:
-            print(" FALHOU")
-            return {"error": "Gateway não iniciou", "turns": 0, "tool_calls": [],
-                    "final_response": "", "duration_ms": 0, "tok_total": 0,
-                    "loop_exhausted": False, "provider": "openclaw"}
-
-    # Usa openclaw agent para executar a tarefa
-    # --deliver faz o agent completar e retornar a resposta
-    session_key = f"forge-{scenario_id}-{int(t_start)}"
 
     cmd = [
         "openclaw", "agent",
+        "--local",
+        "--agent", "main",
         "--model", OPENCLAW_MODEL,
         "--message", prompt,
-        "--deliver",
-        "--session", session_key,
-        "--cwd", str(workdir),
+        "--json",
     ]
 
     print(f"  [openclaw] enviando tarefa ({len(prompt)} chars)...", end="", flush=True)
@@ -119,12 +73,21 @@ def run_openclaw_agent(scenario_id: str, prompt: str, workdir: Path) -> dict:
             capture_output=True,
             text=True,
             timeout=TASK_TIMEOUT_S,
+            cwd=str(workdir),
             env=_ENV,
         )
-        final_response = result.stdout.strip()
-        if result.returncode != 0:
+        if result.returncode == 0:
+            try:
+                d = json.loads(result.stdout.strip())
+                payloads = d.get("payloads", [])
+                final_response = " ".join(p.get("text", "") for p in payloads if p.get("text"))
+                usage = d.get("meta", {}).get("agentMeta", {}).get("usage", {})
+                tok_total = usage.get("total", 0)
+            except json.JSONDecodeError:
+                final_response = result.stdout.strip()
+        else:
             error = result.stderr.strip()[:300] or f"exit {result.returncode}"
-        print(f" done ({len(final_response)} chars)")
+        print(f" done ({len(final_response)} chars, {tok_total} tok)")
 
     except subprocess.TimeoutExpired:
         error = f"timeout {TASK_TIMEOUT_S}s"
@@ -133,10 +96,6 @@ def run_openclaw_agent(scenario_id: str, prompt: str, workdir: Path) -> dict:
         error = str(e)
         print(f" ERRO: {e}")
 
-    # Para Gateway se foi iniciado por este runner
-    if gateway_proc:
-        gateway_proc.terminate()
-
     duration_ms = int((time.time() - t_start) * 1000)
     return {
         "turns":          1,
@@ -144,7 +103,7 @@ def run_openclaw_agent(scenario_id: str, prompt: str, workdir: Path) -> dict:
         "final_response": final_response,
         "error":          error,
         "duration_ms":    duration_ms,
-        "tok_total":      0,
+        "tok_total":      tok_total,
         "loop_exhausted": False,
         "provider":       "openclaw",
     }
@@ -171,7 +130,7 @@ def main():
     print(f"  Modelo    : {OPENCLAW_MODEL}")
     print(f"  Cenários  : {', '.join(scenario_ids)}")
     print(f"  Runs/cen. : {args.runs}")
-    print(f"  Gateway   : {'rodando' if _gateway_running() else 'será iniciado'}")
+    print(f"  Modo      : local (--local, sem Gateway)")
     print(f"{'='*64}")
 
     for i, sid in enumerate(scenario_ids):
