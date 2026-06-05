@@ -137,6 +137,7 @@ def run_telegram_agent(scenario_id: str, scenario: dict, workdir: Path,
 
         print()
         print("  ┌─ ENVIE NO TELEGRAM ───────────────────────────────────────────┐")
+        print(f"  │  0. /new          ← limpa sessão anterior")
         print(f"  │  1. {cwd_cmd}")
         print(f"  │  2. {task_msg}")
         print("  └────────────────────────────────────────────────────────────────┘")
@@ -159,6 +160,7 @@ def run_telegram_agent(scenario_id: str, scenario: dict, workdir: Path,
         cwd_cmd = f"/cwd {workdir}"
         print()
         print("  ┌─ ENVIE NO TELEGRAM ───────────────────────────────────────────┐")
+        print(f"  │  0. /new          ← limpa sessão anterior")
         print(f"  │  1. {cwd_cmd}")
         print("  │  2. (mensagem abaixo)")
         print("  └────────────────────────────────────────────────────────────────┘")

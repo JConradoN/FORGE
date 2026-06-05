@@ -1,0 +1,61 @@
+{
+  "scenario": "F4",
+  "scenario_name": "Code Review + Bug Fix",
+  "model": "telegram-gemma4-26b",
+  "run_idx": 1,
+  "date": "2026-06-04",
+  "turns": 1,
+  "tool_calls_n": 0,
+  "loop_exhausted": false,
+  "error": null,
+  "duration_ms": 60000,
+  "tok_total": 0,
+  "tok_per_s": 0.0,
+  "auto_score": 1,
+  "auto_max": 15,
+  "auto_pct": 7,
+  "auto_checks": {
+    "code_review.md criado": {
+      "passed": false,
+      "weight": 2,
+      "detail": "code_review.md NÃO existe"
+    },
+    "review menciona cache.py": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "review menciona retry.py": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "review menciona logger.py": {
+      "passed": false,
+      "weight": 1,
+      "detail": "arquivo não encontrado: code_review.md"
+    },
+    "validate.py ALL PASSED": {
+      "passed": false,
+      "weight": 8,
+      "detail": "exit 1: FAIL: cache.set/get: get retornou {'key': 'k1', 'value': 'hello', 'ttl': 30}, esperado 'hello'\nFAIL: cache.delete: size("
+    },
+    "confirmou conclusão": {
+      "passed": false,
+      "weight": 1,
+      "detail": "'REVISÃO CONCLUÍDA' NÃO encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [],
+  "final_response": "",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}
