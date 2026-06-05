@@ -1,8 +1,10 @@
-# FORGE — Relatório Comparativo v1.0
+# FORGE — Relatório Comparativo v1.1
 
 **Data:** 2026-06-05  
 **Framework:** FORGE v0.2 — Framework for Open Real-world Generic Evaluation  
 **Máquina:** fox-server (Xeon E5-2696v3, 2× RTX 3060 12GB, 128GB RAM)
+
+**v1.1:** Adicionados resultados do Claude Sonnet 4.6 com harness equivalente (forge_claude_runner.py corrigido — max_tokens 16384, append_file tool, extra_vars fix).
 
 ---
 
@@ -26,37 +28,36 @@ FORGE avalia agentes LLM em **tarefas reais encadeadas** — não perguntas isol
 
 | # | Modelo | Harness | F1 | F2 | F3 | F4 | F5 | Total |
 |---|--------|---------|----|----|----|----|-----|-------|
-| 🥇 | **qwen3.5:9b** | FORGE direct | 77% | **100%** | **100%** | **89%** | **83%** | **87%** |
-| 🥈 | **gemma4:26b** | Aurelia/Telegram | **92%** | **100%** | **100%** | **100%** | 67% | **89%** |
-| 3 | qwen3.6:27b | FORGE direct | — | — | — | — | 78% | 78%* |
-| 4 | gemma4:26b | FORGE direct | 100% | — | — | — | 56% | 71%* |
-| 5 | claude-sonnet-4-6 | Claude API | — | — | — | 72% | 28%† | 50%* |
+| 🥇 | **claude-sonnet-4-6** | Claude API (forge_claude_runner) | 81% | **100%** | **100%** | **100%** | **83%** | **91%** |
+| 🥈 | **gemma4:26b** | Aurelia/Telegram | **92%** | **100%** | **100%** | **100%** | 67% | 89%* |
+| 🥉 | **qwen3.5:9b** | FORGE direct | 77% | **100%** | **100%** | 89% | 83% | 87% |
+| 4 | qwen3.6:27b | FORGE direct | — | — | — | — | 78% | 78%* |
+| 5 | gemma4:26b | FORGE direct | 100% | — | — | — | 56% | 71%* |
 
-*Avaliados apenas nos cenários testados.  
-†Rate limit (30k tok/min free tier) interrompeu no turno 16.
+*Cobertura parcial — avaliados apenas nos cenários testados.
 
 ---
 
 ## 3. Análise por Modelo
 
-### qwen3.5:9b — 87% (75/86 pts)
+### claude-sonnet-4-6 — 91% (78/86 pts) ✓ run válida
 
-Melhor desempenho absoluto considerando todos os cenários testados.
+Run válida com harness equivalente (forge_claude_runner.py corrigido). Custo total: **$4,75 USD**.
 
 **Comportamento observado:**
-- F1 (77%): criou site completo em 6 turnos — HTML 22KB, JSON com 6 imóveis, fetch+filtro+paleta. Não serviu na porta (modelo não iniciou servidor HTTP)
-- F2 (100%): 4 turnos — fetch URL, escreveu relatório com seções RESUMO/RELEVÂNCIA/OPORTUNIDADES, enviou via Telegram
-- F3 (100%): 8 turnos — consultou 5 APIs de câmbio/cripto, relatório com cotações+tendência+recomendação, enviou via Telegram  
-- F4 (89%): leu 4 arquivos Python em paralelo no turno 1, corrigiu bugs em 3 turnos, validate.py passou 5/5
-- F5 (83%): 11 turnos — leu 60KB de código sem perder coerência, criou code_review.md + plano_correcoes.md. Não gerou quality_report.md
+- F1 (81%): 18 turnos — index.html 44KB, imoveis.json correto, fetch+filtros+paleta+media query. Não implementou validação de formulário (validity) e servidor HTTP não ficou de pé após o loop
+- F2 (100%): 5 turnos — fetch URL, relatório com RESUMO/RELEVÂNCIA/OPORTUNIDADES, enviou Telegram
+- F3 (100%): 5 turnos — buscou 5 APIs simultâneas no turno 1, relatório completo, enviou Telegram
+- F4 (100%): 5 turnos — leu arquivos em paralelo, corrigiu todos os bugs, validate.py 5/5, code_review.md completo
+- F5 (83%): ~7 turnos — leu 60KB em paralelo (turno 2), criou code_review.md (17KB) + plano_correcoes.md, forge_runner.py importa OK. Não gerou quality_report.md, faltou "REVISÃO CONCLUÍDA"
 
-**Perfil:** instrução-following estável em contexto longo. Modelo 9B de 6.6GB supera modelos 3× maiores em coerência agentiva.
+**Perfil:** maior score total do benchmark. F4 100% em 5 turnos com leitura paralela é destaque. F5 manteve coerência em contexto longo sem collapse. Custo de $3,16 só no F5 devido ao contexto acumulado de 60KB.
 
 ---
 
 ### gemma4:26b via Aurelia/Telegram — 89% (67/75 pts)
 
-Melhor score absoluto nos cenários testados, mas com cobertura menor.
+Melhor score absoluto nos cenários testados, mas com cobertura parcial (F1-F5 não completo no mesmo harness).
 
 **Comportamento observado:**
 - F1 (92%): 11 turnos — site completo com servidor HTTP funcional. Único modelo a servir na porta corretamente
@@ -65,18 +66,22 @@ Melhor score absoluto nos cenários testados, mas com cobertura menor.
 - F4 (100%): code review completo, todos os bugs corrigidos, validate 5/5
 - F5 (67%): criou code_review.md mas contexto esgotou na continuação (limitação do PI SDK bridge)
 
-**Perfil:** modelo de produção com harness maduro. F5 limitado pelo harness (PI SDK), não pelo modelo.
+**Perfil:** harness Aurelia/Telegram é o mais maduro e gerencia sessão ativamente. F5 limitado pelo harness (PI SDK acumula contexto), não pelo modelo.
 
 ---
 
-### claude-sonnet-4-6 — 50%† (controlador externo)
+### qwen3.5:9b — 87% (75/86 pts)
 
-Travado por rate limit free tier (30k tok/min) no turno 16 do F5.
+Melhor agente local no fox-server. Run completa F1-F5 no mesmo harness (FORGE direct).
 
-**F4 (72%):** completou code review mas não salvou `code_review.md` no workdir esperado.  
-**F5 (28%):** criou `code_review.md` vazia (0 bytes), interrompido no turno 16 por 429.
+**Comportamento observado:**
+- F1 (77%): HTML 22KB, fetch+filtros+paleta. Não serviu na porta
+- F2 (100%): 4 turnos, entrega completa
+- F3 (100%): 8 turnos, 5 APIs, relatório completo
+- F4 (89%): leu 4 arquivos em paralelo, corrigiu bugs, validate 5/5. Não mencionou cache.py no review
+- F5 (83%): 11 turnos, leu 60KB, code_review.md + plano_correcoes.md. Não gerou quality_report.md
 
-**Nota metodológica:** resultado subestimado. Com tier pago o Sonnet completaria F5 — contexto de 395K tokens de entrada confirma que o modelo leu tudo e manteve coerência até o rate limit.
+**Perfil:** instrução-following estável em contexto longo. 9B params / 6.6GB VRAM / ~45 tok/s. Custo operacional: energia elétrica (~$0,001/run).
 
 ---
 
@@ -84,28 +89,30 @@ Travado por rate limit free tier (30k tok/min) no turno 16 do F5.
 
 | Harness | Modelos testados em F5 | Score médio F5 | Melhor resultado |
 |---------|----------------------|----------------|-----------------|
+| Claude API (forge_claude_runner) | 1 | 83% | sonnet-4-6: 83% |
 | FORGE direct (Ollama API) | 19 | 32% | qwen3.5:9b: 83% |
 | Aurelia/Telegram | 1 | 67% | gemma4:26b: 67% |
 | opencode | 11 | 21% | 4 modelos: 22% |
 | OpenHands | 19 | 17% | 3/18 (17%) uniforme |
-| Claude API | 1 | 28%† | sonnet-4-6: 28%† |
 
-**Achado principal:** o harness impacta menos do que o modelo em F1-F4. Em F5 (contexto longo), o harness passa a importar — modelos menores com instrução-following melhor superam modelos maiores independente do harness.
+**Achado:** harness importa menos do que o modelo em F1-F4. Em F5, harnesses com token budget adequado (Claude API 16384, FORGE direct) superam harnesses com restrições implícitas (opencode catalog fechado, OpenHands formato incompatível).
 
 ---
 
-## 5. Achado Central: Capacidade ≠ Funcionalidade Agentiva
+## 5. Achado Central: Capacidade ≠ Funcionalidade Agentiva (revisado)
 
-O qwen3.5:9b (9B params, ABS mediano) supera gemma4:26b (26B params, ABS líder) no FORGE total quando avaliado no mesmo harness (FORGE direct).
+Com o Sonnet medido corretamente, o ranking muda:
 
 ```
-ABS ranking:     gemma4:26b >> qwen3.5:9b
-FORGE ranking:   qwen3.5:9b ≈ gemma4:26b (via Aurelia)
+ABS ranking:      gemma4:26b >> claude-sonnet-4-6 >> qwen3.5:9b
+FORGE ranking:    sonnet-4-6 (91%) > gemma4:26b (89%)* > qwen3.5:9b (87%)
 ```
 
-**Hipótese confirmada:** a variável preditora de desempenho agentivo não é o score de capacidade bruta (ABS), mas a **estabilidade de instrução-following sob pressão de contexto acumulado**.
+*gemma4:26b com cobertura parcial — comparação direta não controlada.
 
-Em F5 (60KB de contexto acumulado, 11+ turnos), gemma4:26b colapsa em todos os harnesses automatizados. qwen3.5:9b mantém coerência até o fim.
+**Hipótese revisada:** a variável preditora primária de desempenho agentivo não é o score de capacidade bruta (ABS), mas a **combinação de instrução-following estável + token budget adequado no harness**. O Sonnet supera o qwen3.5:9b em F1 (81% vs 77%) e mantém paridade em F5 (83% vs 83%) — diferença principalmente em F4 (100% vs 89%).
+
+**Lição de harness documentada:** o Sonnet marcava 50% nas runs anteriores por bugs no harness (max_tokens=8192 truncava tool calls, extra_vars ausente, sem retry em 429). O modelo não tinha falha — o scaffolding tinha. Resultado: 3 semanas de interpretação incorreta de dados.
 
 ---
 
@@ -113,11 +120,12 @@ Em F5 (60KB de contexto acumulado, 11+ turnos), gemma4:26b colapsa em todos os h
 
 | Categoria de falha | Modelos afetados | Causa |
 |-------------------|-----------------|-------|
-| Context collapse (~50K tok) | gemma4:26b, gemma4:e4b, maioria 24B+ | Perda de coerência, re-leitura do task, token leaks |
-| Tool call malformada | phi4:14b, granite4.1:3b | `execute_bash` sem `command`, `write_file` sem `path` |
+| Context collapse (~50K tok) | gemma4:26b, gemma4:e4b, maioria 24B+ | Perda de coerência em F5 |
+| Tool call truncada por max_tokens | qualquer modelo via Claude API | max_tokens insuficiente para arquivos grandes |
+| Tool call malformada | phi4:14b, granite4.1:3b | `run_bash` sem `command`, `write_file` sem `path` |
 | Sem arquivo final | maioria via opencode | Modelo responde em texto, não chama `write` |
-| Rate limit | claude-sonnet-4-6 | Free tier 30k tok/min insuficiente para F5 |
-| OpenHands sandbox | todos | `execute_bash` sem args em loop — bug de formato |
+| OpenHands sandbox | todos | `execute_bash` sem args em loop — formato incompatível |
+| quality_report.md ausente | qwen3.5:9b, sonnet-4-6 | Terceiro entregável do F5 consistentemente omitido |
 
 ---
 
@@ -125,34 +133,37 @@ Em F5 (60KB de contexto acumulado, 11+ turnos), gemma4:26b colapsa em todos os h
 
 | Modelo | Tamanho | VRAM | tok/s¹ | F1-F5 total | Custo/run² |
 |--------|---------|------|--------|-------------|-----------|
-| qwen3.5:9b | 9B | 6.6GB | ~45 t/s | 87% | $0 |
-| gemma4:26b | 26B | 17GB | ~25 t/s | 89%³ | $0 |
-| claude-sonnet-4-6 | — | cloud | — | 50%† | ~$0.15/run |
+| claude-sonnet-4-6 | cloud | — | — | **91%** | **$4,75** |
+| gemma4:26b (Aurelia) | 26B | 17GB | ~25 t/s | 89%* | $0,001 |
+| qwen3.5:9b | 9B | 6.6GB | ~45 t/s | 87% | $0,001 |
 
 ¹Via Ollama no fox-server.  
-²Custo de inferência (modelos locais = energia elétrica ~$0.001/run).  
-³Cobertura parcial (F1-F5 incompleto).
+²Modelos locais: custo de energia elétrica estimado.  
+*Cobertura parcial.
+
+**Observação de custo:** F5 é responsável por 67% do custo total do Sonnet ($3,16 de $4,75) devido ao contexto acumulado de ~60KB que cresce a cada turno da API Anthropic. Para avaliação em escala, F5 com modelos cloud é proibitivo.
 
 ---
 
-## 8. Conclusões
+## 8. Conclusões (v1.1)
 
-1. **qwen3.5:9b é o melhor agente local para tarefas reais** no fox-server — pequeno, rápido, coerente em contexto longo.
+1. **Claude Sonnet 4.6 é o melhor agente FORGE com harness equivalente** — 91% com run válida, superando qwen3.5:9b (87%) e gemma4:26b parcial (89%).
 
-2. **gemma4:26b é superior em tarefas curtas** (F1-F4) mas colapsa em F5 sem o suporte do harness Aurelia para gerenciar a sessão.
+2. **qwen3.5:9b é o melhor agente local** — paridade com o Sonnet em F5, custo operacional 4750× menor por run.
 
-3. **Nenhum harness automatizado** (opencode, OpenHands) conseguiu extrair desempenho superior ao FORGE direct em F5 — os overhead e formatos de tool call prejudicam mais do que ajudam.
+3. **O harness foi o principal inimigo desta avaliação** — bugs em max_tokens, extra_vars e retry geraram 3 semanas de dados inválidos para o Sonnet.
 
-4. **O F5 é um discriminador eficaz** de estabilidade de contexto — separa claramente modelos funcionais de modelos que "parecem bons" em benchmarks de capacidade.
+4. **quality_report.md é o discriminador mais difícil do F5** — nenhum modelo gerou este terceiro entregável consistentemente. Merece investigação: é falha do prompt, do cenário, ou capacidade real?
 
-5. **Para produção imediata:** qwen3.5:9b para tarefas agentivas gerais; gemma4:26b via Aurelia para tarefas que exijam qualidade máxima de raciocínio em contextos menores.
+5. **Para produção:** qwen3.5:9b para tarefas agentivas gerais (custo zero, 87% de acerto); Sonnet para tarefas críticas que justifiquem o custo (~$5/suite completo).
 
 ---
 
 ## 9. Próximos Passos
 
-- [ ] Rodar qwen3.5:9b com `--runs 3` para estabilidade estatística
-- [ ] Testar qwen3.6:27b em F1-F4 (só testado em F5)
-- [ ] Repetir Sonnet com retry em rate limit
-- [ ] Cruzar scores FORGE × ABS para correlação (paper)
-- [ ] Adicionar F6: tarefa de API REST (criar endpoint, testar, documentar)
+- [ ] qwen3.5:9b `--runs 3` para estabilidade estatística (variância F5: 67%-83%)
+- [ ] gemma4:26b F1-F5 completo via FORGE direct (comparação controlada com Sonnet)
+- [ ] Investigar quality_report.md: ajuste de prompt ou novo critério?
+- [ ] Correlação ABS × FORGE para paper (achado principal)
+- [ ] F6: tarefa de API REST (criar endpoint, testar, documentar)
+- [ ] Sonnet `--runs 3` para validação estatística (~$14 USD)
