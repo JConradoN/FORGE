@@ -21,6 +21,7 @@ import datetime
 import json
 import os
 import time
+import random
 from pathlib import Path
 
 # Importar ferramentas e avaliação do runner principal
@@ -119,6 +120,23 @@ CLAUDE_TOOLS = [
         }
     },
     {
+        "name": "append_file",
+        "description": (
+            "Adiciona conteúdo ao final de um arquivo existente. "
+            "Use quando o conteúdo for grande demais para um único write_file — "
+            "escreva o arquivo em múltiplos chunks com write_file + append_file. "
+            "Se o arquivo não existir, ele é criado."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path":    {"type": "string"},
+                "content": {"type": "string"}
+            },
+            "required": ["path", "content"]
+        }
+    },
+    {
         "name": "send_claudio",
         "description": "Envia mensagem pelo bot Telegram do Claudio.",
         "input_schema": {
@@ -130,6 +148,15 @@ CLAUDE_TOOLS = [
         }
     },
 ]
+
+
+SYSTEM_PROMPT = (
+    "Você é um agente de engenharia rodando em um servidor Linux. "
+    "Ao usar a ferramenta write_file, SEMPRE inclua o conteúdo completo do arquivo "
+    "no parâmetro 'content' da chamada da ferramenta — nunca no texto da resposta. "
+    "Ao usar run_bash, SEMPRE inclua o comando no parâmetro 'command'. "
+    "Não explique o que vai fazer antes de chamar a ferramenta — execute diretamente."
+)
 
 
 # ── Loop do agente Claude ─────────────────────────────────────
@@ -164,16 +191,28 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
             if not messages:
                 messages = [{"role": "user", "content": current_prompt}]
 
-            try:
-                resp = client.messages.create(
-                    model=model_id,
-                    max_tokens=4096,
-                    tools=CLAUDE_TOOLS,
-                    messages=messages,
-                )
-            except anthropic.APIError as e:
-                error = str(e)
-                print(f"ERRO API: {error}")
+            # Retry com backoff exponencial em 429 (rate limit)
+            for attempt in range(5):
+                try:
+                    resp = client.messages.create(
+                        model=model_id,
+                        max_tokens=16384,
+                        system=SYSTEM_PROMPT,
+                        tools=CLAUDE_TOOLS,
+                        messages=messages,
+                    )
+                    break
+                except anthropic.RateLimitError as e:
+                    wait = (2 ** attempt) * 10 + random.uniform(0, 5)
+                    print(f"\n  [429] rate limit — aguardando {wait:.0f}s (tentativa {attempt+1}/5)...")
+                    time.sleep(wait)
+                except anthropic.APIError as e:
+                    error = str(e)
+                    print(f"ERRO API: {error}")
+                    break
+            else:
+                error = "429 rate limit após 5 tentativas"
+                print(f"  ABORTANDO: {error}")
                 break
 
             tok_input  += resp.usage.input_tokens
@@ -200,7 +239,9 @@ def run_claude_agent(model_id: str, scenario_id: str, prompt: str, workdir: Path
             print(f"{len(tool_uses)} tool(s): {[t.name for t in tool_uses]}")
             messages.append({"role": "assistant", "content": resp.content})
 
-            # Executar ferramentas e coletar resultados
+            if resp.stop_reason == "max_tokens":
+                print(f"  [WARN] stop_reason=max_tokens — considere usar append_file para conteúdo grande.")
+
             tool_results = []
             for tu in tool_uses:
                 name = tu.name
@@ -342,7 +383,8 @@ def main():
             read_max = scenario.get("read_max_chars")
             agent_result = run_claude_agent(model_id, sid, prompt, workdir,
                                             read_max_chars=read_max)
-            auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug)
+            auto_eval    = auto_evaluate(scenario, workdir, agent_result, slug,
+                                         extra_vars={"port": port})
 
             # Enriquecer com metadados do provider antes de salvar
             agent_result["model_display"] = model_id

@@ -160,6 +160,26 @@ TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "append_file",
+            "description": (
+                "Adiciona conteúdo ao final de um arquivo existente no diretório de trabalho. "
+                "Use quando o conteúdo for grande demais para um único write_file, "
+                "escrevendo o arquivo em múltiplos chunks. "
+                "Se o arquivo não existir, ele é criado."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path":    {"type": "string", "description": "Caminho relativo do arquivo."},
+                    "content": {"type": "string", "description": "Conteúdo a adicionar ao final."}
+                },
+                "required": ["path", "content"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "send_claudio",
             "description": (
                 "Envia uma mensagem de texto pelo bot Telegram do Claudio. "
@@ -249,6 +269,8 @@ def _kill_port(port: int):
 
 # ── Implementação das ferramentas ─────────────────────────────
 def exec_run_bash(command: str, workdir: Path, cleanup_ports: list) -> str:
+    if not command or not command.strip():
+        return "[ERRO] Parâmetro 'command' é obrigatório e não pode ser vazio."
     # Fix SEGURANÇA: blocklist de comandos destrutivos
     block_msg = _check_bash_safety(command)
     if block_msg:
@@ -287,6 +309,8 @@ _PROTECTED_FILES = {"validate.py", "TASK.md"}
 def exec_write_file(path: str, content: str, workdir: Path) -> str:
     if not path or not path.strip():
         return "[ERRO] Parâmetro 'path' é obrigatório."
+    if not content:
+        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio. Inclua o conteúdo completo do arquivo no parâmetro 'content'."
     target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
@@ -296,8 +320,26 @@ def exec_write_file(path: str, content: str, workdir: Path) -> str:
         return f"[ERRO] '{target.name}' é um arquivo de fixture protegido e não pode ser modificado."
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(content, encoding="utf-8")
-    # Confirmação curta — evitar injetar o conteúdo de volta no contexto
     return f"OK: {path} ({len(content)} chars, {content.count(chr(10))+1} linhas)"
+
+
+def exec_append_file(path: str, content: str, workdir: Path) -> str:
+    if not path or not path.strip():
+        return "[ERRO] Parâmetro 'path' é obrigatório."
+    if not content:
+        return "[ERRO] Parâmetro 'content' é obrigatório e não pode ser vazio."
+    target = (workdir / path).resolve()
+    if not str(target).startswith(str(workdir.resolve())):
+        return "[ERRO] Caminho fora do diretório de trabalho."
+    if target.is_dir():
+        return f"[ERRO] '{path}' é um diretório, não um arquivo."
+    if target.name in _PROTECTED_FILES:
+        return f"[ERRO] '{target.name}' é um arquivo de fixture protegido e não pode ser modificado."
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with open(target, "a", encoding="utf-8") as f:
+        f.write(content)
+    total = target.stat().st_size
+    return f"OK: appended {len(content)} chars to {path} (total: {total} bytes)"
 
 
 READ_MAX_CHARS = 8_000   # padrão; sobrescrito por cenários que leem arquivos grandes
@@ -369,6 +411,8 @@ def dispatch_tool(name: str, args: dict, workdir: Path, cleanup_ports: list,
         return exec_run_bash(args.get("command", ""), workdir, cleanup_ports)
     if name == "write_file":
         return exec_write_file(args.get("path", ""), args.get("content", ""), workdir)
+    if name == "append_file":
+        return exec_append_file(args.get("path", ""), args.get("content", ""), workdir)
     if name == "read_file":
         return exec_read_file(args.get("path", ""), workdir, max_chars=read_max_chars)
     if name == "http_get":
