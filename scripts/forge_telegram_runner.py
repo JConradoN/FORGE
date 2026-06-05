@@ -111,6 +111,19 @@ def run_telegram_agent(scenario_id: str, scenario: dict, workdir: Path,
 
     prd_rel = scenario.get("prd_file")
 
+    # Copiar fixtures de diretório (ex: buggy-module/) para o workdir
+    for fixture_rel in scenario.get("fixture_dirs", []):
+        src = SCENARIOS_BASE / fixture_rel
+        dst = workdir / src.name
+        if dst.exists():
+            shutil.rmtree(dst)
+        shutil.copytree(src, dst)
+        # marcar todos os arquivos copiados como seed (não são outputs)
+        for f in dst.rglob("*"):
+            if f.is_file():
+                seed_files.add(str(f.relative_to(workdir)))
+        print(f"  [fixture] copiado: {src.name}/ → {dst}")
+
     if prd_rel:
         # ── PRD-mode ──────────────────────────────────────────────────────────
         prd_src = SCENARIOS_BASE / prd_rel

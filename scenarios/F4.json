@@ -1,0 +1,52 @@
+{
+  "id": "F4",
+  "name": "Code Review + Bug Fix",
+  "description": "Lê um módulo Python com 4 bugs intencionais (cache.get, cache.delete, retry path, logger), produz code_review.md estruturado, corrige todos os bugs e valida com suite de testes automatizada. Inspirado na metodologia do Igor (AVALIACAO_MODELO_2026-05-25).",
+  "difficulty": "hard",
+  "expected_turns": "10-20",
+  "version": 1,
+
+  "prd_file": "prds/F4.md",
+  "fixture_dirs": ["fixtures/buggy-module"],
+
+  "prompt": "Você é um agente de engenharia de software. No diretório de trabalho há um módulo Python com bugs.\n\n1. Leia os arquivos: buggy-module/cache.py, buggy-module/retry.py, buggy-module/logger.py\n\n2. Crie code_review.md documentando cada bug encontrado (localização, descrição, impacto, correção proposta).\n\n3. Corrija todos os bugs nos arquivos originais. Não adicione dependências externas.\n\n4. Valide: python3 buggy-module/validate.py\n   Saída esperada: ALL TESTS PASSED (5/5)\n\n5. Se algum teste falhar, corrija e rode novamente.\n\n6. Quando validação passar, responda: REVISÃO CONCLUÍDA: <N> bugs corrigidos, validação OK",
+
+  "aurelia_prompt": "No diretório de trabalho há um módulo Python com bugs introduzidos durante geração automática de código. Leia o TASK.md para as instruções completas e execute todas as etapas.",
+
+  "auto_checks": [
+    {"type": "file_exists",      "label": "code_review.md criado",      "path": "code_review.md",                   "weight": 2},
+    {"type": "file_contains",    "label": "review menciona cache.py",   "path": "code_review.md", "needle": "cache",  "weight": 1},
+    {"type": "file_contains",    "label": "review menciona retry.py",   "path": "code_review.md", "needle": "retry",  "weight": 1},
+    {"type": "file_contains",    "label": "review menciona logger.py",  "path": "code_review.md", "needle": "logger", "weight": 1},
+    {"type": "run_command_ok",   "label": "validate.py ALL PASSED",
+     "cmd": "python3 buggy-module/validate.py",
+     "expect_output": "ALL TESTS PASSED",                                                                             "weight": 8},
+    {"type": "response_contains","label": "confirmou conclusão",        "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "no_error",         "label": "sem erro de API",                                                          "weight": 1}
+  ],
+
+  "aurelia_auto_checks": [
+    {"type": "file_exists",      "label": "code_review.md criado",      "path": "code_review.md",                   "weight": 2},
+    {"type": "file_contains",    "label": "review menciona cache.py",   "path": "code_review.md", "needle": "cache",  "weight": 1},
+    {"type": "file_contains",    "label": "review menciona retry.py",   "path": "code_review.md", "needle": "retry",  "weight": 1},
+    {"type": "file_contains",    "label": "review menciona logger.py",  "path": "code_review.md", "needle": "logger", "weight": 1},
+    {"type": "run_command_ok",   "label": "validate.py ALL PASSED",
+     "cmd": "python3 buggy-module/validate.py",
+     "expect_output": "ALL TESTS PASSED",                                                                             "weight": 8},
+    {"type": "response_contains","label": "confirmou conclusão",        "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "no_error",         "label": "sem erro de API",                                                          "weight": 1}
+  ],
+
+  "judge_rubric": {
+    "review_accuracy":    "O code_review.md identificou todos os 4 bugs corretamente? Descrições precisas? (0-4)",
+    "review_structure":   "O relatório tem estrutura clara por arquivo, com localização de linha e impacto? (0-4)",
+    "fix_correctness":    "As correções são corretas e idiomáticas em Python? Sem gambiarras? (0-4)",
+    "fix_completeness":   "Todos os bugs foram corrigidos ou houve regressões introduzidas? (0-4)",
+    "iteration_quality":  "O agente usou o resultado do validate.py para iterar? Ou chutou e saiu? (0-4)"
+  },
+
+  "reference": {
+    "source": "Igor Chaves — AVALIACAO_MODELO_2026-05-25.md (/mnt/vault/TEMP/IGOR/)",
+    "insight": "Modelo avaliado por Igor foi bom em diagnóstico mas péssimo em correção (67% arquivos quebrados). F4 mede exatamente essa dimensão com validação automatizada."
+  }
+}

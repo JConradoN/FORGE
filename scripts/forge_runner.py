@@ -578,6 +578,26 @@ def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str) 
             except OSError:
                 detail = f"porta {port} fechada"
 
+        elif ctype == "run_command_ok":
+            import subprocess
+            cmd = _resolve(check["cmd"]).format(workdir=str(workdir))
+            expect = check.get("expect_output", "")
+            try:
+                r = subprocess.run(
+                    cmd, shell=True, capture_output=True,
+                    text=True, timeout=30, cwd=str(workdir)
+                )
+                out = (r.stdout + r.stderr).strip()
+                if expect:
+                    passed = r.returncode == 0 and expect.lower() in out.lower()
+                else:
+                    passed = r.returncode == 0
+                detail = f"exit {r.returncode}: {out[:120]}"
+            except subprocess.TimeoutExpired:
+                detail = "timeout (30s)"
+            except Exception as e:
+                detail = str(e)
+
         elif ctype == "no_error":
             passed = agent_result["error"] is None
             detail = agent_result["error"] or "sem erro"
