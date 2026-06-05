@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Moderno Centro",
+    "endereco": "Rua Principal, 100",
+    "preco": 250000,
+    "area_m2": 65,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Studio Luxo Jardins",
+    "endereco": "Av. das Flores, 500",
+    "preco": 450000,
+    "area_m2": 35,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa Familiar Residencial",
+    "endereco": "Rua das Palmeiras, 25",
+    "preco": 750000,
+    "area_m2": 180,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Mansão Contemporânea",
+    "endereco": "Alameda Bela Vista, 88",
+    "preco": 1200000,
+    "area_m2": 450,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Lote Residencial Plano",
+    "endereco": "Parque Industrial, S/N",
+    "preco": 120000,
+    "area_m2": 360,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno de Alto Padrão",
+    "endereco": "Condominado Verde, Lote 12",
+    "preco": 300000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

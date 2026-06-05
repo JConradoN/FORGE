@@ -1,6 +1,6 @@
 {
   "scenario": "F1",
-  "scenario_name": "Web — Página Imobiliária Completa",
+  "scenario_name": "Web — Agência Imobiliária (full-stack frontend)",
   "model": "telegram-gemma4-26b",
   "run_idx": 1,
   "date": "2026-06-04",
@@ -8,41 +8,66 @@
   "tool_calls_n": 0,
   "loop_exhausted": false,
   "error": null,
-  "duration_ms": 60000,
+  "duration_ms": 90000,
   "tok_total": 0,
   "tok_per_s": 0.0,
-  "auto_score": 9,
-  "auto_max": 9,
-  "auto_pct": 100,
+  "auto_score": 22,
+  "auto_max": 24,
+  "auto_pct": 92,
   "auto_checks": {
     "index.html criado": {
       "passed": true,
       "weight": 2,
       "detail": "index.html existe"
     },
-    "contém 'Casa Certa'": {
+    "imoveis.json criado": {
       "passed": true,
-      "weight": 1,
-      "detail": "'Casa Certa' encontrado em index.html"
+      "weight": 3,
+      "detail": "imoveis.json existe"
     },
-    "contém tag <html>": {
+    "carrega JSON via fetch": {
       "passed": true,
-      "weight": 1,
-      "detail": "'<html' encontrado em index.html"
+      "weight": 3,
+      "detail": "'fetch(' encontrado em index.html"
     },
-    "contém CSS": {
+    "botões de filtro": {
       "passed": true,
-      "weight": 1,
-      "detail": "'<style' encontrado em index.html"
+      "weight": 2,
+      "detail": "'Apartamento' encontrado em index.html"
     },
-    "contém formulário": {
+    "paleta #1B4332": {
       "passed": true,
       "weight": 1,
-      "detail": "'<form' encontrado em index.html"
+      "detail": "'#1B4332' encontrado em index.html"
+    },
+    "media query 768px": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'768px' encontrado em index.html"
+    },
+    "validação de formulário": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'validity' encontrado em index.html"
+    },
+    "6 fotos placehold.co": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'placehold.co' aparece 6x em imoveis.json (mín 6)"
+    },
+    "index.html > 15 KB": {
+      "passed": false,
+      "weight": 2,
+      "detail": "index.html: 10186 bytes (< 15000)"
+    },
+    "servidor respondendo": {
+      "passed": true,
+      "weight": 3,
+      "detail": "HTTP 200"
     },
     "confirmou publicação": {
       "passed": true,
-      "weight": 2,
+      "weight": 1,
       "detail": "'PÁGINA PUBLICADA' encontrado na resposta final"
     },
     "sem erro de API": {

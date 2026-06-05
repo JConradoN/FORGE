@@ -19,10 +19,6 @@ def with_retry(func: Callable[[], T], max_attempts: int = 3, delay: float = 0.1)
             return func()
         except Exception as exc:
             last_exc = exc
-            # BUG: lógica invertida — levanta na tentativa 0 (primeira),
-            # nunca chega nas tentativas seguintes
-            if attempt == 0:
-                raise last_exc
             time.sleep(delay)
 
     raise last_exc  # type: ignore

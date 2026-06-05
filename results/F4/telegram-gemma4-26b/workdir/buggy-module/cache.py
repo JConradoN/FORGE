@@ -19,14 +19,12 @@ class Cache:
         self._store[key] = entry
 
     def get(self, key: str) -> object:
-        # BUG-1: retorna o dict inteiro ao invés de entry["value"]
-        return self._store.get(key)
+        entry = self._store.get(key)
+        return entry["value"] if entry else None
 
     def delete(self, key: str) -> None:
         if key in self._store:
-            self._store.popitem()
-            # BUG-2: double-delete — KeyError se key não for o último item
-            del self._store[key]
+            self._store.pop(key)
 
     def size(self) -> int:
         return len(self._store)

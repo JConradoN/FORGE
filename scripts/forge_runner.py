@@ -274,10 +274,16 @@ def exec_run_bash(command: str, workdir: Path, cleanup_ports: list) -> str:
         return f"[ERRO] {e}"
 
 
+# Arquivos de fixture que nunca devem ser sobrescritos pelo agente
+_PROTECTED_FILES = {"validate.py", "TASK.md"}
+
+
 def exec_write_file(path: str, content: str, workdir: Path) -> str:
     target = (workdir / path).resolve()
     if not str(target).startswith(str(workdir.resolve())):
         return "[ERRO] Caminho fora do diretório de trabalho."
+    if target.name in _PROTECTED_FILES:
+        return f"[ERRO] '{target.name}' é um arquivo de fixture protegido e não pode ser modificado."
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(content, encoding="utf-8")
     # Confirmação curta — evitar injetar o conteúdo de volta no contexto
