@@ -1,0 +1,60 @@
+{
+  "id": "F5",
+  "name": "Code Review + Implementação — FORGE Scripts",
+  "description": "Revisão completa dos scripts do FORGE (~1600 linhas Python, 4 arquivos). Produz code_review.md, plano_correcoes.md, quality_report.md e implementa correções de Alta prioridade. Replica a metodologia de avaliação do Igor (AVALIACAO_MODELO_2026-05-25).",
+  "difficulty": "hard",
+  "expected_turns": "15-30",
+  "version": 1,
+
+  "prd_file": "prds/F5.md",
+  "fixture_dirs": ["fixtures/forge-scripts"],
+  "monitor_stable_s": 120,
+
+  "prompt": "Você é um agente de engenharia de software. No diretório de trabalho há o código-fonte do framework FORGE (~1600 linhas Python, 4 arquivos). Leia todos os arquivos, faça um code review completo, gere os documentos pedidos e implemente as correções de Alta prioridade. Veja as instruções detalhadas em TASK.md.",
+
+  "aurelia_prompt": "No diretório de trabalho há o código-fonte de um framework Python para benchmark de agentes (~1600 linhas, 4 arquivos). Leia o TASK.md para as instruções completas e execute todas as etapas.",
+
+  "auto_checks": [
+    {"type": "file_exists",     "label": "code_review.md criado",      "path": "code_review.md",                    "weight": 2},
+    {"type": "file_exists",     "label": "plano_correcoes.md criado",  "path": "plano_correcoes.md",                "weight": 2},
+    {"type": "file_exists",     "label": "quality_report.md criado",   "path": "quality_report.md",                 "weight": 2},
+    {"type": "file_contains",   "label": "review cobre forge_runner",  "path": "code_review.md",  "needle": "forge_runner",  "weight": 1},
+    {"type": "file_contains",   "label": "review cobre claude_runner", "path": "code_review.md",  "needle": "claude_runner", "weight": 1},
+    {"type": "file_contains",   "label": "review cobre mock_server",   "path": "code_review.md",  "needle": "mock_server",   "weight": 1},
+    {"type": "file_contains",   "label": "review cobre telegram",      "path": "code_review.md",  "needle": "telegram",      "weight": 1},
+    {"type": "file_contains",   "label": "plano tem prioridades",      "path": "plano_correcoes.md", "needle": "Alta",        "weight": 1},
+    {"type": "file_size_min",   "label": "code_review.md > 3 KB",      "path": "code_review.md",  "min_bytes": 3000,         "weight": 2},
+    {"type": "run_command_ok",  "label": "forge_runner.py importa OK", "cmd": "python3 -c 'import sys; sys.path.insert(0,\"forge-scripts\"); import forge_runner'", "weight": 3},
+    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "no_error",        "label": "sem erro de API",                                                          "weight": 1}
+  ],
+
+  "aurelia_auto_checks": [
+    {"type": "file_exists",     "label": "code_review.md criado",      "path": "code_review.md",                    "weight": 2},
+    {"type": "file_exists",     "label": "plano_correcoes.md criado",  "path": "plano_correcoes.md",                "weight": 2},
+    {"type": "file_exists",     "label": "quality_report.md criado",   "path": "quality_report.md",                 "weight": 2},
+    {"type": "file_contains",   "label": "review cobre forge_runner",  "path": "code_review.md",  "needle": "forge_runner",  "weight": 1},
+    {"type": "file_contains",   "label": "review cobre claude_runner", "path": "code_review.md",  "needle": "claude_runner", "weight": 1},
+    {"type": "file_contains",   "label": "review cobre mock_server",   "path": "code_review.md",  "needle": "mock_server",   "weight": 1},
+    {"type": "file_contains",   "label": "review cobre telegram",      "path": "code_review.md",  "needle": "telegram",      "weight": 1},
+    {"type": "file_contains",   "label": "plano tem prioridades",      "path": "plano_correcoes.md", "needle": "Alta",        "weight": 1},
+    {"type": "file_size_min",   "label": "code_review.md > 3 KB",      "path": "code_review.md",  "min_bytes": 3000,         "weight": 2},
+    {"type": "run_command_ok",  "label": "forge_runner.py importa OK", "cmd": "python3 -c 'import sys; sys.path.insert(0,\"forge-scripts\"); import forge_runner'", "weight": 3},
+    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "no_error",        "label": "sem erro de API",                                                          "weight": 1}
+  ],
+
+  "judge_rubric": {
+    "review_coverage":     "O code_review.md cobriu todos os 4 arquivos com profundidade? Identificou issues reais? (0-4)",
+    "review_accuracy":     "Os problemas apontados são legítimos ou são falsos positivos? (0-4)",
+    "plan_prioritization": "O plano priorizou corretamente Alta/Média/Baixa? As escolhas fazem sentido? (0-4)",
+    "fix_correctness":     "As correções implementadas são corretas e não introduzem regressões? (0-4)",
+    "fix_scope":           "O agente respeitou o escopo (só Alta prioridade) ou fez mais/menos? (0-4)",
+    "report_quality":      "O quality_report.md reflete fielmente o que foi feito (não marca como feito o que não foi)? (0-4)"
+  },
+
+  "reference": {
+    "source": "Igor Chaves — AVALIACAO_MODELO_2026-05-25.md + avaliacao-gemma4-ollama-tailscale.md (/mnt/vault/TEMP/IGOR/)",
+    "methodology": "Code review + implementação em codebase real. Avaliação por arquivo, dimensão e fidelidade dos relatórios."
+  }
+}
