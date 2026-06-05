@@ -1,115 +1,98 @@
 """
-Validation suite — expected output: ALL TESTS PASSED (5/5)
+Suite de validação para o buggy-module.
+Execute após corrigir os bugs: python3 validate.py
+
+Saída esperada: ALL TESTS PASSED (exit 0)
+Saída com falha: FAIL: <descrição> (exit 1)
 """
 import sys
-import time
+import os
 
-sys.path.insert(0, __file__.rsplit("/", 1)[0])
+sys.path.insert(0, os.path.dirname(__file__))
 
-from cache import Cache
-from retry import retry, retry_call
-from logger import Logger
+errors = []
 
-passed = 0
-total = 5
-
-def ok(name):
-    global passed
-    passed += 1
-    print(f"  [PASS] {name}")
-
-def fail(name, reason):
-    print(f"  [FAIL] {name}: {reason}")
-
-
-# ── Test 1 ── cache: get missing key returns None (no KeyError) ──────────────
-print("Test 1: cache.get on missing key")
+# ── Teste 1: Cache.set() não deve levantar TypeError ─────────────────────────
 try:
-    c = Cache(ttl=10)
-    result = c.get("nonexistent")
-    assert result is None, f"expected None, got {result!r}"
-    ok("get missing key returns None")
+    from cache import Cache
+    c = Cache()
+    c.set("k1", "hello", ttl=30)
+    c.set("k2", 42)
+    assert c.get("k1") == "hello", f"get retornou {c.get('k1')!r}, esperado 'hello'"
+    assert c.get("k2") == 42,      f"get retornou {c.get('k2')!r}, esperado 42"
+    assert c.size() == 2,          f"size() retornou {c.size()}, esperado 2"
 except Exception as e:
-    fail("get missing key returns None", e)
+    errors.append(f"cache.set/get: {e}")
 
-
-# ── Test 2 ── cache: delete cleans up timestamps; size is accurate ────────────
-print("Test 2: cache.delete and cache.size accuracy")
+# ── Teste 2: Cache.delete() não deve levantar KeyError ───────────────────────
 try:
-    c = Cache(ttl=60)
+    from cache import Cache
+    c = Cache()
     c.set("a", 1)
     c.set("b", 2)
     c.delete("a")
-    assert c.size() == 1, f"expected size 1, got {c.size()}"
-    assert "a" not in c.timestamps, "timestamps still contains deleted key"
-    ok("delete cleans timestamps; size accurate")
+    assert c.get("a") is None, "delete não removeu a chave"
+    assert c.size() == 1,     f"size() após delete: {c.size()}, esperado 1"
 except Exception as e:
-    fail("delete cleans timestamps; size accurate", e)
+    errors.append(f"cache.delete: {e}")
 
-
-# ── Test 3 ── cache: get_all_valid respects TTL boundary (>= not >) ──────────
-print("Test 3: cache.get_all_valid TTL boundary")
+# ── Teste 3: with_retry retorna na primeira tentativa quando não há exceção ──
 try:
-    c = Cache(ttl=5)
-    c.set("x", 42)
-    # Backdate the timestamp so age == ttl exactly → should still be valid
-    c.timestamps["x"] = time.time() - 5
-    valid = c.get_all_valid()
-    assert "x" in valid, "entry at exact TTL boundary should be valid"
-    ok("get_all_valid includes entry at exact TTL boundary")
+    from retry import with_retry
+    calls = []
+    def success():
+        calls.append(1)
+        return 99
+    result = with_retry(success)
+    assert result == 99,    f"with_retry retornou {result!r}, esperado 99"
+    assert len(calls) == 1, f"função chamada {len(calls)}x, esperado 1"
 except Exception as e:
-    fail("get_all_valid includes entry at exact TTL boundary", e)
+    errors.append(f"retry (success path): {e}")
 
-
-# ── Test 4 ── retry: retry_call re-raises the original exception ──────────────
-print("Test 4: retry_call raises original exception")
+# ── Teste 4: with_retry tenta novamente após falha ───────────────────────────
 try:
-    class CustomError(Exception): pass
-
-    def always_fail():
-        raise CustomError("original message")
-
-    try:
-        retry_call(always_fail, max_attempts=2, delay=0.0)
-        fail("retry_call raises original exception", "no exception raised")
-    except CustomError as e:
-        assert "original message" in str(e), f"wrong message: {e}"
-        ok("retry_call raises original exception")
-    except Exception as e:
-        fail("retry_call raises original exception", f"wrong type {type(e).__name__}: {e}")
+    from retry import with_retry
+    attempts = []
+    def flaky():
+        attempts.append(1)
+        if len(attempts) < 3:
+            raise ValueError("ainda não")
+        return "ok"
+    result = with_retry(flaky, max_attempts=3, delay=0.0)
+    assert result == "ok",      f"with_retry retornou {result!r}, esperado 'ok'"
+    assert len(attempts) == 3,  f"tentativas: {len(attempts)}, esperado 3"
 except Exception as e:
-    fail("retry_call raises original exception", e)
+    errors.append(f"retry (retry path): {e}")
 
-
-# ── Test 5 ── logger: level filtering works correctly ────────────────────────
-print("Test 5: logger level filtering")
+# ── Teste 5: log_call decora sem NameError e loga o nome correto ─────────────
 try:
-    log = Logger("test", level="WARNING")
-    log.debug("d")
-    log.info("i")
-    log.warning("w")
-    log.error("e")
-    log.critical("c")
+    import logging, io
+    from logger import log_call
 
-    assert len(log.records) == 3, (
-        f"expected 3 records (WARNING+), got {len(log.records)}: "
-        + str([r['level'] for r in log.records])
+    stream = io.StringIO()
+    handler = logging.StreamHandler(stream)
+    logging.getLogger("logger").addHandler(handler)
+    logging.getLogger("logger").setLevel(logging.DEBUG)
+
+    @log_call
+    def greet(name: str) -> str:
+        return f"hello {name}"
+
+    result = greet("world")
+    assert result == "hello world", f"greet retornou {result!r}"
+
+    log_output = stream.getvalue()
+    assert "greet" in log_output, (
+        f"log não contém o nome da função — contém: {log_output!r}"
     )
-
-    errors_and_above = log.get_records(min_level="ERROR")
-    assert len(errors_and_above) == 2, (
-        f"expected 2 records (ERROR+), got {len(errors_and_above)}: "
-        + str([r['level'] for r in errors_and_above])
-    )
-    ok("logger filters by level correctly")
 except Exception as e:
-    fail("logger filters by level correctly", e)
+    errors.append(f"logger.log_call: {e}")
 
-
-# ── Summary ──────────────────────────────────────────────────────────────────
-print()
-if passed == total:
-    print(f"ALL TESTS PASSED ({passed}/{total})")
-else:
-    print(f"FAILED: {passed}/{total} passed")
+# ── Resultado ─────────────────────────────────────────────────────────────────
+if errors:
+    for err in errors:
+        print(f"FAIL: {err}")
     sys.exit(1)
+else:
+    print(f"ALL TESTS PASSED ({5 - len(errors)}/5)")
+    sys.exit(0)

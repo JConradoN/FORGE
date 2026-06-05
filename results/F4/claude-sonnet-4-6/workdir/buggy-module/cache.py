@@ -1,49 +1,35 @@
-"""
-Simple in-memory cache with TTL (Time To Live) support.
-"""
+"""Simple in-memory cache with TTL support."""
+
 import time
 
 
 class Cache:
     def __init__(self, ttl=60):
-        self.ttl = ttl
-        self.store = {}
-        self.timestamps = {}
+        self._store = {}
+        self._default_ttl = ttl
 
-    def set(self, key, value):
-        self.store[key] = value
-        self.timestamps[key] = time.time()
+    def set(self, key, value, ttl=None):
+        # FIX bug 2: aceita TTL por item; usa o TTL global como fallback
+        effective_ttl = ttl if ttl is not None else self._default_ttl
+        self._store[key] = (value, time.time(), effective_ttl)
 
     def get(self, key):
-        # FIX Bug 1: guard against missing key — return None instead of raising KeyError
-        if key not in self.store:
+        if key not in self._store:
             return None
-        ts = self.timestamps[key]
-        if time.time() - ts > self.ttl:
-            self.delete(key)
+        value, ts, ttl = self._store[key]
+        # FIX bug 1: operador correto — subtração para calcular tempo decorrido
+        if time.time() - ts > ttl:
+            del self._store[key]
             return None
-        return self.store[key]
+        return value
 
     def delete(self, key):
-        del self.store[key]
-        # FIX Bug 2: also remove the timestamp to prevent memory leak
-        del self.timestamps[key]
+        # FIX bug 3: pop() é idempotente — sem KeyError se chave não existir
+        self._store.pop(key, None)
 
     def clear(self):
-        self.store = {}
-        self.timestamps = {}
+        self._store = {}
 
     def size(self):
-        # FIX Bug 3: count only entries that are still within TTL
-        now = time.time()
-        return sum(1 for key in self.store if now - self.timestamps[key] <= self.ttl)
-
-    def get_all_valid(self):
-        now = time.time()
-        result = {}
-        for key in self.store:
-            # FIX Bug 4: use <= (not <) — entry is valid when age <= ttl, consistent with get()
-            # which only expires when age > ttl
-            if now - self.timestamps[key] <= self.ttl:
-                result[key] = self.store[key]
-        return result
+        # FIX bug 4: retorna o número de entradas, não o dict
+        return len(self._store)

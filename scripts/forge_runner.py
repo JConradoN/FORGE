@@ -32,7 +32,8 @@ from pathlib import Path
 
 # ── Configuração ──────────────────────────────────────────────
 OLLAMA_URL    = "http://localhost:11434/api/chat"
-RESULTS_BASE  = Path(__file__).parent.parent / "results"
+RESULTS_BASE   = Path(__file__).parent.parent / "results"
+SCENARIOS_BASE = Path(__file__).parent.parent / "scenarios"
 MAX_TURNS     = 20
 TIMEOUT_S     = 300
 TEMPERATURE   = 0
@@ -252,6 +253,11 @@ def exec_run_bash(command: str, workdir: Path, cleanup_ports: list) -> str:
     block_msg = _check_bash_safety(command)
     if block_msg:
         return block_msg
+
+    # Proteger fixtures contra escrita via bash (>, tee, cp sobrescrevendo)
+    for protected in _PROTECTED_FILES:
+        if re.search(rf"[>|]\s*['\"]?.*{re.escape(protected)}['\"]?", command):
+            return f"[BLOQUEADO] '{protected}' é um arquivo de fixture protegido."
 
     # Registrar porta para cleanup pós-run
     port = _extract_server_port(command)
@@ -592,6 +598,22 @@ def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str,
                     detail = f"porta {port} aberta"
             except OSError:
                 detail = f"porta {port} fechada"
+
+        elif ctype == "file_unchanged":
+            import hashlib
+            path_resolved = _resolve(check["path"])
+            ref_resolved  = _resolve(check["ref"])
+            p   = workdir / path_resolved
+            ref = SCENARIOS_BASE / ref_resolved
+            if not p.exists():
+                detail = f"{path_resolved} não existe"
+            elif not ref.exists():
+                detail = f"referência não encontrada: {ref_resolved}"
+            else:
+                h_cur = hashlib.md5(p.read_bytes()).hexdigest()
+                h_ref = hashlib.md5(ref.read_bytes()).hexdigest()
+                passed = h_cur == h_ref
+                detail = "inalterado" if passed else f"modificado (md5 {h_cur[:8]} ≠ {h_ref[:8]})"
 
         elif ctype == "run_command_ok":
             import subprocess

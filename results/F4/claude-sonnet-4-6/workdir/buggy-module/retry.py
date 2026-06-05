@@ -1,44 +1,34 @@
-"""
-Retry decorator with exponential back-off.
-"""
+"""Retry helper with exponential back-off."""
+
 import time
 
 
-def retry(max_attempts=3, delay=1.0, backoff=2.0, exceptions=(Exception,)):
-    """Retry a function up to max_attempts times with exponential back-off."""
+def with_retry(fn, max_attempts=3, delay=0.1, exceptions=(Exception,)):
+    """Chama fn() repetidamente até ter sucesso ou esgotar max_attempts.
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            attempt = 0
-            current_delay = delay
+    FIX bug 5: implementa a interface with_retry(fn, ...) esperada pelo validador.
+    FIX bug 6: condição de loop corrigida para `<` (era atribuição `=`).
 
-            # FIX Bug 5: use < max_attempts (not max_attempts - 1) so all attempts are executed
-            while attempt < max_attempts:
-                try:
-                    return func(*args, **kwargs)
-                except exceptions as e:
-                    attempt += 1
-                    # FIX Bug 6: raise immediately when attempts exhausted, sleep only if retrying
-                    if attempt >= max_attempts:
-                        raise
-                    time.sleep(current_delay)
-                    current_delay *= backoff
+    Args:
+        fn:           callable sem argumentos a ser executado.
+        max_attempts: número máximo de tentativas (padrão 3).
+        delay:        espera inicial em segundos entre tentativas (padrão 0.1).
+                      O back-off é exponencial: delay * 2^attempt.
+        exceptions:   tupla de tipos de exceção que disparam nova tentativa.
 
-        return wrapper
-    return decorator
+    Returns:
+        O valor retornado por fn() na primeira execução bem-sucedida.
 
-
-class RetryError(Exception):
-    pass
-
-
-def retry_call(func, args=(), kwargs={}, max_attempts=3, delay=0.0):
-    """Call func retrying on any exception."""
-    last_exc = None
-    for i in range(max_attempts):
+    Raises:
+        A última exceção capturada quando todos os attempts se esgotam.
+    """
+    attempt = 0
+    # FIX bug 6: comparação correta com <
+    while attempt < max_attempts:
         try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            last_exc = e
-    # FIX Bug 7: re-raise the original exception to preserve type and message
-    raise last_exc
+            return fn()
+        except exceptions as exc:
+            attempt += 1
+            if attempt == max_attempts:
+                raise
+            time.sleep(delay * (2 ** attempt))
