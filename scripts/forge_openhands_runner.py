@@ -16,6 +16,7 @@ Uso:
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import time
@@ -32,8 +33,8 @@ from forge_runner import (
 
 OPENHANDS_IMAGE   = "ghcr.io/all-hands-ai/openhands:0.42"
 RUNTIME_IMAGE     = "ghcr.io/all-hands-ai/runtime:0.42-nikolaik"
-OPENHANDS_SLUG    = "openhands-gemma4-26b"
-LLM_MODEL         = "ollama/gemma4:26b"
+_DEFAULT_MODEL    = os.environ.get("LLM_MODEL_OVERRIDE", "ollama/gemma4:26b")
+LLM_MODEL         = _DEFAULT_MODEL
 OPENHANDS_PORT    = 3011          # porta dedicada ao runner (evita conflito com :3010 web)
 POLL_INTERVAL_S   = 5
 TASK_TIMEOUT_S    = 600
@@ -245,7 +246,15 @@ def main():
     parser.add_argument("--runs",      type=int, default=1)
     parser.add_argument("--port-base", type=int, default=8700)
     parser.add_argument("--mock",      action="store_true")
+    parser.add_argument("--model",     type=str, default=None,
+                        help="LLM model override (e.g. ollama/qwen3.5:9b-48k)")
     args = parser.parse_args()
+
+    if args.model:
+        global LLM_MODEL, OPENHANDS_SLUG
+        LLM_MODEL = args.model
+        raw = args.model.split("/")[-1]
+        OPENHANDS_SLUG = "openhands-" + raw.replace(":", "-").replace(".", "-")
 
     if args.all:
         scenario_ids = [p.stem for p in sorted(SCENARIOS_BASE.glob("*.json"))]
