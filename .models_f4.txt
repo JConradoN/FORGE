@@ -1,0 +1,11 @@
+qwen3:8b
+qwen3.5:9b
+gemma4:12b
+phi4-tools:14b
+qwen3:14b
+gemma4:e4b-it-q4_K_M
+lfm2:24b-a2b
+devstral-small-2:24b
+qwen3.5:27b
+qwen3.6:27b
+gemma4:26b

@@ -52,5 +52,11 @@
   "claude_score": null,
   "human_score": null,
   "composite_score": null,
-  "notes": ""
+  "notes": "",
+  "artifact_judge_scores": {
+    "relatorio-telegram-gemma4-26b.md": {
+      "error": "bloqueado — relatorio-telegram-gemma4-26b.md ausente (tarefa incompleta)"
+    }
+  },
+  "judge_blocked_reason": "missing required files: ['relatorio-telegram-gemma4-26b.md']"
 }

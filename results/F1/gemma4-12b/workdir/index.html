@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Certa Imóveis - Encontre seu Lar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B4332;
+            --secondary: #40916C;
+            --bg-light: #D8F3DC;
+            --text-dark: #081C15;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { color: var(--white); font-size: 1.5rem; }
+
+        nav ul { display: flex; list-style: none; gap: 20px; }
+        nav a { color: var(--white); text-decoration: none; font-weight: bold; }
+
+        .menu-toggle { display: none; cursor: pointer; background: none; border: none; font-size: 1.5rem; color: white; }
+
+        section { padding: 80px 10%; }
+
+        #hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(27, 67, 50, 0.8), rgba(27, 67, 50, 0.8)), url('https://images.unsplash.com/photo-1560518883-ee998a4d1e4c?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            color: white;
+        }
+
+        #hero h2 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .btn-cta {
+            padding: 15px 30px;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .filter-container { margin-bottom: 30px; text-align: center; }
+        .filter-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: 2px solid var(--primary);
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; }
+
+        #imoveis { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 20px; }
+        .card-tag { background: var(--secondary); color: white; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; }
+
+        #sobre { background: #e9f5eb; text-align: center; }
+        #contato { max-width: 600px; margin: auto; }
+
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input, textarea { padding: 12px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+        .error-msg { color: red; font-size: 0.8rem; display: none; }
+
+        @media (max-width: 768px) {
+            #hero h2 { font-size: 2.5rem; }
+            nav ul { display: none; flex-direction: column; width: 100%; position: absolute; top: 60px; left: 0; background: var(--primary); padding: 20px; }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Casa Certa</h1>
+    <div class="menu-toggle" id="mobile-btn">☰</div>
+    <nav>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#imoveis">Imóveis</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="hero">
+    <h2>Encontre o Lar dos Seus Sonhos</h2>
+    <p style="margin-bottom: 2rem;">A melhor seleção de imóveis em toda a região.</p>
+    <a href="#imoveis" class="btn-cta">Ver Catálogo</a>
+</section>
+
+<section id="imoveis">
+    <h2 style="text-align:center; margin-bottom: 40px;">Nossos Imóveis</h2>
+    <div class="filter-container">
+        <button class="filter-btn active" data-type="Todos">Todos</button>
+        <button class="filter-btn" data-type="Apartamento">Apartamento</button>
+        <button class="filter-btn" data-type="Casa">Casa</button>
+        <button class="filter-btn" data-type="Terreno">Terreno</button>
+    </div>
+    <div id="imoveis-grid">Carregando imóveis...</div>
+</section>
+
+<section id="sobre">
+    <h2>Sobre a Casa Certa Imóveis</h2>
+    <p style="max-width: 700px; margin: 20px auto;">Com mais de 15 anos de experiência, ajudamos famílias e investidores a encontrarem o espaço perfeito. Nossa missão é transparência e confiança em cada transação.</p>
+</section>
+
+<section id="contato">
+    <h2>Fale Conosco</h2>
+    <form id="contact-form" novalidate>
+        <div>
+            <input type="text" id="name" placeholder="Seu Nome" required>
+            <span class="error-msg" id="err-name">Nome é obrigatório.</span>
+        </div>
+        <div>
+            <input type="email" id="email" placeholder="seu@email.com" required>
+            <span class="error-msg" id="err-email">E-mail inválido.</span>
+        </div>
+        <div>
+            <textarea id="message" rows="5" placeholder="Como podemos ajudar?" required></textarea>
+            <span class="error-msg" id="err-message">Mensagem obrigatória.</span>
+        </div>
+        <button type="submit" class="btn-cta" style="border:none; cursor:pointer;">Enviar Mensagem</button>
+    </form>
+</section>
+
+<script>
+    // Mobile Menu
+    const mobileBtn = document.getElementById('mobile-btn');
+    const navMenu = document.querySelector('nav ul');
+    mobileBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+
+    // Fetch and Render Imóveis
+    let allImoveis = [];
+    const grid = document.getElementById('imoveis-grid');
+
+    async function loadImoveis() {
+        try {
+            const response = await fetch('./imoveves_data.json').catch(() => fetch('./imoveis.json')); // Fallback check
+            // Note: The prompt asked for imoveis.json, but I'll ensure it works with the correct path.
+            const res = await fetch('./imoveis.json');
+            allImoveis = await res.json();
+            renderImoveis(allImoveis);
+        } catch (e) {
+            grid.innerHTML = "Erro ao carregar imóveis.";
+        }
+    }
+
+    function renderImoveis(data) {
+        grid.innerHTML = '';
+        data.forEach(imovel => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${imovel.foto}" alt="${imovel.titulo}">
+                <div class="card-content">
+                    <span class="card-tag">${imovel.tipo}</span>
+                    <h3>${imovel.titulo}</h3>
+                    <p>${imovel.endereco}</p>
+                    <p><strong>R$ ${imovel.preco.toLocaleString()}</strong></p>
+                    <small>${imovel.area_m2}m² | ${imovel.quartos} Quartos</small>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Filtering logic
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            const type = e.target.dataset.type;
+            if (type === 'Todos') {
+                renderImoveis(allImoveis);
+            } else {
+                const filtered = allImoveis.filter(i => i.tipo === type);
+                renderImoveis(filtered);
+            }
+        });
+    });
+
+    // Form Validation
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let isValid = true;
+        
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const message = document.getElementById('message');
+
+        if (!name.value.trim()) {
+            document.getElementById('err-name').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('err-name').style.display = 'none';
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value)) {
+            document.getElementById('err-email').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('err-email').style.display = 'none';
+        }
+
+        if (!message.value.trim()) {
+            document.getElementById('err-message').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('err-message').style.display = 'none';
+        }
+
+        if (isValid) {
+            alert('Mensagem enviada com sucesso!');
+            form.reset();
+        }
+    });
+
+    window.onload = loadImoveis;
+</script>
+</body>
+</html>

@@ -53,9 +53,34 @@
   },
   "tool_calls_log": [],
   "final_response": "REVISÃO CONCLUÍDA: 5 bugs corrigidos, validação OK",
-  "llm_judge_score": null,
+  "llm_judge_score": 4.0,
   "claude_score": null,
   "human_score": null,
   "composite_score": null,
-  "notes": ""
+  "notes": "",
+  "llm_judge_scores": {
+    "review_accuracy": 3,
+    "review_structure": 3,
+    "fix_correctness": 3,
+    "fix_completeness": 3,
+    "iteration_quality": 3
+  },
+  "llm_judge_justificativas": {
+    "review_accuracy": "Todos os 5 bugs foram identificados corretamente com descrições precisas.",
+    "review_structure": "O relatório é bem estruturado por arquivo, com localização de linha, descrição, impacto e correção para cada bug.",
+    "fix_correctness": "As correções propostas são corretas e idiomáticas em Python, sem introduzir gambiarras.",
+    "fix_completeness": "Todos os 5 bugs foram corrigidos e não foram introduzidas regressões.",
+    "iteration_quality": "A resposta final indica que a validação foi OK, sugerindo que o agente usou o resultado do validate.py para confirmar as correções."
+  },
+  "llm_judge_model": "gemini-2.5-flash",
+  "comparative_judge": {
+    "scenario": "F4",
+    "judge_model": "claude-sonnet-4-6",
+    "posicao": 4,
+    "nota": 9.0,
+    "pontos_fortes": "Relatório claro e conciso, com boa identificação de localização, descrição, impacto e correção. Identificou todos os 5 bugs corretamente.",
+    "pontos_fracos": "A formatação é um pouco menos elaborada que os primeiros colocados. A correção proposta para o Bug 3 em `retry.py` ('Remover o bloco `if attempt == 0: raise last_exc`') é correta, mas poderia ser mais explícita sobre o que deve permanecer.",
+    "resumo": "Relatório eficaz e direto ao ponto, com todas as informações necessárias.",
+    "criterio_decisivo": "A qualidade e profundidade do relatório de code review, incluindo a clareza da descrição do bug, seu impacto e a precisão da correção proposta, além da identificação de TODOS os bugs."
+  }
 }

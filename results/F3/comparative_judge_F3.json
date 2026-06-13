@@ -1,0 +1,105 @@
+{
+  "scenario": "F3",
+  "judge_model": "claude-sonnet-4-6",
+  "n_modelos": 12,
+  "ranking": [
+    {
+      "posicao": 1,
+      "modelo": "qwen3.6:27b",
+      "nota": 9.2,
+      "pontos_fortes": "Relatório mais completo e preciso: tabela de cotações bem formatada, histórico de 7 dias com datas ordenadas corretamente (do mais antigo ao mais recente), cálculo da valorização acumulada (2.70%), análise de tendência qualitativa sólida explicando a ruptura no último dia, tabela de volatilidade com classificação por nível, e recomendações com justificativas individuais detalhadas. Uso correto de emojis sem excessos.",
+      "pontos_fracos": "Relatório truncado na seção de ETH da recomendação; valores de BTC/ETH ligeiramente diferentes dos dados brutos (variação BTC -1.59% vs -1.21% da maioria), possivelmente de timestamp diferente.",
+      "resumo": "O relatório mais estruturado e analiticamente profundo, com histórico 7 dias ordenado, cálculo de variação acumulada e justificativas por recomendação."
+    },
+    {
+      "posicao": 2,
+      "modelo": "claude-sonnet-4-6",
+      "nota": 9.0,
+      "pontos_fortes": "Único modelo que apresentou tabela de histórico de 7 dias com datas reais (dd/mm/yyyy) e variação diária de cada período, incluindo médias comparativas (3 dias recentes vs 3 dias antigos), diagnóstico de tendência com variação acumulada (+0.78%), e ranking de volatilidade visualmente diferenciado. Formatação rica e profissional com emojis semânticos.",
+      "pontos_fracos": "Usou dados de API com timestamp diferente (cotação USD mais baixa ~5.12 vs 5.16 da maioria, pois rodou em horário anterior), o que pode confundir a comparação. Relatório cortado na análise de volatilidade. As datas no histórico são aproximadas.",
+      "resumo": "Melhor apresentação do histórico de 7 dias com datas explícitas e médias comparativas, porém com dados de snapshot temporal diferente dos demais modelos."
+    },
+    {
+      "posicao": 3,
+      "modelo": "qwen3.5:27b",
+      "nota": 8.7,
+      "pontos_fortes": "Excelente estrutura com tabela de histórico de 7 dias detalhada, análise de tendência com contagem de dias de alta/queda (2/6 alta, 3/6 queda), variação acumulada (+2.82%), análise de divergência cambial vs cripto bem fundamentada, e tabela de volatilidade classificada. Relatório visualmente organizado.",
+      "pontos_fracos": "Relatório truncado na seção de recomendações (ETH cortada). A lógica de classificar tendência como ALTA mesmo com mais dias de queda (3/6) é questionável, embora justificada pelo impulso do dia atual. Valor BTC ligeiramente diferente (317.600).",
+      "resumo": "Análise quantitativa robusta do histórico 7 dias com métricas de contagem e variação acumulada, prejudicada pelo truncamento no final."
+    },
+    {
+      "posicao": 4,
+      "modelo": "gemma4:26b",
+      "nota": 8.3,
+      "pontos_fortes": "Dados precisos e consistentes com a API, timestamps convertidos para formato legível, análise de tendência com contexto numérico ('saindo da casa dos 5.03'), recomendações coerentes e bem estruturadas. Formato limpo e profissional.",
+      "pontos_fracos": "Análise de tendência muito curta e sem tabela do histórico de 7 dias (apenas descrição textual), análise de volatilidade superficial sem classificação estruturada, sem disclaimer.",
+      "resumo": "Dados corretos e bem formatados, mas com análise de tendência e volatilidade insuficientemente desenvolvidas."
+    },
+    {
+      "posicao": 5,
+      "modelo": "devstral-small-2:24b",
+      "nota": 8.0,
+      "pontos_fortes": "Dados precisos da API, timestamps convertidos, análise de volatilidade relativa com cálculo explícito (ETH 3.85x mais volátil que USD), recomendações por ativo. Único a calcular ratio de volatilidade comparativa.",
+      "pontos_fracos": "Análise de tendência do dólar vaga (sem tabela histórica, apenas descrição textual superficial), sem disclaimer de risco, recomendação de 'compra' para BTC durante queda é inconsistente com a própria análise de volatilidade negativa apresentada.",
+      "resumo": "Inovação no cálculo de volatilidade relativa, mas análise de tendência insuficiente e sem histórico tabular dos 7 dias."
+    },
+    {
+      "posicao": 6,
+      "modelo": "qwen3:14b",
+      "nota": 7.8,
+      "pontos_fortes": "Dados corretos e bem formatados, timestamps convertidos, estrutura clara e direta, análise coerente.",
+      "pontos_fracos": "Análise de tendência extremamente superficial (apenas uma frase vaga), sem tabela de histórico, sem análise quantitativa de volatilidade, recomendações sem justificativas detalhadas, ausência de disclaimer.",
+      "resumo": "Relatório correto mas superficial, com análise de tendência e volatilidade insuficientemente desenvolvidas."
+    },
+    {
+      "posicao": 7,
+      "modelo": "qwen3.5:9b",
+      "nota": 7.5,
+      "pontos_fortes": "Boa estrutura visual com emojis, histórico dos 7 dias apresentado em formato texto/código com variações percentuais diárias, classificação de volatilidade por ativo com ícones semânticos, recomendações com racionais explicativos.",
+      "pontos_fracos": "ERRO CRÍTICO: valores de USD/BRL e EUR/BRL exibidos incorretamente como R$ 5.167,10 e R$ 5.963,03 (com vírgula errada separando milhares, parecendo valores em milhares). Relatório truncado na seção BTC. Typo 'Racial' em vez de 'Racional'.",
+      "resumo": "Boa estrutura analítica comprometida por erro de formatação grave nos valores monetários que distorce a leitura das cotações."
+    },
+    {
+      "posicao": 8,
+      "modelo": "gemma4:e4b-it-q4_K_M",
+      "nota": 7.3,
+      "pontos_fortes": "Dados corretos, disclaimer de risco presente (único entre os compactos), recomendações diferenciadas por ativo com nuances (ETH: cautela máxima vs BTC: acumular em quedas), estrutura limpa.",
+      "pontos_fracos": "Análise de tendência sem tabela histórica, sem timestamps na tabela principal, análise de volatilidade puramente descritiva sem estrutura tabular, data da análise genérica.",
+      "resumo": "Relatório correto com bom disclaimer, mas análise de tendência e volatilidade pouco desenvolvidas."
+    },
+    {
+      "posicao": 9,
+      "modelo": "qwen3:8b",
+      "nota": 7.0,
+      "pontos_fortes": "Dados corretos, estrutura clara, análise sucinta e objetiva, timestamps na tabela.",
+      "pontos_fracos": "Análise de tendência extremamente superficial (apenas 2 linhas), sem tabela histórica de 7 dias, análise de volatilidade apenas lista variações sem classificação, recomendações sem justificativas, ausência de disclaimer.",
+      "resumo": "Relatório funcional mas minimalista, faltando profundidade analítica em tendência e volatilidade."
+    },
+    {
+      "posicao": 10,
+      "modelo": "gemma4:12b",
+      "nota": 6.5,
+      "pontos_fortes": "Dados corretos da API, estrutura tabular clara, recomendações por ativo presentes.",
+      "pontos_fracos": "Data/hora da análise incorreta ('2024-05-23 Simulado via Timestamp' — errou o ano em 2 anos), análise de tendência sem tabela histórica e vaga, timestamps em formato Unix não convertido na tabela principal, análise de volatilidade superficial, sem disclaimer.",
+      "resumo": "Dados corretos mas data da análise incorreta (2024 em vez de 2026) e análise de tendência sem substância."
+    },
+    {
+      "posicao": 11,
+      "modelo": "phi4-tools:14b",
+      "nota": 6.2,
+      "pontos_fortes": "Dados corretos da API com precisão maior nas casas decimais das variações (2.10248%, 1.550391%), estrutura tabular básica presente.",
+      "pontos_fracos": "Tendência do dólar classificada como 'Estável' apesar de variação de +2.10% — contradição analítica clara. Sem tabela histórica dos 7 dias, análise de volatilidade extremamente superficial (2 linhas), recomendações inconsistentes (USD 'aguardar' mas EUR 'compra' com variação menor), sem disclaimer.",
+      "resumo": "Erro analítico grave ao classificar tendência de +2.10% como 'Estável', comprometendo a credibilidade do relatório."
+    },
+    {
+      "posicao": 12,
+      "modelo": "lfm2:24b-a2b",
+      "nota": 4.5,
+      "pontos_fortes": "Dados corretos da API, inclui todos os 4 ativos requeridos, recomendações por ativo presentes.",
+      "pontos_fracos": "PROBLEMA GRAVE DE FORMATAÇÃO: o relatório contém literalmente os caracteres de escape '\\n' no texto em vez de quebras de linha reais, indicando falha no processamento da saída. Sem tabela histórica de 7 dias, análise de tendência resumida a uma frase, análise de volatilidade mínima, sem disclaimer, formatação Markdown quebrada tornando o relatório de difícil leitura.",
+      "resumo": "Relatório com falha grave de formatação (escapes \\n literais no texto) que compromete completamente a legibilidade e profissionalismo do documento."
+    }
+  ],
+  "criterio_decisivo": "A profundidade da análise do histórico de 7 dias do dólar foi o principal diferenciador: os melhores modelos apresentaram tabelas com dados diários, variações por período e cálculo de variação acumulada, enquanto os piores apenas mencionaram 'tendência de alta' em uma frase. Erros de formatação graves (lfm2 com \\n literais, qwen3.5:9b com valores monetários incorretos) e erros analíticos (phi4 classificando +2.10% como 'Estável', gemma4:12b com data errada em 2 anos) penalizaram fortemente os modelos inferiores.",
+  "observacoes_gerais": "A maioria dos modelos utilizou corretamente os dados da API (bid, ask, pctChange). A principal diferença qualitativa está na elaboração do histórico de 7 dias: modelos superiores construíram tabelas com datas e variações diárias, enquanto os inferiores apenas fizeram afirmações genéricas sobre tendência. Todos os modelos identificaram corretamente o ETH como o ativo mais volátil e o dólar em tendência de alta. As recomendações variaram entre 'compra' e 'aguardar' para os mesmos ativos, refletindo interpretações distintas mas geralmente coerentes com os dados. O claude-sonnet-4-6 rodou em timestamp anterior (USD ~5.12 vs 5.16), o que gerou um conjunto de dados diferente mas igualmente válido."
+}

@@ -1,113 +1,113 @@
 #!/usr/bin/env python3
 """
-Monitora /tmp/forge_f5_batch.log e envia notificação Telegram
-via bot Claudio após cada modelo concluir.
+Monitora o log do batch FORGE e envia notificação Telegram via bot Claudio.
+
+Uso:
+    python3 forge_notify_watcher.py F1
 """
-import re
-import sys
-import time
-import urllib.request
-import urllib.parse
-import json
+import os, re, sys, time, json
+import urllib.request, urllib.parse
 
 TOKEN   = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 CHAT_ID = int(os.environ.get("TELEGRAM_CHAT_ID", "0"))
-LOG     = "/tmp/forge_f5_batch.log"
 
-MODELS = [
-    "granite4.1:8b",
-    "ministral-3:14b",
-    "phi4:14b",
-    "phi4-tools:14b",
-    "lfm2:24b-a2b",
-    "devstral-small-2:24b",
-    "qwen3.5:27b",
-    "qwen3.6:27b",
-    "granite4.1:30b",
-]
+SCENARIO = sys.argv[1] if len(sys.argv) > 1 else "F5"
+LOG      = f"/tmp/forge_{SCENARIO.lower()}_batch.log"
+
+# Sentinela única emitida pelo batch script no fim — inclui o cenário
+# ex: "  Pipeline F1 concluído — 17:45:23"
+DONE_SENTINEL = f"Pipeline {SCENARIO} concluído"
 
 
 def send(text: str):
+    if not TOKEN or not CHAT_ID:
+        print(f"[notify] sem credenciais")
+        return
     url  = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": CHAT_ID, "text": text}).encode()
-    req  = urllib.request.Request(url, data=data)
     try:
-        urllib.request.urlopen(req, timeout=10)
-        print(f"[notify] enviado: {text[:60]}")
+        urllib.request.urlopen(
+            urllib.request.Request(url, data=data), timeout=10
+        )
+        print(f"[notify] >> {text[:100]}")
     except Exception as e:
         print(f"[notify] ERRO: {e}")
 
 
-def tail(path):
-    with open(path, "r") as f:
-        f.seek(0, 2)  # vai ao fim
+def read_new_lines(path):
+    """Tail -f simples: aguarda arquivo existir, depois entrega novas linhas."""
+    while not os.path.exists(path):
+        time.sleep(2)
+    with open(path, "r", errors="replace") as f:
+        f.seek(0, 2)
         while True:
             line = f.readline()
             if line:
-                yield line
+                yield line.rstrip()
             else:
-                time.sleep(1)
+                time.sleep(0.5)
 
 
 def main():
-    print(f"[watcher] monitorando {LOG}")
-    send("🤖 FORGE F5 batch iniciado — 9 modelos na fila")
+    print(f"[watcher] {SCENARIO} | log: {LOG}")
+    print(f"[watcher] sentinela de fim: '{DONE_SENTINEL}'")
 
-    current_model  = None
-    current_score  = None
-    model_idx      = 0
+    model_atual = None
+    score_atual = None
+    notificados = set()   # modelos já notificados (evita duplicata por linha dobrada)
+    last_line   = ""      # descarta linha imediatamente repetida (tee + nohup)
 
-    for line in tail(LOG):
-        line = line.rstrip()
+    for line in read_new_lines(LOG):
+        if line == last_line:          # linha dobrada → ignora segunda cópia
+            last_line = ""
+            continue
+        last_line = line
 
-        # Detecta início de novo modelo
-        m = re.search(r">>>\s+(.+?)\s+\d{2}:\d{2}:\d{2}", line)
+        # ── Início de modelo ──────────────────────────────────────────
+        # batch script loga: "  >>> granite4.1:8b  17:45:23"
+        m = re.search(r">>>\s+(\S+)\s+\d{2}:\d{2}:\d{2}", line)
         if m:
-            current_model = m.group(1)
-            current_score = None
-            model_idx    += 1
-            print(f"[watcher] iniciando: {current_model} ({model_idx}/{len(MODELS)})")
+            model_atual = m.group(1)
+            score_atual = None
+            print(f"[watcher] iniciando: {model_atual}")
+            send(f"FORGE - {SCENARIO} - Iniciando o modelo ({model_atual})")
             continue
 
-        # Captura score
+        # ── Score capturado ───────────────────────────────────────────
         m = re.search(r"Auto score\s*:\s*(\d+)/(\d+)\s*\((\d+)%\)", line)
         if m:
-            current_score = f"{m.group(1)}/{m.group(2)} ({m.group(3)}%)"
+            score_atual = f"{m.group(1)}/{m.group(2)} ({m.group(3)}%)"
             continue
 
-        # Detecta conclusão
-        if "[OK]" in line and current_model:
-            next_model = MODELS[model_idx] if model_idx < len(MODELS) else None
-            msg = (
-                f"✅ FORGE F5 — {current_model}\n"
-                f"Score: {current_score or '?'}\n"
-            )
-            if next_model:
-                msg += f"Próximo: {next_model}"
-            else:
-                msg += "Batch concluído!"
-            send(msg)
-            current_model = None
-            current_score = None
+        # ── Modelo finalizado com sucesso ─────────────────────────────
+        # batch script loga: "  [OK] granite4.1:8b concluído"
+        # Extrai nome da própria linha — não depende de ter visto o >>>
+        if "[OK]" in line:
+            m2 = re.search(r"\[OK\]\s+(\S+)\s+conclu", line)
+            nome = m2.group(1) if m2 else model_atual
+            if nome and nome not in notificados:
+                notificados.add(nome)
+                score_txt = score_atual or "?"
+                send(f"FORGE - {SCENARIO} - Finalizado o modelo ({nome})\nScore: {score_txt}")
+            model_atual = None
+            score_atual = None
             continue
 
-        # Detecta ERRO
-        if "[ERRO]" in line and current_model:
-            next_model = MODELS[model_idx] if model_idx < len(MODELS) else None
-            msg = (
-                f"❌ FORGE F5 — {current_model} FALHOU\n"
-            )
-            if next_model:
-                msg += f"Próximo: {next_model}"
-            send(msg)
-            current_model = None
-            current_score = None
+        # ── Modelo com erro ───────────────────────────────────────────
+        if "[ERRO]" in line:
+            m2 = re.search(r"\[ERRO\]\s+(\S+)\s+falhou", line)
+            nome = m2.group(1) if m2 else model_atual
+            if nome and nome not in notificados:
+                notificados.add(nome)
+                send(f"FORGE - {SCENARIO} - Falhou o modelo ({nome})")
+            model_atual = None
+            score_atual = None
             continue
 
-        # Detecta fim do batch
-        if "Pipeline concluído" in line:
-            send("🏁 FORGE F5 batch completo! Todos os modelos rodaram.")
-            print("[watcher] batch completo — encerrando")
+        # ── Fim do batch ──────────────────────────────────────────────
+        if DONE_SENTINEL in line:
+            send(f"FORGE - {SCENARIO} - Batch completo! Todos os modelos rodaram.")
+            print("[watcher] batch concluído — encerrando")
             break
 
 

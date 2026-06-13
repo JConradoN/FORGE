@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Certa Imóveis - Encontre o Lar dos Seus Sonhos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B4332;
+            --secondary: #40916C;
+            --background-light: #D8F3DC;
+            --text-dark: #081C15;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--white);
+            transition: all 0.3s;
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(rgba(8, 28, 21, 0.7), rgba(8, 28, 21, 0.7)), url('https://placehold.co/1920x600');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Imóveis Section */
+        #imoveis {
+            padding: 5rem 2rem;
+            background-color: var(--background-light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #666;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 25px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .imoveis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .imovel-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .imovel-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .imovel-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .imovel-info {
+            padding: 1.5rem;
+        }
+
+        .imovel-tipo {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .imovel-titulo {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .imovel-endereco {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .imovel-details {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .imovel-preco {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.25rem !important;
+        }
+
+        /* Sobre Section */
+        #sobre {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+        }
+
+        .sobre-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .sobre-texto {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* Contato Section */
+        #contato {
+            padding: 5rem 2rem;
+            background-color: var(--background-light);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-input.error,
+        .form-textarea.error {
+            border-color: #e74c3c;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: var(--primary);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: left 0.3s ease-in-out;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .imoveis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #sobre, #contato {
+                padding: 3rem 1.5rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">Casa Certa Imóveis</a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero">Início</a></li>
+                <li><a href="#imoveis">Imóveis</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Encontre o Lar dos Seus Sonhos</h1>
+            <p>A Casa Certa Imóveis tem os melhores apartamentos, casas e terrenos para você começar uma nova vida.</p>
+            <a href="#imoveis" class="cta-button">Ver Imóveis Disponíveis</a>
+        </div>
+    </section>
+
+    <section id="imoveis">
+        <h2 class="section-title">Nossos Imóveis</h2>
+        <p class="section-subtitle">Explore nossa seleção exclusiva de propriedades</p>
+        
+        <div class="filter-buttons" id="filterButtons">
+            <button class="filter-btn active" data-filter="todos">Todos</button>
+            <button class="filter-btn" data-filter="Apartamento">Apartamento</button>
+            <button class="filter-btn" data-filter="Casa">Casa</button>
+            <button class="filter-btn" data-filter="Terreno">Terreno</button>
+        </div>
+
+        <div class="imoveis-grid" id="imoveisGrid"></div>
+    </section>
+
+    <section id="sobre">
+        <h2 class="section-title">Sobre Nós</h2>
+        <p class="section-subtitle">Conheça a Casa Certa Imóveis</p>
+        <div class="sobre-content">
+            <p class="sobre-texto">
+                A Casa Certa Imóveis é uma agência especializada em conectar pessoas aos seus lares ideais. 
+                Com mais de 15 anos de experiência no mercado imobiliário, nossa equipe dedicada trabalha incansavelmente 
+                para oferecer as melhores opções de apartamentos, casas e terrenos que atendam às necessidades e sonhos 
+                dos nossos clientes. Nossa missão é tornar o processo de compra ou venda de imóveis simples, transparente 
+                e gratificante para todos os envolvidos.
+            </p>
+        </div>
+    </section>
+
+    <section id="contato">
+        <h2 class="section-title">Entre em Contato</h2>
+        <p class="section-subtitle">Estamos prontos para atendê-lo</p>
+        
+        <form class="form-container" id="contactForm">
+            <div class="form-group">
+                <label for="nome" class="form-label">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" class="form-input" required>
+                <span class="error-message" id="erro-nome">Por favor, insira seu nome.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">E-mail *</label>
+                <input type="text" id="email" name="email" class="form-input" required>
+                <span class="error-message" id="erro-email">Por favor, insira um e-mail válido.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="mensagem" class="form-label">Mensagem *</label>
+                <textarea id="mensagem" name="mensagem" rows="5" class="form-textarea" required></textarea>
+                <span class="error-message" id="erro-mensagem">Por favor, insira sua mensagem.</span>
+            </div>
+
+            <button type="submit" class="submit-btn">Enviar Mensagem</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Casa Certa Imóveis. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Dados dos imóveis (carregados via fetch)
+        let imoveis = [];
+
+        // Carregar dados do JSON
+        async function carregarImoveis() {
+            try {
+                const response = await fetch('./imoveis.json');
+                if (!response.ok) throw new Error('Falha ao carregar imóveis');
+                imoveis = await response.json();
+                renderizarImoveis(imoveis);
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('imoveisGrid').innerHTML = '<p style="text-align:center;grid-column:1/-1;">Não foi possível carregar os imóveis.</p>';
+            }
+        }
+
+        // Renderizar cards de imóveis
+        function renderizarImoveis(lista) {
+            const grid = document.getElementById('imoveisGrid');
+            
+            if (lista.length === 0) {
+                grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;">Nenhum imóvel encontrado.</p>';
+                return;
+            }
+
+            grid.innerHTML = lista.map(imovel => `
+                <div class="imovel-card">
+                    <img src="${imovel.foto}" alt="${imovel.titulo}" class="imovel-img">
+                    <div class="imovel-info">
+                        <span class="imovel-tipo">${imovel.tipo}</span>
+                        <h3 class="imovel-titulo">${imovel.titulo}</h3>
+                        <p class="imovel-endereco">📍 ${imovel.endereco}</p>
+                        <div class="imovel-details">
+                            <span>${imovel.area_m2} m²</span>
+                            <span>${imovel.quartos > 0 ? imovel.quartos + ' quartos' : '-'}</span>
+                            <span class="imovel-preco">R$ ${imovel.preco.toLocaleString('pt-BR')}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filtros de imóveis
+        document.getElementById('filterButtons').addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
+                const filtro = e.target.dataset.filter;
+                
+                // Atualizar botões ativos
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Filtrar imóveis
+                if (filtro === 'todos') {
+                    renderizarImoveis(imoveis);
+                } else {
+                    const filtrados = imoveis.filter(i => i.tipo === filtro);
+                    renderizarImoveis(filtrados);
+                }
+            }
+        });
+
+        // Menu mobile hamburger
+        document.getElementById('hamburger').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Fechar menu ao clicar em link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Validação do formulário de contato
+        const form = document.getElementById('contactForm');
+        
+        function validarEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let valido = true;
+            const nome = document.getElementById('nome');
+            const email = document.getElementById('email');
+            const mensagem = document.getElementById('mensagem');
+
+            // Resetar erros anteriores
+            [nome, email, mensagem].forEach(input => input.classList.remove('error'));
+            ['erro-nome', 'erro-email', 'erro-mensagem'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+
+            // Validar nome
+            if (!nome.value.trim()) {
+                nome.classList.add('error');
+                document.getElementById('erro-nome').style.display = 'block';
+                valido = false;
+            }
+
+            // Validar email
+            if (!validarEmail(email.value)) {
+                email.classList.add('error');
+                document.getElementById('erro-email').style.display = 'block';
+                valido = false;
+            }
+
+            // Validar mensagem
+            if (!mensagem.value.trim()) {
+                mensagem.classList.add('error');
+                document.getElementById('erro-mensagem').style.display = 'block';
+                valido = false;
+            }
+
+            if (valido) {
+                alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+                form.reset();
+            }
+        });
+
+        // Inicializar ao carregar a página
+        document.addEventListener('DOMContentLoaded', carregarImoveis);
+    </script>
+</body>
+</html>

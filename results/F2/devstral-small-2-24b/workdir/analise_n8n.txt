@@ -1,0 +1,1 @@
+Analisando o conteúdo da página do GitHub do n8n para identificar tecnologias, ferramentas de IA/agentes, integrações e casos de uso.

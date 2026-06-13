@@ -161,11 +161,6 @@
   "composite_score": null,
   "notes": "",
   "ollama_version": "0.30.3",
-  "artifact_judge_scores": {
-    "code_review.md": {
-      "error": "arquivo não encontrado"
-    }
-  },
   "llm_judge_scores": {
     "review_coverage": 0,
     "review_accuracy": 0,
@@ -182,5 +177,17 @@
     "fix_scope": "Não há correções para avaliar o escopo.",
     "report_quality": "O artefato não é um quality_report.md, mas sim uma descrição de um processo de revisão. Ele não reflete fielmente o que foi feito em termos de revisão de código, pois a revisão não foi executada."
   },
-  "llm_judge_model": "gemini-2.5-flash"
+  "llm_judge_model": "gemini-2.5-flash",
+  "artifact_judge_scores": {
+    "code_review.md": {
+      "error": "bloqueado — code_review.md ausente (tarefa incompleta)"
+    },
+    "plano_correcoes.md": {
+      "error": "bloqueado — plano_correcoes.md ausente (tarefa incompleta)"
+    },
+    "quality_report.md": {
+      "error": "bloqueado — quality_report.md ausente (tarefa incompleta)"
+    }
+  },
+  "judge_blocked_reason": "missing required files: ['code_review.md', 'plano_correcoes.md', 'quality_report.md']"
 }

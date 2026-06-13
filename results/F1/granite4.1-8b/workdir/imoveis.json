@@ -1,0 +1,64 @@
+{
+  "imoveis": [
+    {
+      "id": "apartamento1",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento Moderno",
+      "endereco": "Rua das Flores, 123",
+      "preco": 250000,
+      "area_m2": 60,
+      "quartos": 2,
+      "foto": "https://placehold.co/400x300"
+    },
+    {
+      "id": "apartamento2",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento Luz Solar",
+      "endereco": "Av. Principal, 456",
+      "preco": 320000,
+      "area_m2": 75,
+      "quartos": 3,
+      "foto": "https://placehold.co/400x300"
+    },
+    {
+      "id": "casa1",
+      "tipo": "Casa",
+      "titulo": "Casa Rural Charm",
+      "endereco": "Estrada da Paz, 789",
+      "preco": 550000,
+      "area_m2": 120,
+      "quartos": 4,
+      "foto": "https://placehold.co/400x300"
+    },
+    {
+      "id": "casa2",
+      "tipo": "Casa",
+      "titulo": "Casa de Verão",
+      "endereco": "Logradouro Calmo, 321",
+      "preco": 480000,
+      "area_m2": 150,
+      "quartos": 5,
+      "foto": "https://placehold.co/400x300"
+    },
+    {
+      "id": "terreno1",
+      "tipo": "Terreno",
+      "titulo": "Terreno Plano para Construir",
+      "endereco": "Caminho Aberto, 654",
+      "preco": 900000,
+      "area_m2": 200,
+      "quartos": null,
+      "foto": "https://placehold.co/400x300"
+    },
+    {
+      "id": "terreno2",
+      "tipo": "Terreno",
+      "titulo": "Terreno com Vista",
+      "endereco": "Trilha Serena, 987",
+      "preco": 1100000,
+      "area_m2": 250,
+      "quartos": null,
+      "foto": "https://placehold.co/400x300"
+    }
+  ]
+}

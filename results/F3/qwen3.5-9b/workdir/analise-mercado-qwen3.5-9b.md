@@ -1,79 +1,78 @@
 # 📊 RELATÓRIO DE ANÁLISE MERCADOLÓGIA - QWEN 3.5
 
-**Data/Hora da Análise:** 2026-06-05 08:31:17 (UTC)  
-**Fonte de Dados:** AwesomeAPI Brasil  
+---
+
+## DATA/HORA DA ANÁLISE
+**06/07/2026 às 18:45 UTC-3** (timestamp atualizado)
 
 ---
 
-## 💱 COTAÇÕES ATUAIS
+## 💵 COTAÇÕES ATUAIS
 
-| Ativo | Compra (Bid) | Venda (Ask) | Variação % | Timestamp |
-|-------|--------------|-------------|------------|-----------|
-| **USD/BRL - Dólar Americano** | R$ 5,0641 | R$ 5,0671 | +0.07% | 2026-06-05 08:31:17 |
-| **EUR/BRL - Euro** | R$ 5,8893 | R$ 5,9032 | +0.29% | 2026-06-05 08:16:13 |
-| **BTC/BRL - Bitcoin** | R$ 316.784 | R$ 316.893 | **-0.23%** | 2026-06-05 08:35:16 |
-| **ETH/BRL - Ethereum** | R$ 8.520,15 | R$ 8.521,95 | **-4.27%** | 2026-06-05 08:31:21 |
+| Ativo | Par | Compra (bid) | Venda (ask) | Variação (%) | Timestamp |
+|-------|-----|--------------|-------------|--------------|-----------|
+| 🇺🇸 Dólar Americano | USD/BRL | R$ 5,167.10 | R$ 5,177.10 | +2.10% | 2026-06-05 18:30:21 |
+| 🇪🇺 Euro | EUR/BRL | R$ 5,963.03 | R$ 5,977.29 | +1.55% | 2026-06-05 18:00:05 |
+| ₿ Bitcoin | BTC/BRL | R$ 323,668.00 | R$ 323,669.00 | +2.45% | 2026-06-07 13:13:45 |
+| Ξ Ethereum | ETH/BRL | R$ 8,505.20 | R$ 8,506.13 | +4.69% | 2026-06-07 12:45:04 |
 
 ---
 
 ## 📈 TENDÊNCIA DO DÓLAR (Últimos 7 dias)
 
-### Histórico Recente de Variação Diária do USD/BRL:
-| Dia | Variação % | Direção |
-|-----|------------|---------|
-| Hoje | +0.08% | ⬆️ Alta leve |
-| -1 dia | -0.33% | ⬇️ Queda |
-| -2 dias | +1.13% | ⬆️ Alta forte |
-| -3 dias | -0.35% | ⬇️ Queda |
-| -4 dias | -0.02% | ➡️ Estável |
-| -5 dias | +0.14% | ⬆️ Alta leve |
-| -6 dias | -0.39% | ⬇️ Queda |
+### Análise do Histórico Diário USD/BRL:
+| Dia | Variação Diária (%) | Tendência |
+|------|---------------------|-----------|
+| +2.10% | Alta significativa | 🔼 |
+| -0.33% | Leve queda | 📉 |
+| +1.13% | Alta moderada | 🔼 |
+| -0.35% | Queda leve | 📉 |
+| -0.02% | Estável | ➖ |
+| +0.14% | Leve alta | 🔼 |
+| -0.39% | Queda moderada | 📉 |
 
-### **TENDÊNCIA IDENTIFICADA: ESTÁVEL COM LEVE ALTA** 📊
+### Conclusão da Tendência: **ALTA COM VOLATILIDADE**
 
-O dólar apresentou volatilidade moderada nos últimos 7 dias, com oscilações entre +1.13% e -0.39%. A soma das variações recentes indica um mercado lateralizado com leve viés de alta no curto prazo. O ativo está em consolidação após a forte alta do dia anterior (+1.13%).
+O dólar apresentou movimento de alta nos últimos 7 dias, com três dias positivos e quatro negativos, mas terminando em terreno positivo (+2.10%). A volatilidade é característica do mercado cambial brasileiro.
 
 ---
 
-## 📉 ANÁLISE DE VOLATILIDADE (Comparativo)
+## 📊 ANÁLISE DE VOLATILIDADE (Comparativa)
 
-| Ativo | Variação % | Classificação de Volatilidade |
-|-------|------------|-------------------------------|
-| **ETH/BRL** | -4.27% | 🔴 ALTA (Cripto mais volátil) |
-| **BTC/BRL** | -0.23% | 🟡 MÉDIA (Estável com leve queda) |
-| **EUR/BRL** | +0.29% | 🟢 BAIXA (Moeda tradicional estável) |
-| **USD/BRL** | +0.07% | 🟢 BAIXA (Referência do mercado) |
+| Ativo | Variação (%) | Classificação de Volatilidade |
+|-------|--------------|-------------------------------|
+| **Ethereum** | +4.69% | 🔴 Alta volatilidade |
+| Bitcoin | +2.45% | 🟡 Média-alta volatilidade |
+| Dólar Americano | +2.10% | 🟢 Moderada volatilidade |
+| Euro | +1.55% | 🟢 Baixa volatilidade relativa |
 
-### Observações:
-- Ethereum apresenta a maior volatilidade atual (-4.27%), sugerindo possível correção técnica ou notícia negativa específica para o ativo.
-- Bitcoin mantém-se relativamente estável com leve queda, comportamento típico de "refúgio" em momentos de incerteza.
-- Moedas fiduciárias (USD e EUR) mostram baixa volatilidade, conforme esperado no mercado tradicional brasileiro.
+**Observação:** Criptomoedas apresentam maior sensibilidade a notícias e eventos globais, enquanto o dólar segue tendências macroeconômicas mais estáveis.
 
 ---
 
 ## 💡 RECOMENDAÇÕES POR ATIVO
 
-### 🇺🇸 **DÓLAR AMERICANO (USD/BRL)** - ⚠️ AGUARDAR
-> *Momento neutro para entrada de novas posições. Recomenda-se aguardar confirmação de tendência após a consolidação atual.*
+### 🇺🇸 Dólar Americano (USD/BRL)
+> **Recomendação: AGUARDAR** - O dólar em alta recente (+2.10%) sugere cautela para compras imediatas. Recomenda-se monitorar indicadores econômicos dos EUA e do Brasil antes de posicionar operações.
 
-### 💶 **EURO (EUR/BRL)** - 🟢 COMPRA SELETIVA  
-> *Moeda tradicional com leve alta, boa oportunidade para compra fracionada em caso de correção técnica.*
+### 🇪🇺 Euro (EUR/BRL)
+> **Recomendação: COMPRA SELETIVA** - Com variação mais contida (+1.55%), o euro oferece oportunidade para entrada gradual em posições longas, aproveitando a tendência alcina moderada.
 
-### ₿ **BITCOIN (BTC/BRL)** - 🔵 AGUARDAR/COMPRA ACUMULATIVA
-> *Ativo estável com leve queda. Recomenda-se acumulação gradual se o objetivo é longo prazo, evitando timing do mercado.*
+### ₿ Bitcoin (BTC/BRL)
+> **Recomendação: VENDA PARCIAL** - Após alta de +2.45%, sugere-se realizar vendas parciais com lucro e manter posição estratégica reduzida para proteger ganhos obtidos.
 
-### 📱 **ETHEREUM (ETH/BRL)** - ⚠️ VENDA PARCIAL / ESPERAR CORREÇÃO  
-> *Queda significativa de 4.27% sugere possível oportunidade de compra após correção técnica ou venda parcial para proteger ganhos anteriores.*
-
----
-
-## 🔍 RESUMO EXECUTIVO
-
-- **Mercado Global:** Volatilidade moderada com criptomoedas liderando as oscilações
-- **Dólar Brasileiro:** Estável em faixa lateral, aguardando direção definida
-- **Criptoativos:** Ethereum apresentando maior volatilidade; Bitcoin mantendo estabilidade relativa
-- **Risco Geral:** Moderado - adequado para estratégias de médio/longo prazo
+### Ξ Ethereum (ETH/BRL)
+> **Recomendação: COMPRA AGRESSIVA** - Com maior variação positiva (+4.69%), o ethereum apresenta oportunidade de entrada favorável, especialmente considerando seu potencial tecnológico a longo prazo.
 
 ---
 
-*Relatório gerado automaticamente pelo Agente de Análise Financeira Qwen 3.5 | Última atualização: 2026-06-05 08:31:17 UTC*
+## 📋 RESUMO EXECUTIVO
+
+- ✅ Todas as 4 moedas apresentaram tendência alcina no período analisado
+- ⚠️ Ethereum lidera em volatilidade (+4.69%), Bitcoin segue próximo (+2.45%)
+- 💰 Dólar e Euro mostram comportamento mais estável, adequados para estratégias conservadoras
+- 🎯 Recomenda-se diversificação entre ativos de alta (ETH) e baixa volatilidade relativa (EUR/USD)
+
+---
+
+*Relatório gerado automaticamente pelo Agente de Análise Financeira Qwen 3.5 - Bots Linux v1.0*

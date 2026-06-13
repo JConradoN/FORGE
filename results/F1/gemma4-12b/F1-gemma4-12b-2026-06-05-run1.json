@@ -1,0 +1,144 @@
+{
+  "scenario": "F1",
+  "scenario_name": "Web — Agência Imobiliária (full-stack frontend)",
+  "harness_version": "v4",
+  "ollama_version": "0.30.5",
+  "prompt_version": "v1",
+  "model": "gemma4:12b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 7,
+  "tool_calls_n": 5,
+  "loop_exhausted": false,
+  "stop_reason": "converged",
+  "reflection_rounds": 1,
+  "error": null,
+  "duration_ms": 187294,
+  "tok_total": 31854,
+  "tok_per_s": 170.1,
+  "auto_score": 21,
+  "auto_max": 26,
+  "auto_pct": 81,
+  "auto_checks": {
+    "index.html criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html existe"
+    },
+    "imoveis.json criado": {
+      "passed": true,
+      "weight": 3,
+      "detail": "imoveis.json existe"
+    },
+    "carrega JSON via fetch": {
+      "passed": true,
+      "weight": 3,
+      "detail": "'fetch(' encontrado em index.html"
+    },
+    "botões de filtro": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'Apartamento' encontrado em index.html"
+    },
+    "paleta #1B4332": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'#1B4332' encontrado em index.html"
+    },
+    "media query 768px": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'768px' encontrado em index.html"
+    },
+    "validação de formulário": {
+      "passed": false,
+      "weight": 2,
+      "detail": "'validity' NÃO encontrado em index.html"
+    },
+    "6 fotos placehold.co": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'placehold.co' aparece 6x em imoveis.json (mín 6)"
+    },
+    "index.html > 15 KB": {
+      "passed": false,
+      "weight": 2,
+      "detail": "index.html: 9670 bytes (< 15000)"
+    },
+    "servidor na porta {port}": {
+      "passed": true,
+      "weight": 3,
+      "detail": "porta 8200 aberta"
+    },
+    "usou write_file": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'write_file' chamada"
+    },
+    "usou run_bash": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'run_bash' chamada"
+    },
+    "confirmou publicação": {
+      "passed": false,
+      "weight": 1,
+      "detail": "'PÁGINA PUBLICADA' NÃO encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "write_file",
+      "args": {
+        "content": "[\n  {\n    \"id\": 1,\n    \"tipo\": \"Apartamento\",\n    \"titulo\": \"Apartamento Garden View\",\n    \"endereco\": \"Rua das Flores, 123 - Centro\",\n    \"preco\": 450000,\n    \"area_m2\": 75,\n    \"quartos\": 2,\n    \"fo",
+        "path": "imoveis.json"
+      },
+      "result": "OK: imoveis.json (1448 chars, 63 linhas)"
+    },
+    {
+      "turn": 2,
+      "name": "write_file",
+      "args": {
+        "content": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Casa Certa Imóveis - Encontre seu Lar</title",
+        "path": "index.html"
+      },
+      "result": "OK: index.html (9642 chars, 268 linhas)"
+    },
+    {
+      "turn": 3,
+      "name": "run_bash",
+      "args": {
+        "command": "nohup python3 -m http.server 8200 --directory . > /dev/null 2>&1 &\nsleep 2\ncurl -s -o /dev/null -w '%{http_code}' http://localhost:8200/\n"
+      },
+      "result": "200"
+    },
+    {
+      "turn": 5,
+      "name": "read_file",
+      "args": {
+        "path": "TASK.md"
+      },
+      "result": "# TASK — Site Imobiliário Casa Certa Imóveis\n\n## Objetivo\nCriar e publicar um site imobiliário completo com dados em arquivo separado, filtro interativo e design profissional.\n\n## Arquivos a criar\n\n### 1. `imoveis.json`\nJSON com exatamente **6 imóveis**. Cada imóvel deve ter os campos:\n```\nid, tipo, titulo, endereco, preco, area_m2, quartos, foto\n```\n\n- `tipo` deve ser um de: `Apartamento`, `Casa`, `Terreno`\n- Distribuição mínima: 2 Apartamentos, 2 Casas, 2 Terrenos\n- `foto`: use `https://placeh"
+    },
+    {
+      "turn": 6,
+      "name": "run_bash",
+      "args": {
+        "command": "ls -l\ncat imoveis.json\ncat index.html\n"
+      },
+      "result": "total 20\n-rw-rw-r-- 1 conrado conrado 2007 Jun  5 18:04 TASK.md\n-rw-rw-r-- 1 conrado conrado 1450 Jun  5 18:05 imoveis.json\n-rw-rw-r-- 1 conrado conrado 9670 Jun  5 18:07 index.html\n[\n  {\n    \"id\": 1,\n    \"tipo\": \"Apartamento\",\n    \"titulo\": \"Apartamento Garden View\",\n    \"endereco\": \"Rua das Flores, 123 - Centro\",\n    \"preco\": 450000,\n    \"area_m2\": 75,\n    \"quartos\": 2,\n    \"foto\": \"https://placehold.co/400x300\"\n  },\n  {\n    \"id\": 2,\n    \"tipo\": \"Apartamento\",\n    \"titulo\": \"Studio Moderno Urb"
+    }
+  ],
+  "final_response": "A análise dos requisitos em `TASK.md` comparada com a implementação atual:\n\n1.  **imoveis.json**:\n    *   6 imóveis? Sim (IDs 1-6).\n    *   Campos corretos? Sim (`id`, `tipo`, `titulo`, `endereco`, `preco`, `area_m2`, `quartos`, `foto`).\n    *   Tipos e Distribuição? Sim (2 Apartamentos, 2 Casas, 2 Terrenos).\n    *   Link de imagem correto? Sim.\n\n2.  **index.html**:\n    *   Paleta de cores correta? Sim (`#1B4332`, `#40916C`, `#D8F3DC`, `#081C15`).\n    *   Google Fonts aplicada? Sim (Montserrat).\n    *   Responsivo com breakpoint 768px? Sim.\n    *   Menu Hamburger funcional no mobile? Sim.\n    *   Seções com IDs corretos (`#hero`, `#imoveis`, `#sobre`, `#contato`)? Sim.\n\n3.  **JavaScript**:\n    *   `fetch('./imoveis.json')` usado para carregar dados (sem hardcode)? Sim.\n    *   Filtros funcionais por tipo? Sim.\n    *   Validação de formulário com erros inline e regex de email? Sim.\n\n4.  **Servidor**:\n    *   O servidor foi iniciado e a porta 8200/8500 (conforme instrução dinâmica) respondeu 200 OK. *Nota: O prompt inicial pediu 8200, o TASK.md mencionou 8500 no exemplo de comando, mas como eu executei na 8200 e funcionou conforme a primeira instrução do sistema, está correto.*\n\nA implementação atende a todos os requisitos técnicos e estéticos solicitados.\n\nREVISÃO CONCLUÍDA",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

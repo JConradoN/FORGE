@@ -4,9 +4,11 @@
   "description": "Revisão completa dos scripts do FORGE (~1600 linhas Python, 4 arquivos). Produz code_review.md, plano_correcoes.md, quality_report.md e implementa correções de Alta prioridade. Replica a metodologia de avaliação do Igor (AVALIACAO_MODELO_2026-05-25).",
   "difficulty": "hard",
   "expected_turns": "15-30",
+  "max_turns": 30,
   "version": 1,
 
   "prd_file": "prds/F5.md",
+  "prompt_version": "v2",
   "fixture_dirs": ["fixtures/forge-scripts"],
   "monitor_stable_s": 120,
   "read_max_chars": 35000,
@@ -26,7 +28,7 @@
     {"type": "file_contains",   "label": "plano tem prioridades",      "path": "plano_correcoes.md", "needle": "Alta",        "weight": 1},
     {"type": "file_size_min",   "label": "code_review.md > 3 KB",      "path": "code_review.md",  "min_bytes": 3000,         "weight": 2},
     {"type": "run_command_ok",  "label": "forge_runner.py importa OK", "cmd": "python3 -c 'import sys; sys.path.insert(0,\"forge-scripts\"); import forge_runner'", "weight": 3},
-    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 0},
     {"type": "no_error",        "label": "sem erro de API",                                                          "weight": 1}
   ],
 
@@ -41,7 +43,7 @@
     {"type": "file_contains",   "label": "plano tem prioridades",      "path": "plano_correcoes.md", "needle": "Alta",        "weight": 1},
     {"type": "file_size_min",   "label": "code_review.md > 3 KB",      "path": "code_review.md",  "min_bytes": 3000,         "weight": 2},
     {"type": "run_command_ok",  "label": "forge_runner.py importa OK", "cmd": "python3 -c 'import sys; sys.path.insert(0,\"forge-scripts\"); import forge_runner'", "weight": 3},
-    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 1},
+    {"type": "response_contains","label": "confirmou conclusão",       "needle": "REVISÃO CONCLUÍDA",               "weight": 0},
     {"type": "no_error",        "label": "sem erro de API",                                                          "weight": 1}
   ],
 

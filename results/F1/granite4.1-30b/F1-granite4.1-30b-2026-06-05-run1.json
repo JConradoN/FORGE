@@ -1,0 +1,136 @@
+{
+  "scenario": "F1",
+  "scenario_name": "Web — Agência Imobiliária (full-stack frontend)",
+  "harness_version": "v4",
+  "ollama_version": "0.30.5",
+  "prompt_version": "v1",
+  "model": "granite4.1:30b",
+  "run_idx": 1,
+  "date": "2026-06-05",
+  "turns": 6,
+  "tool_calls_n": 4,
+  "loop_exhausted": false,
+  "stop_reason": "converged",
+  "reflection_rounds": 1,
+  "error": null,
+  "duration_ms": 1201017,
+  "tok_total": 32829,
+  "tok_per_s": 27.3,
+  "auto_score": 22,
+  "auto_max": 26,
+  "auto_pct": 85,
+  "auto_checks": {
+    "index.html criado": {
+      "passed": true,
+      "weight": 2,
+      "detail": "index.html existe"
+    },
+    "imoveis.json criado": {
+      "passed": true,
+      "weight": 3,
+      "detail": "imoveis.json existe"
+    },
+    "carrega JSON via fetch": {
+      "passed": true,
+      "weight": 3,
+      "detail": "'fetch(' encontrado em index.html"
+    },
+    "botões de filtro": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'Apartamento' encontrado em index.html"
+    },
+    "paleta #1B4332": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'#1B4332' encontrado em index.html"
+    },
+    "media query 768px": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'768px' encontrado em index.html"
+    },
+    "validação de formulário": {
+      "passed": false,
+      "weight": 2,
+      "detail": "'validity' NÃO encontrado em index.html"
+    },
+    "6 fotos placehold.co": {
+      "passed": true,
+      "weight": 2,
+      "detail": "'placehold.co' aparece 6x em imoveis.json (mín 6)"
+    },
+    "index.html > 15 KB": {
+      "passed": false,
+      "weight": 2,
+      "detail": "index.html: 8679 bytes (< 15000)"
+    },
+    "servidor na porta {port}": {
+      "passed": true,
+      "weight": 3,
+      "detail": "porta 8200 aberta"
+    },
+    "usou write_file": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'write_file' chamada"
+    },
+    "usou run_bash": {
+      "passed": true,
+      "weight": 1,
+      "detail": "tool 'run_bash' chamada"
+    },
+    "confirmou publicação": {
+      "passed": true,
+      "weight": 1,
+      "detail": "'PÁGINA PUBLICADA' encontrado na resposta final"
+    },
+    "sem erro de API": {
+      "passed": true,
+      "weight": 1,
+      "detail": "sem erro"
+    }
+  },
+  "tool_calls_log": [
+    {
+      "turn": 1,
+      "name": "write_file",
+      "args": {
+        "content": "[\n  {\n    \"id\": 1,\n    \"tipo\": \"Apartamento\",\n    \"titulo\": \"Apartamento Cozinha Moderna\",\n    \"endereco\": \"Rua das Flores, 123 - Centro\",\n    \"preco\": 250000,\n    \"area_m2\": 58,\n    \"quartos\": 2,\n   ",
+        "path": "imoveis.json"
+      },
+      "result": "OK: imoveis.json (1432 chars, 63 linhas)"
+    },
+    {
+      "turn": 2,
+      "name": "write_file",
+      "args": {
+        "content": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n<title>Casa Certa Imóveis</title>\n<link href=\"https://fonts",
+        "path": "index.html"
+      },
+      "result": "OK: index.html (8650 chars, 234 linhas)"
+    },
+    {
+      "turn": 3,
+      "name": "run_bash",
+      "args": {
+        "command": "(nohup python3 -m http.server 8200 --directory . > /dev/null 2>&1 &) && sleep 2 && curl -s -o /dev/null -w '%{http_code}' http://localhost:8200/"
+      },
+      "result": "200"
+    },
+    {
+      "turn": 5,
+      "name": "read_file",
+      "args": {
+        "path": "TASK.md"
+      },
+      "result": "# TASK — Site Imobiliário Casa Certa Imóveis\n\n## Objetivo\nCriar e publicar um site imobiliário completo com dados em arquivo separado, filtro interativo e design profissional.\n\n## Arquivos a criar\n\n### 1. `imoveis.json`\nJSON com exatamente **6 imóveis**. Cada imóvel deve ter os campos:\n```\nid, tipo, titulo, endereco, preco, area_m2, quartos, foto\n```\n\n- `tipo` deve ser um de: `Apartamento`, `Casa`, `Terreno`\n- Distribuição mínima: 2 Apartamentos, 2 Casas, 2 Terrenos\n- `foto`: use `https://placeh"
+    }
+  ],
+  "final_response": "**1. Leitura dos requisitos**  \nO conteúdo de **TASK.md** foi lido usando `read_file('TASK.md')`. Todos os itens exigidos estão presentes no documento.\n\n---\n\n### 2. O que foi entregue\n\n| Item | Descrição |\n|------|-----------|\n| **`imoveis.json`** | Arquivo JSON contendo exatamente 6 imóveis (2 Apartamentos, 2 Casas, 2 Terrenos) com os campos `id`, `tipo`, `titulo`, `endereco`, `preco`, `area_m2`, `quartos`, `foto` (`https://placehold.co/400x300`). |\n| **`index.html`** | Página HTML completa e auto‑contida que: <br>• Usa a paleta de cores obrigatória (`#1B4332`, `#40916C`, `#D8F3DC`, `#081C15`). <br>• Carrega a fonte **Roboto** do Google Fonts. <br>• Possui layout responsivo com breakpoint em 768 px e um hamburger menu para dispositivos móveis. <br>• Contém as seções obrigatórias com os IDs solicitados (`#hero`, `#imoveis`, `#sobre`, `#contato`). <br>• Carrega dinamicamente os imóveis via `fetch('./imoveis.json')` (não hardcode). <br>• Possui botões de filtro por tipo (`Todos`, `Apartamento`, `Casa`, `Terreno`). <br>• Implementa validação do formulário de contato (nome obrigatório, e‑mail com formato válido, mensagem obrigatória) exibindo erros inline. <br>• Inclui a regra CSS `@media (max-width: 768px)` para grid de imóveis em 1 coluna e menu mobile. |\n| **Servidor** | Executou o comando `nohup python3 -m http.server 8200 --directory . > /dev/null 2>&1 &`, aguardou 2 segundos e verificou a resposta HTTP (`curl …` retornou `200`). |\n| **Confirmação final** | Após validação, enviou a mensagem “PÁGINA PUBLICADA: http://localhost:8200/”. |\n\n---\n\n### 3. Comparação ponto‑a‑ponto\n\n| Requisito do TASK.md | Entregue? | Observação / Ajuste |\n|----------------------|-----------|---------------------|\n| **Arquivo `imoveis.json`** com 6 imóveis, tipos corretos e foto URL | ✅ | Arquivo criado exatamente conforme especificação. |\n| **`index.html` – Design** (paleta de cores, fonte Google Fonts) | ✅ | Paleta usada em CSS `:root`; Roboto carregado via `<link>` do Google Fonts. |\n| ",
+  "llm_judge_score": null,
+  "claude_score": null,
+  "human_score": null,
+  "composite_score": null,
+  "notes": ""
+}

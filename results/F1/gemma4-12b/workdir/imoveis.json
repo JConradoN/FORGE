@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Garden View",
+    "endereco": "Rua das Flores, 123 - Centro",
+    "preco": 450000,
+    "area_m2": 75,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Studio Moderno Urbano",
+    "endereco": "Av. Paulista, 1500 - Bela Vista",
+    "preco": 320000,
+    "area_m2": 45,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa de Campo Luxo",
+    "endereco": "Estrada Real, km 10 - Interior",
+    "preco": 890000,
+    "area_m2": 250,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Casa Térrea Familiar",
+    "endereco": "Rua das Palmeiras, 50 - Bairro Jardim",
+    "preco": 620000,
+    "area_m2": 180,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Lote Residencial Vista Mar",
+    "endereco": "Av. Costeira, Lote 12 - Praia",
+    "preco": 300000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno Comercial Estratégico",
+    "endereco": "Rodovia Principal, km 5 - Zona Industrial",
+    "preco": 1200000,
+    "area_m2": 1000,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

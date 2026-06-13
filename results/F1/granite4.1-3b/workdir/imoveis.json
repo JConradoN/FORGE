@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Casa Certa - Apartamento Duplo",
+    "endereco": "Rua das Flores, 123",
+    "preco": 2500000,
+    "area_m2": 70,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Casa Certa - Casa com Jardim",
+    "endereco": "Av. das Acácias, 456",
+    "preco": 4000000,
+    "area_m2": 120,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Casa Certa - Terreno para Construção",
+    "endereco": "Rua da Liberdade, 78",
+    "preco": 1500000,
+    "area_m2": 2500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Casa Certa - Apartamento Moderno",
+    "endereco": "Rua da Paz, 90",
+    "preco": 2100000,
+    "area_m2": 65,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Casa Certa - Casa Rusticana",
+    "endereco": "Rua do Sol, 112",
+    "preco": 3200000,
+    "area_m2": 180,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Casa Certa - Terreno Agrícola",
+    "endereco": "Rua da Natureza, 45",
+    "preco": 800000,
+    "area_m2": 5000,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

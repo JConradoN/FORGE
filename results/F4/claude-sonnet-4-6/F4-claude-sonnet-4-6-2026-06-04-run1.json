@@ -227,9 +227,24 @@
     }
   ],
   "final_response": "---\n\n## REVISÃO CONCLUÍDA: 7 bugs corrigidos, validação OK ✅\n\n---\n\n### Sumário do trabalho realizado\n\n#### 📄 `code_review.md` — 7 bugs documentados\n\n| # | Arquivo | Bug | Severidade |\n|---|---------|-----|------------|\n| 1 | `cache.py` | `time.time() + ts` em vez de `time.time() - ts` → itens expiram imediatamente | Alta |\n| 2 | `cache.py` | `set(key, value)` não aceita parâmetro `ttl=` → `TypeError` | Alta |\n| 3 | `cache.py` | `del self._store[key]` → `KeyError` em chave ausente | Média |\n| 4 | `cache.py` | `size()` retorna o `dict` inteiro em vez de `len()` | Média |\n| 5 | `retry.py` | Função `with_retry(fn, ...)` não existia — interface completamente ausente | Alta |\n| 6 | `retry.py` | `while attempt = max_attempts` — atribuição ilegal → `SyntaxError` na importação | **Crítica** |\n| 7 | `logger.py` | Decorator `log_call` não existia — módulo só tinha classe `Logger` | Alta |\n\n#### 🔧 Correções aplicadas\n\n**`cache.py`**\n- `set()` agora aceita `ttl=None` por item e armazena a tripla `(value, timestamp, ttl_efetivo)`\n- `get()` usa `time.time() - ts` (subtração) para calcular tempo decorrido\n- `delete()` usa `self._store.pop(key, None)` — idempotente, sem `KeyError`\n- `size()` retorna `len(self._store)` — `int` correto\n\n**`retry.py`**\n- Substituído o decorator `@retry` pela função `with_retry(fn, max_attempts, delay, exceptions)` conforme contrato\n- Loop corrigido para `while attempt < max_attempts:`\n- Back-off exponencial preservado: `delay * 2^attempt`\n\n**`logger.py`**\n- Implementado `log_call` como decorator funcional usando `logging.getLogger(\"logger\")`\n- `functools.wraps` preserva `__name__` e metadados da função original\n- Zero dependências externas — apenas stdlib (`logging`, `functools`)",
-  "llm_judge_score": null,
+  "llm_judge_score": 0.8,
   "claude_score": null,
   "human_score": null,
   "composite_score": null,
-  "notes": ""
+  "notes": "",
+  "llm_judge_scores": {
+    "review_accuracy": 0,
+    "review_structure": 3,
+    "fix_correctness": 0,
+    "fix_completeness": 0,
+    "iteration_quality": 0
+  },
+  "llm_judge_justificativas": {
+    "review_accuracy": "O agente ignorou completamente o `code_review.md` fornecido e inventou 7 bugs que não estavam no artefato original, além de não identificar nenhum dos 5 bugs reais.",
+    "review_structure": "A estrutura do relatório de revisão (o artefato fornecido para avaliação) é clara, com detalhes por bug, localização e impacto, mesmo que o conteúdo esteja incorreto.",
+    "fix_correctness": "O agente não forneceu correções para os bugs reais do `code_review.md` original. As 'correções' mencionadas são para bugs inventados e não podem ser avaliadas sem o código corrigido.",
+    "fix_completeness": "O agente não corrigiu nenhum dos 5 bugs presentes no `code_review.md` original. Em vez disso, inventou e 'corrigiu' 7 bugs que não existiam no contexto da tarefa.",
+    "iteration_quality": "O agente não usou o `code_review.md` fornecido como base para sua avaliação e 'correções'. Ele agiu como se estivesse fazendo uma revisão inicial de um código que não foi fornecido, ignorando completamente a tarefa de avaliar o `code_review.md` existente."
+  },
+  "llm_judge_model": "gemini-2.5-flash"
 }

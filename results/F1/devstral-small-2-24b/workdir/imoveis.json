@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento no Centro",
+    "endereco": "Rua das Flores, 123 - Centro",
+    "preco": 500000,
+    "area_m2": 80,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Casa com Piscina",
+    "endereco": "Avenida Principal, 456 - Bairro Nobre",
+    "preco": 1200000,
+    "area_m2": 250,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Terreno para Construção",
+    "endereco": "Estrada Velha, 789 - Zona Rural",
+    "preco": 200000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento com Vista para o Mar",
+    "endereco": "Praia dos Sonhos, 101 - Litoral",
+    "preco": 850000,
+    "area_m2": 95,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Casa de Campo",
+    "endereco": "Chácara Verde, 202 - Interior",
+    "preco": 950000,
+    "area_m2": 300,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno Comercial",
+    "endereco": "Avenida Comercial, 321 - Centro Empresarial",
+    "preco": 450000,
+    "area_m2": 600,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

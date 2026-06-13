@@ -19,8 +19,9 @@ def with_retry(func: Callable[[], T], max_attempts: int = 3, delay: float = 0.1)
             return func()
         except Exception as exc:
             last_exc = exc
-            # Correção: apenas levanta após esgotar todas as tentativas
-            if attempt < max_attempts - 1:
-                time.sleep(delay)
+            # FIX-3: só levanta após esgotar todas as tentativas
+            if attempt == max_attempts - 1:
+                raise last_exc
+            time.sleep(delay)
 
     raise last_exc  # type: ignore

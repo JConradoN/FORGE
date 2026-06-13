@@ -1,0 +1,62 @@
+[
+  {
+    \"id\": 1,
+    \"tipo\": \"Apartamento\",
+    \"titulo\": \"Apartamento Moderno no Centro\",
+    \"endereco\": \"Rua das Flores, 123\",
+    \"preco\": 850000,
+    \"area_m2\": 75,
+    \"quartos\": 3,
+    \"foto\": \"https://placehold.co/400x300\"
+  },
+  {
+    \"id\": 2,
+    \"tipo\": \"Apartamento\",
+    \"titulo\": \"Appartamento com Vista ao Mar\",
+    \"endereco\": \"Avenida do Mar, 45\",
+    \"preco\": 1200000,
+    \"area_m2\": 110,
+    \"quartos\": 4,
+    \"foto\": \"https://placehold.co/400x300\"
+  },
+  {
+    \"id\": 3,
+    \"tipo\": \"Casa\",
+    \"titulo\": \"Casa de Campo com Piscina\",
+    \"endereco\": \"Fazenda dos Sonhos, 8\",
+    \"preco\": 2500000,
+    \"area_m2\": 300,
+    \"quartos\": 5,
+    \"foto\": \"https://placehold.co/400x300\"
+  },
+  {
+    \"id\": 4,
+    \"tipo\": \"Casa\",
+    \"titulo\": \"Casa Moderna na Praia\",
+    \"endereco\": \"Praia Tranquila, 22\",
+    \"preco\": 1800000,
+    \"area_m2\": 220,
+    \"quartos\": 4,
+    \"foto\": \"https://placehold.co/400x300\"
+  },
+  {
+    \"id\": 5,
+    \"tipo\": \"Terreno\",
+    \"titulo\": \"Terreno para Construção em Zona Norte\",
+    \"endereco\": \"Vila Nova, 15\",
+    \"preco\": 600000,
+    \"area_m2\": 1000,
+    \"quartos\": 0,
+    \"foto\": \"https://placehold.co/400x300\"
+  },
+  {
+    \"id\": 6,
+    \"tipo\": \"Terreno\",
+    \"titulo\": \"Terreno com Acesso à Praia\",
+    \"endereco\": \"Praia Larga, 7\",
+    \"preco\": 750000,
+    \"area_m2\": 1200,
+    \"quartos\": 0,
+    \"foto\": \"https://placehold.co/400x300\"
+  }
+]

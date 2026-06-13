@@ -1,0 +1,113 @@
+{
+  "scenario": "F2",
+  "judge_model": "claude-sonnet-4-6",
+  "n_modelos": 13,
+  "ranking": [
+    {
+      "posicao": 1,
+      "modelo": "claude-sonnet-4-6",
+      "nota": 9.8,
+      "pontos_fortes": "Relatório mais completo e estruturado: usa tabela comparativa clara para mapear cada componente do stack ao n8n, cita dados precisos (400+ integrações, 900+ templates, licença Fair-code/SUL), menciona explicitamente que o n8n já está no stack, identifica LangChain como integração nativa, apresenta seções bem demarcadas com formatação rica. Usou duas fontes (GitHub HTML + README raw), extraindo informações complementares.",
+      "pontos_fracos": "Relatório foi truncado no final (seção OPORTUNIDADES cortada). Pequena redundância na tabela de relevância.",
+      "resumo": "O mais completo, preciso e bem estruturado, com tabela de mapeamento stack×n8n e dados verificáveis, apesar do truncamento final."
+    },
+    {
+      "posicao": 2,
+      "modelo": "qwen3.6-27b",
+      "nota": 9.3,
+      "pontos_fortes": "Consultou duas fontes (HTML + README raw), citou números corretos (400+ integrações, 900+ templates, fair-code/SUL), listou air-gapped deployment e SSO como features enterprise relevantes, justificativa de relevância com 6 pontos numerados e bem fundamentados, menção explícita ao Qdrant para RAG e à licença sustentável.",
+      "pontos_fracos": "Seção OPORTUNIDADES truncada. Ligeiramente menos visual que o claude-sonnet (sem tabela comparativa).",
+      "resumo": "Excelente cobertura técnica com dados precisos e múltiplas fontes, truncado nas oportunidades mas superior na profundidade de justificativa."
+    },
+    {
+      "posicao": 3,
+      "modelo": "qwen3.5-27b",
+      "nota": 9.1,
+      "pontos_fortes": "Único modelo que consultou 4 URLs distintas (incluindo docs.n8n.io e API GitHub README), identificou corretamente 400+ integrações e LangChain nativo, apresentou 5 oportunidades detalhadas com sub-tópicos, mencionou RAG pipeline completo (ingestão→embedding→storage→retrieval), tone técnico preciso.",
+      "pontos_fracos": "Seção de tecnologias relativamente curta comparada a outros modelos. Não há tabela de mapeamento direto stack×componente.",
+      "resumo": "Melhor uso de múltiplas fontes do conjunto, com pipeline RAG bem detalhado e oportunidades concretas, mas tecnologias menos detalhadas."
+    },
+    {
+      "posicao": 4,
+      "modelo": "granite4.1:30b",
+      "nota": 8.9,
+      "pontos_fortes": "Único modelo a mencionar Redis explicitamente como componente de fila/estado do n8n, usa tabela de relevância por tecnologia com justificativas individuais, menciona Express.js e mecanismos de autenticação OAuth2, detalhe técnico sobre PostgreSQL/SQLite como opções de banco.",
+      "pontos_fracos": "Seção OPORTUNIDADES truncada. Não cita números específicos de integrações/templates. Não menciona LangChain explicitamente.",
+      "resumo": "Boa profundidade técnica com tabela granular e componentes menos óbvios como Redis/Express, mas truncado e sem LangChain."
+    },
+    {
+      "posicao": 5,
+      "modelo": "qwen3.5:9b",
+      "nota": 8.5,
+      "pontos_fortes": "Lista explicitamente Go como linguagem suportada (único entre os menores), menciona Qdrant diretamente na lista de tecnologias identificadas, justificativa de relevância em 5 pontos numerados, seção de oportunidades bem estruturada com fluxo RAG detalhado.",
+      "pontos_fracos": "Afirma que n8n tem suporte nativo a Go (incorreto - não é documentado oficialmente). Seção de oportunidades truncada. Algumas afirmações não verificáveis na fonte.",
+      "resumo": "Bom relatório com detalhes técnicos relevantes, mas contém imprecisão sobre suporte nativo a Go."
+    },
+    {
+      "posicao": 6,
+      "modelo": "gemma4:26b",
+      "nota": 8.2,
+      "pontos_fortes": "Seção de oportunidades com 4 pontos distintos e bem justificados, menciona prototipagem rápida antes de implementação em código puro, metáfora útil do 'sistema nervoso central' para o n8n, menciona memória de longo prazo via Qdrant.",
+      "pontos_fracos": "Typo em 'TECNOLOGIAS IDENTIFICAS'. Lista de tecnologias relativamente curta. Não cita números de integrações/templates. Menos dados factuais verificáveis.",
+      "resumo": "Boas oportunidades estratégicas e metáforas úteis, mas com typo e lista de tecnologias superficial."
+    },
+    {
+      "posicao": 7,
+      "modelo": "gemma4:12b",
+      "nota": 8.0,
+      "pontos_fortes": "Conciso e direto, todas as seções presentes e completas, menciona LangChain, RAG pipeline e custom nodes como oportunidades concretas, conclusão bem fundamentada.",
+      "pontos_fracos": "Lista de tecnologias muito curta. Não cita dados quantitativos. Sem tabela ou estrutura visual de mapeamento. Superficial em comparação com os melhores.",
+      "resumo": "Relatório completo e correto mas superficial; todas as seções presentes porém com pouca profundidade técnica."
+    },
+    {
+      "posicao": 8,
+      "modelo": "qwen3:14b",
+      "nota": 7.5,
+      "pontos_fortes": "Lista de tecnologias extensa incluindo Grafana, Prometheus, WebSockets, React, PostgreSQL e Redis, bom detalhamento de tecnologias identificadas.",
+      "pontos_fracos": "Duplicação evidente na lista de tecnologias (Grafana, Prometheus, Kubernetes aparecem duas vezes). Não cita LangChain. Oportunidades genéricas sem detalhes técnicos. Estrutura menos elaborada.",
+      "resumo": "Lista de tecnologias longa mas com duplicações óbvias e oportunidades genéricas sem substância técnica."
+    },
+    {
+      "posicao": 9,
+      "modelo": "devstral-small-2:24b",
+      "nota": 7.0,
+      "pontos_fortes": "Lista abrangente de tecnologias genéricas, menciona OpenAPI/Swagger/GraphQL como integrações, cobre casos de uso empresariais.",
+      "pontos_fracos": "Afirma '200 integrações nativas' (incorreto - são 400+). Não segue exatamente o formato de seções solicitado. Relevância dividida em Alta/Média/Baixa mas sem formatação clara. Não menciona LangChain. Conclusão fraca.",
+      "resumo": "Dado quantitativo incorreto sobre integrações e formato não padronizado reduzem a confiabilidade do relatório."
+    },
+    {
+      "posicao": 10,
+      "modelo": "gemma4:e4b-it-q4_K_M",
+      "nota": 6.8,
+      "pontos_fortes": "Formato limpo, todas as seções presentes, ênfase correta no self-hosting e controle de dados, menção ao RAG pipeline como oportunidade.",
+      "pontos_fracos": "Lista de tecnologias extremamente superficial (apenas 4 itens, sem Node.js, Docker, LangChain etc.). Não cita números de integrações. Seção de tecnologias identificadas é a mais fraca do conjunto. Relatório genérico demais.",
+      "resumo": "Estrutura correta mas tecnologias identificadas são mínimas e genéricas, perdendo quase todo valor técnico da análise."
+    },
+    {
+      "posicao": 11,
+      "modelo": "qwen3:8b",
+      "nota": 6.5,
+      "pontos_fortes": "Todas as seções presentes e completas, oportunidades cobrindo os 4 componentes do stack, tom adequado.",
+      "pontos_fracos": "Afirma que n8n tem 'suporte a agentes e integrações com IA, como Ollama' como se fosse nativo (não verificado). Lista de tecnologias genérica sem especificidade. Conclusão repetitiva. Nível de detalhe insuficiente para análise técnica.",
+      "resumo": "Relatório adequado mas superficial, com afirmações imprecisas sobre integração Ollama nativa e pouca profundidade técnica."
+    },
+    {
+      "posicao": 12,
+      "modelo": "phi4-tools:14b",
+      "nota": 5.0,
+      "pontos_fortes": "Estrutura presente, menciona Docker e Kubernetes corretamente.",
+      "pontos_fracos": "Afirma explicitamente que n8n 'não menciona diretamente IA/agentes' - completamente incorreto dado que LangChain é feature central. Lista de tecnologias com apenas 3 itens (Node.js, Docker, Kubernetes). Análise superficialíssima. Não menciona integrações, templates, LangChain, Python, TypeScript. Relatório mais fraco em conteúdo técnico.",
+      "resumo": "Análise gravemente incorreta ao afirmar ausência de IA/agentes no n8n, com lista de tecnologias mínima e sem valor técnico real."
+    },
+    {
+      "posicao": 13,
+      "modelo": "lfm2:24b-a2b",
+      "nota": 3.5,
+      "pontos_fortes": "Estrutura de seções presente, tom adequado.",
+      "pontos_fracos": "Relatório extremamente curto (~150 palavras). Não analisa o conteúdo da página - apenas lista componentes do stack já conhecidos (Ollama, Qdrant, Docker) como 'tecnologias identificadas', sem extrair informações da fonte. Oportunidades genéricas sem embasamento. RESUMO de uma única frase vaga. Não cumpre minimamente a tarefa de analisar o conteúdo web.",
+      "resumo": "Falha fundamental: não analisou o conteúdo da URL, apenas relistou o stack já existente com texto mínimo sem valor analítico."
+    }
+  ],
+  "criterio_decisivo": "A principal diferença foi a capacidade de extrair e sintetizar informações específicas e verificáveis da fonte (LangChain nativo, 400+ integrações, 900+ templates, fair-code license, self-hosting Docker), mapeando-as concretamente para cada componente do stack. Os melhores modelos também usaram múltiplas URLs e apresentaram tabelas ou justificativas numeradas, enquanto os piores ou inventaram dados, ignoraram features centrais de IA, ou simplesmente relistaram o stack sem análise real.",
+  "observacoes_gerais": "Há uma clara divisão em três tiers: (1) Modelos que consultaram múltiplas fontes e extraíram dados precisos com estrutura elaborada (claude-sonnet, qwen3.6:27b, qwen3.5:27b); (2) Modelos com boa estrutura mas dados parcialmente imprecisos ou listas incompletas (granite4.1, qwen3.5:9b, gemma4:26b, gemma4:12b, qwen3:14b); (3) Modelos que produziram análises superficiais, incorretas ou que ignoraram features críticas de IA do n8n (devstral, gemma4:e4b, qwen3:8b, phi4-tools, lfm2). A afirmação do phi4-tools de que n8n 'não menciona IA' é o erro factual mais grave. O truncamento de relatórios foi um problema recorrente nos modelos top, sugerindo limitação de tokens de saída."
+}

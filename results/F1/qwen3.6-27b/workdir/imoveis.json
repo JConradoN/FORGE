@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Moderno no Centro",
+    "endereco": "Rua das Flores, 123 - Centro, São Paulo/SP",
+    "preco": 450000,
+    "area_m2": 75,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Cobertura Duplex Vista Mar",
+    "endereco": "Av. Beira Mar, 500 - Copacabana, Rio de Janeiro/RJ",
+    "preco": 1200000,
+    "area_m2": 150,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa em Condomínio Fechado",
+    "endereco": "Rua das Palmeiras, 78 - Alphaville, Barueri/SP",
+    "preco": 890000,
+    "area_m2": 200,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Sobrado com Piscina e Jardim",
+    "endereco": "Travessa dos Ipês, 45 - Vila Nova, Campinas/SP",
+    "preco": 670000,
+    "area_m2": 180,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Terreno Plano em Loteamento",
+    "endereco": "Rua Sete, Lote 12 - Jardim Esperança, Curitiba/PR",
+    "preco": 180000,
+    "area_m2": 360,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno Comercial em Av. Principal",
+    "endereco": "Av. Brasil, 1000 - Centro, Belo Horizonte/MG",
+    "preco": 350000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

@@ -129,11 +129,6 @@
   "composite_score": null,
   "notes": "",
   "ollama_version": "0.30.3",
-  "artifact_judge_scores": {
-    "code_review.md": {
-      "error": "arquivo não encontrado"
-    }
-  },
   "llm_judge_scores": {
     "review_coverage": 1,
     "review_accuracy": 3,
@@ -150,5 +145,17 @@
     "fix_scope": "O artefato fornecido é apenas um code review e não inclui as correções implementadas. Não é possível avaliar o escopo das correções.",
     "report_quality": "O artefato fornecido é apenas um fragmento do code_review.md e não inclui o quality_report.md. Não é possível avaliar a qualidade do relatório."
   },
-  "llm_judge_model": "gemini-2.5-flash"
+  "llm_judge_model": "gemini-2.5-flash",
+  "artifact_judge_scores": {
+    "code_review.md": {
+      "error": "bloqueado — code_review.md ausente (tarefa incompleta)"
+    },
+    "plano_correcoes.md": {
+      "error": "bloqueado — plano_correcoes.md ausente (tarefa incompleta)"
+    },
+    "quality_report.md": {
+      "error": "bloqueado — quality_report.md ausente (tarefa incompleta)"
+    }
+  },
+  "judge_blocked_reason": "missing required files: ['code_review.md', 'plano_correcoes.md', 'quality_report.md']"
 }

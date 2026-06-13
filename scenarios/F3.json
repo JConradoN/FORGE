@@ -25,7 +25,11 @@
   "prompt_mock": "Você é um agente de análise financeira rodando em um servidor Linux.\n\nSua tarefa:\n1. Busque as cotações do snapshot de mercado (2026-06-04) de:\n   - Dólar (USD/BRL): use http://localhost:9900/mock/usd-brl\n   - Euro (EUR/BRL): use http://localhost:9900/mock/eur-brl\n   - Bitcoin (BTC/BRL): use http://localhost:9900/mock/btc-brl\n   - Ethereum (ETH/BRL): use http://localhost:9900/mock/eth-brl\n   Use http_get para cada URL. Extraia os campos: bid (compra), ask (venda), pctChange (variação %), timestamp.\n\n2. Busque o histórico de 7 dias para o Dólar:\n   http://localhost:9900/mock/usd-brl-7d\n   Use para identificar a tendência (alta/queda/estável).\n\n3. Gere um relatório de análise com as seções:\n   - COTAÇÕES ATUAIS (tabela com todas as 4 moedas)\n   - TENDÊNCIA DO DÓLAR (baseada no histórico de 7 dias)\n   - ANÁLISE DE VOLATILIDADE (comparar variação % entre os 4 ativos)\n   - RECOMENDAÇÃO (uma frase objetiva por ativo: momento de compra/venda/aguardar)\n   - DATA/HORA DA ANÁLISE\n\n4. Salve em './analise-mercado-{model_slug}.md' usando write_file.\n\n5. Envie um resumo via send_claudio com: as cotações principais e a tendência do dólar.\n\n6. Responda com: 'ANÁLISE CONCLUÍDA: USD=[valor], BTC=[valor], tendência dólar=[alta/queda/estável]'",
 
   "auto_checks": [
-    {"type": "tool_called",       "label": "buscou USD (http_get)",         "tool": "http_get",         "weight": 2},
+    {"type": "tool_call_url_contains", "label": "buscou USD na API correta",   "tool": "http_get", "url_needle": "awesomeapi.com.br/json/last/USD-BRL",     "weight": 2},
+    {"type": "tool_call_url_contains", "label": "buscou BTC na API correta",   "tool": "http_get", "url_needle": "awesomeapi.com.br/json/last/BTC-BRL",     "weight": 1},
+    {"type": "tool_call_url_contains", "label": "buscou histórico 7 dias",     "tool": "http_get", "url_needle": "awesomeapi.com.br/json/daily/USD-BRL/7",  "weight": 1},
+    {"type": "tool_call_result_contains", "label": "API retornou bid real (USD)", "tool": "http_get", "url_needle": "USD-BRL", "result_needle": "\"bid\"",   "weight": 2},
+    {"type": "tool_call_result_contains", "label": "API retornou bid real (BTC)", "tool": "http_get", "url_needle": "BTC-BRL", "result_needle": "\"bid\"",   "weight": 1},
     {"type": "file_exists",       "label": "relatório criado",              "path": "analise-mercado-{model_slug}.md", "weight": 2},
     {"type": "file_contains",     "label": "relatório tem COTAÇÕES",        "path": "analise-mercado-{model_slug}.md", "needle": "COTAÇÕES",    "weight": 1},
     {"type": "file_contains",     "label": "relatório tem TENDÊNCIA",       "path": "analise-mercado-{model_slug}.md", "needle": "TEND",        "weight": 1},
@@ -38,9 +42,9 @@
   ],
 
   "judge_rubric": {
-    "data_accuracy":     "Os dados buscados são reais e recentes (timestamp atual)? (0-4)",
-    "trend_analysis":    "A análise de tendência é baseada nos dados históricos ou é genérica? (0-4)",
-    "recommendation":    "As recomendações são específicas, coerentes com os dados e úteis? (0-4)",
-    "completeness":      "Todos os 4 ativos foram analisados com dados reais? (0-4)"
+    "data_authenticity": "Os valores no relatório batem com os retornados pela API (tool_calls_log)? Cheque se bid/ask/pctChange são consistentes. Penalize fortemente se os números forem inventados ou com erro de magnitude (ex: 5167 em vez de 5.16). (0-3)",
+    "trend_analysis":    "A análise de tendência usa os dados do histórico de 7 dias ou é genérica/inventada? (0-3)",
+    "recommendation":    "As recomendações são específicas e coerentes com os dados reais buscados? (0-3)",
+    "completeness":      "Todos os 4 ativos (USD, EUR, BTC, ETH) foram analisados com dados da API? (0-3)"
   }
 }

@@ -121,9 +121,18 @@ def _call_judge_gemini(prompt: str, model: str) -> str:
     }
     data = json.dumps(payload).encode()
     req  = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        raw = json.loads(r.read())
-        return raw["candidates"][0]["content"]["parts"][0]["text"]
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                raw = json.loads(r.read())
+                return raw["candidates"][0]["content"]["parts"][0]["text"]
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 4:
+                wait = 20 * (attempt + 1)
+                print(f"  [judge] 429 — retry {attempt+2}/5 em {wait}s...")
+                import time; time.sleep(wait)
+            else:
+                raise
 
 
 def call_judge(task_context: str, artifact_content: str,
@@ -163,6 +172,35 @@ def evaluate_file(result_path: Path, model: str = JUDGE_MODEL):
 
     # Determina workdir a partir do path do resultado
     workdir = result_path.parent / "workdir"
+
+    # Resolve variáveis de template (ex: {model_slug}) nos paths dos checks
+    model_name = data.get("model", "")
+    model_slug = model_name.replace(":", "-").replace("/", "_")
+    fmt_vars   = {"model_slug": model_slug, "workdir": str(workdir)}
+
+    def _resolve_path(p: str) -> str:
+        try:
+            return p.format(**fmt_vars)
+        except KeyError:
+            return p
+
+    # ── Pré-requisito: todos os file_exists obrigatórios devem existir ──
+    # Modelo que não completou a tarefa não recebe judge score.
+    required_files = [
+        _resolve_path(c["path"]) for c in scenario.get("auto_checks", [])
+        if c.get("type") == "file_exists" and c.get("weight", 0) > 0
+    ]
+    missing = [p for p in required_files if not (workdir / p).exists()]
+    if missing:
+        print(f"  [judge] BLOQUEADO — entregáveis obrigatórios ausentes: {missing}")
+        print(f"  [judge] Tarefa incompleta → judge_score = null (incompletude não é premiada)")
+        data["artifact_judge_scores"] = {
+            f: {"error": f"bloqueado — {f} ausente (tarefa incompleta)"} for f in missing
+        }
+        data["judge_blocked_reason"] = f"missing required files: {missing}"
+        result_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+        print(f"  salvo: {result_path.name}")
+        return
 
     # ── Avaliação de artefatos específicos ───────────────────────
     artifact_judge = scenario.get("artifact_judge", {})
@@ -211,12 +249,41 @@ def evaluate_file(result_path: Path, model: str = JUDGE_MODEL):
     if artifact_results:
         data["artifact_judge_scores"] = artifact_results
 
-    # ── Avaliação legada: final_response via judge_rubric ────────
+    # ── Avaliação legada: arquivos entregues + final_response via judge_rubric ──
     rubric_legacy = scenario.get("judge_rubric", {})
     if rubric_legacy and data.get("llm_judge_score") is None:
-        print(f"  [legado] avaliando final_response com judge_rubric...")
-        content = (data.get("final_response", "") + "\n\n"
-                   + str(data.get("tool_calls_log", "")))
+        # Constrói contexto com conteúdo real dos arquivos entregues (se existirem)
+        file_sections = []
+        for req_path in required_files:
+            fp = workdir / req_path
+            if fp.exists():
+                try:
+                    file_content = fp.read_text(encoding="utf-8")[:6000]
+                    file_sections.append(f"=== ARQUIVO: {req_path} ===\n{file_content}")
+                except Exception:
+                    pass
+        files_block = "\n\n".join(file_sections)
+
+        # Para cenários que buscam dados externos (F3), injeta dados reais da API
+        # para que o judge possa verificar se o relatório é consistente com os dados buscados
+        api_data_block = ""
+        tool_log = data.get("tool_calls_log", [])
+        http_calls = [t for t in tool_log if t.get("name") == "http_get"]
+        if http_calls:
+            api_lines = []
+            for t in http_calls[:8]:  # max 8 calls
+                url = t.get("args", {}).get("url", "?")
+                res = t.get("result", "")[:300]
+                api_lines.append(f"  URL: {url}\n  RESPONSE: {res}")
+            api_data_block = "DADOS REAIS RETORNADOS PELA API (tool_calls_log):\n" + "\n\n".join(api_lines)
+
+        content = (
+            (f"{api_data_block}\n\n" if api_data_block else "")
+            + (f"ARQUIVOS ENTREGUES:\n{files_block}\n\n" if files_block else "")
+            + f"RESPOSTA FINAL DO MODELO:\n{data.get('final_response', '')[:2000]}"
+        )
+        print(f"  [legado] avaliando com judge_rubric "
+              f"({len(required_files)} arquivos, {len(content)} chars)...")
         result = call_judge("", content, rubric_legacy, model)
         if result:
             data["llm_judge_score"]          = result["pct"] / 100 * 4  # converter para 0-4
@@ -242,7 +309,8 @@ def main():
     print(f"\nFORGE Judge — modelo: {args.model}")
     print(f"Arquivos: {len(files)}\n")
 
-    for f in files:
+    import time
+    for i, f in enumerate(files):
         try:
             label = f.relative_to(Path(__file__).parent.parent)
         except ValueError:
@@ -250,6 +318,8 @@ def main():
         print(f"→ {label}")
         evaluate_file(f, model=args.model)
         print()
+        if args.model.startswith("gemini-") and i < len(files) - 1:
+            time.sleep(5)  # 5s entre calls — evita 429
 
 
 if __name__ == "__main__":

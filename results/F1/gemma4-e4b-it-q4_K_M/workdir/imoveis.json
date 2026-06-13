@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Luxuoso Apartamento no Coração da Cidade",
+    "endereco": "Avenida Principal, 123, Centro",
+    "preco": 850000.00,
+    "area_m2": 120,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300/1B4332/FFFFFF?text=Apartamento+Luxo"
+  },
+  {
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Charmosa Casa com Jardim Amplo",
+    "endereco": "Rua das Flores, 45, Bairro Jardins",
+    "preco": 620000.00,
+    "area_m2": 180,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300/40916C/FFFFFF?text=Casa+Jardim"
+  },
+  {
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Oportunidade Única: Terreno Plano em Área Nobre",
+    "endereco": "Alameda dos Ipês, 789, Nova Zona",
+    "preco": 250000.00,
+    "area_m2": 300,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300/D8F3DC/081C15?text=Terreno+Oportunidade"
+  },
+  {
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Studio Moderno Próximo ao Trabalho",
+    "endereco": "Travessa dos Comerciários, 10, Centro",
+    "preco": 350000.00,
+    "area_m2": 65,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300/1B4332/FFFFFF?text=Studio+Moderno"
+  },
+  {
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Ampla Casa Familiar com Piscina",
+    "endereco": "Estrada Real, 99, Bairro Residencial",
+    "preco": 910000.00,
+    "area_m2": 250,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300/40916C/FFFFFF?text=Casa+Piscina"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno para Construção Comercial",
+    "endereco": "Via Expressa, 202, Zona Industrial",
+    "preco": 450000.00,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300/D8F3DC/081C15?text=Terreno+Comercial"
+  }
+]

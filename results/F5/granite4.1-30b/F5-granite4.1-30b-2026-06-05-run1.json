@@ -1,0 +1,44 @@
+{
+  "scenario": "F5",
+  "model": "granite4.1:30b",
+  "date": "2026-06-05",
+  "harness_version": "v4",
+  "ollama_version": "0.30.3",
+  "prompt_version": "v2",
+  "status": "discarded",
+  "reason": "VRAM overflow — modelo requer 34 GB total (20.8 GB VRAM + 13 GB RAM offload), excede os 24 GB disponíveis. Resultados inválidos por offload excessivo. Mesmo comportamento observado no devstral-small-2:24b.",
+  "turns": 3,
+  "auto_score": null,
+  "auto_max": 17,
+  "notes": "Descartado no turn 3, antes de qualquer entrega.",
+  "artifact_judge_scores": {
+    "code_review.md": {
+      "error": "bloqueado — code_review.md ausente (tarefa incompleta)"
+    },
+    "plano_correcoes.md": {
+      "error": "bloqueado — plano_correcoes.md ausente (tarefa incompleta)"
+    },
+    "quality_report.md": {
+      "error": "bloqueado — quality_report.md ausente (tarefa incompleta)"
+    }
+  },
+  "llm_judge_score": 0.0,
+  "llm_judge_scores": {
+    "review_coverage": 0,
+    "review_accuracy": 0,
+    "plan_prioritization": 0,
+    "fix_correctness": 0,
+    "fix_scope": 0,
+    "report_quality": 0
+  },
+  "llm_judge_justificativas": {
+    "review_coverage": "O artefato não contém o code_review.md, impossibilitando a avaliação da cobertura.",
+    "review_accuracy": "O artefato não contém o code_review.md, impossibilitando a avaliação da acurácia dos problemas apontados.",
+    "plan_prioritization": "O artefato não contém o plano de priorização, impossibilitando a avaliação.",
+    "fix_correctness": "O artefato não contém as correções implementadas, impossibilitando a avaliação da correção.",
+    "fix_scope": "O artefato não contém as correções implementadas nem o plano, impossibilitando a avaliação do escopo.",
+    "report_quality": "O artefato não contém o quality_report.md, impossibilitando a avaliação da qualidade do relatório."
+  },
+  "llm_judge_model": "gemini-2.5-flash",
+  "judge_blocked_reason": "missing required files: ['code_review.md', 'plano_correcoes.md', 'quality_report.md']"
+}

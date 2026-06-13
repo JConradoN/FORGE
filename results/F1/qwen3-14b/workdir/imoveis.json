@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento no centro",
+    "endereco": "Rua das Flores, 123",
+    "preco": 500000,
+    "area_m2": 80,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Casa de verão",
+    "endereco": "Avenida das Palmeiras, 456",
+    "preco": 1200000,
+    "area_m2": 200,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Terreno em condomínio",
+    "endereco": "Rua do Sol, 789",
+    "preco": 800000,
+    "area_m2": 500,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento moderno",
+    "endereco": "Rua da Lua, 101",
+    "preco": 600000,
+    "area_m2": 90,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Casa com piscina",
+    "endereco": "Avenida das Águas, 202",
+    "preco": 1500000,
+    "area_m2": 300,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno em área verde",
+    "endereco": "Rua das Oliveiras, 303",
+    "preco": 900000,
+    "area_m2": 600,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

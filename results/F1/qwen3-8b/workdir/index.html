@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Casa Certa Imóveis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primaria: #1B4332;
+      --secundaria: #40916C;
+      --fundo-claro: #D8F3DC;
+      --texto-escuro: #081C15;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--fundo-claro);
+      color: var(--texto-escuro);
+    }
+
+    header {
+      background-color: var(--primaria);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+    }
+
+    .menu {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background-color: var(--primaria);
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      z-index: 1001;
+    }
+
+    .menu.active {
+      display: flex;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background-color: var(--secundaria);
+      color: white;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero button {
+      padding: 0.75rem 1.5rem;
+      background-color: white;
+      color: var(--primaria);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .hero button:hover {
+      background-color: #e0f2f1;
+    }
+
+    #imoveis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .imovel {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .imovel:hover {
+      transform: translateY(-5px);
+    }
+
+    .imovel img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .imovel-content {
+      padding: 1rem;
+    }
+
+    .imovel-content h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+      color: var(--primaria);
+    }
+
+    .imovel-content p {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .filtro {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .filtro button {
+      padding: 0.5rem 1rem;
+      background-color: var(--secundaria);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .filtro button.active {
+      background-color: var(--primaria);
+      color: white;
+    }
+
+    #sobre {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    #sobre h2 {
+      margin-bottom: 1rem;
+    }
+
+    #sobre p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    #contato {
+      padding: 4rem 2rem;
+      background-color: var(--fundo-claro);
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, textarea {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .success {
+      color: green;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .filtro {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .menu {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: var(--primaria);
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        z-index: 1001;
+      }
+
+      .menu.active {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Casa Certa Imóveis</h1>
+    <nav>
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="menu" id="menu">
+        <a href="#imoveis">Imóveis</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero" id="hero">
+    <h2>Encontre o Seu Sonho de Casa</h2>
+    <p>Descubra imóveis incríveis em diferentes regiões e preços. Encontre o que você procura!</p>
+    <button onclick="window.location.href='#imoveis'">Ver Imóveis</button>
+  </section>
+
+  <section id="imoveis">
+    <div class="filtro">
+      <button class="filtro-btn" data-filtro="todos">Todos</button>
+      <button class="filtro-btn" data-filtro="apartamento">Apartamento</button>
+      <button class="filtro-btn" data-filtro="casa">Casa</button>
+      <button class="filtro-btn" data-filtro="terreno">Terreno</button>
+    </div>
+    <div id="imoveis-container"></div>
+  </section>
+
+  <section id="sobre">
+    <h2>Sobre Nós</h2>
+    <p>
+      Na Casa Certa Imóveis, somos especializados em encontrar soluções imobiliárias que atendem às suas necessidades. Com anos de experiência no mercado, oferecemos uma ampla gama de imóveis, desde apartamentos em áreas urbanas até casas em regiões tranquilas e terrenos para quem busca espaço e liberdade. Nossa equipe está sempre pronta para ajudar você a encontrar o imóvel ideal.
+    </p>
+  </section>
+
+  <section id="contato">
+    <h2>Contato</h2>
+    <form id="contato-form">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
+      <div class="error" id="nome-error"></div>
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required>
+      <div class="error" id="email-error"></div>
+
+      <label for="mensagem">Mensagem:</label>
+      <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+      <div class="error" id="mensagem-error"></div>
+
+      <button type="submit">Enviar</button>
+      <div class="success" id="success-message"></div>
+    </form>
+  </section>
+
+  <script>
+    const filtroBtns = document.querySelectorAll('.filtro-btn');
+    const imoveisContainer = document.getElementById('imoveis-container');
+    const filtro = document.querySelector('#filtro');
+    const menu = document.getElementById('menu');
+    const hamburger = document.getElementById('hamburger');
+    const contatoForm = document.getElementById('contato-form');
+    const nomeError = document.getElementById('nome-error');
+    const emailError = document.getElementById('email-error');
+    const mensagemError = document.getElementById('mensagem-error');
+    const successMessage = document.getElementById('success-message');
+
+    let imoveis = [];
+
+    // Carregar imóveis
+    fetch('./imoveis.json')
+      .then(response => response.json())
+      .then(data => {
+        imoveis = data;
+        renderImoveis('todos');
+      });
+
+    // Renderizar imóveis
+    function renderImoveis(filtroTipo) {
+      imoveisContainer.innerHTML = '';
+      const imoveisFiltrados = filtroTipo === 'todos' ? imoveis : imoveis.filter(imovel => imovel.tipo === filtroTipo);
+      imoveisFiltrados.forEach(imovel => {
+        const imovelDiv = document.createElement('div');
+        imovelDiv.className = 'imovel';
+        imovelDiv.innerHTML = `
+          <img src="${imovel.foto}" alt="${imovel.titulo}">
+          <div class="imovel-content">
+            <h3>${imovel.titulo}</h3>
+            <p><strong>Endereço:</strong> ${imovel.endereco}</p>
+            <p><strong>Preço:</strong> R$ ${imovel.preco.toLocaleString()}</p>
+            <p><strong>Área:</strong> ${imovel.area_m2} m²</p>
+            <p><strong>Quartos:</strong> ${imovel.quartos}</p>
+          </div>
+        `;
+        imoveisContainer.appendChild(imovelDiv);
+      });
+    }
+
+    // Filtros
+    filtroBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filtroBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderImoveis(btn.dataset.filtro);
+      });
+    });
+
+    // Menu mobile
+    hamburger.addEventListener('click', () => {
+      menu.classList.toggle('active');
+    });
+
+    // Formulário de contato
+    contatoForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      nomeError.textContent = '';
+      emailError.textContent = '';
+      mensagemError.textContent = '';
+      successMessage.textContent = '';
+
+      const nome = contatoForm.nome.value.trim();
+      const email = contatoForm.email.value.trim();
+      const mensagem = contatoForm.mensagem.value.trim();
+
+      if (nome === '') {
+        nomeError.textContent = 'Nome é obrigatório.';
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailError.textContent = 'E-mail inválido.';
+        return;
+      }
+
+      if (mensagem === '') {
+        mensagemError.textContent = 'Mensagem é obrigatória.';
+        return;
+      }
+
+      successMessage.textContent = 'Mensagem enviada com sucesso!';
+      contatoForm.reset();
+    });
+  </script>
+</body>
+</html>

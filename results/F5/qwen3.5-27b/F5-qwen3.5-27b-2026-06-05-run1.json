@@ -251,6 +251,24 @@
   "human_score": null,
   "composite_score": null,
   "notes": "",
+  "llm_judge_scores": {
+    "review_coverage": 3,
+    "review_accuracy": 3,
+    "plan_prioritization": 3,
+    "fix_correctness": 0,
+    "fix_scope": 0,
+    "report_quality": 0
+  },
+  "llm_judge_justificativas": {
+    "review_coverage": "O `code_review.md` cobriu todos os 4 arquivos e identificou múltiplos problemas reais em cada um, com boa profundidade.",
+    "review_accuracy": "Os problemas apontados no `code_review.md` são legítimos e bem descritos, sem falsos positivos aparentes.",
+    "plan_prioritization": "O `plano_correcoes.md` priorizou os problemas de forma lógica e as escolhas de prioridade fazem sentido para os problemas descritos.",
+    "fix_correctness": "Nenhuma correção foi implementada, portanto não é possível avaliar a correção ou a introdução de regressões.",
+    "fix_scope": "Nenhuma correção foi implementada, o que significa que o escopo de 'apenas Alta prioridade' não foi respeitado, pois nada foi feito.",
+    "report_quality": "O `quality_report.md` indica '0 corrigidos' para problemas de alta prioridade, o que é inconsistente com a expectativa de que correções seriam feitas. Além disso, o `TASK.md` pedia um checklist de pendências que não foi incluído, conforme verificado pelo `run_bash` no turno 14."
+  },
+  "llm_judge_model": "gemini-2.5-flash",
+  "ollama_version": "0.30.3",
   "artifact_judge_scores": {
     "code_review.md": {
       "model": "gemini-2.5-flash",
@@ -273,21 +291,14 @@
       }
     }
   },
-  "llm_judge_scores": {
-    "review_coverage": 3,
-    "review_accuracy": 3,
-    "plan_prioritization": 3,
-    "fix_correctness": 0,
-    "fix_scope": 0,
-    "report_quality": 0
-  },
-  "llm_judge_justificativas": {
-    "review_coverage": "O `code_review.md` cobriu todos os 4 arquivos e identificou múltiplos problemas reais em cada um, com boa profundidade.",
-    "review_accuracy": "Os problemas apontados no `code_review.md` são legítimos e bem descritos, sem falsos positivos aparentes.",
-    "plan_prioritization": "O `plano_correcoes.md` priorizou os problemas de forma lógica e as escolhas de prioridade fazem sentido para os problemas descritos.",
-    "fix_correctness": "Nenhuma correção foi implementada, portanto não é possível avaliar a correção ou a introdução de regressões.",
-    "fix_scope": "Nenhuma correção foi implementada, o que significa que o escopo de 'apenas Alta prioridade' não foi respeitado, pois nada foi feito.",
-    "report_quality": "O `quality_report.md` indica '0 corrigidos' para problemas de alta prioridade, o que é inconsistente com a expectativa de que correções seriam feitas. Além disso, o `TASK.md` pedia um checklist de pendências que não foi incluído, conforme verificado pelo `run_bash` no turno 14."
-  },
-  "llm_judge_model": "gemini-2.5-flash"
+  "comparative_judge": {
+    "scenario": "F5",
+    "judge_model": "claude-sonnet-4-6",
+    "posicao": 1,
+    "nota": 9,
+    "pontos_fortes": "O modelo apresentou um sumário claro e bem estruturado com uma tabela de problemas por arquivo e prioridade. As descrições dos problemas são detalhadas, com localização precisa, impacto bem explicado e propostas de correção robustas. A identificação de vulnerabilidades de segurança complexas (como injeção de variáveis e proteção de arquivos) foi superior.",
+    "pontos_fracos": "Apesar da alta qualidade, algumas propostas de correção poderiam ser ainda mais explícitas em termos de código ou bibliotecas a serem usadas para resolver o problema de forma mais eficiente.",
+    "resumo": "Relatório de code review abrangente, bem estruturado e com identificação de problemas de alta complexidade e impacto.",
+    "criterio_decisivo": "A profundidade e a precisão na identificação de vulnerabilidades de segurança complexas, a clareza na descrição do impacto e a robustez das propostas de correção foram os fatores decisivos. Modelos que conseguiram ir além da superfície e apontar problemas mais sutis e de alto impacto se destacaram."
+  }
 }

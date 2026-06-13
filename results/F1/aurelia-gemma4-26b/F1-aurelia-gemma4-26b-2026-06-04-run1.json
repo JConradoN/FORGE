@@ -57,5 +57,14 @@
   "claude_score": null,
   "human_score": null,
   "composite_score": null,
-  "notes": ""
+  "notes": "",
+  "artifact_judge_scores": {
+    "index.html": {
+      "error": "bloqueado — index.html ausente (tarefa incompleta)"
+    },
+    "imoveis.json": {
+      "error": "bloqueado — imoveis.json ausente (tarefa incompleta)"
+    }
+  },
+  "judge_blocked_reason": "missing required files: ['index.html', 'imoveis.json']"
 }

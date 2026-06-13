@@ -701,6 +701,28 @@ def auto_evaluate(scenario: dict, workdir: Path, agent_result: dict, slug: str,
             passed = any(t["name"] == tool_name for t in agent_result["tool_calls"])
             detail = f"tool '{tool_name}' {'chamada' if passed else 'NÃO chamada'}"
 
+        elif ctype == "tool_call_url_contains":
+            # Verifica se http_get foi chamado com URL contendo o padrão esperado
+            tool_name  = check.get("tool", "http_get")
+            url_needle = check["url_needle"]
+            matching   = [t for t in agent_result["tool_calls"]
+                          if t["name"] == tool_name
+                          and url_needle.lower() in t.get("args", {}).get("url", "").lower()]
+            passed = len(matching) > 0
+            used_url = matching[0]["args"].get("url", "?") if matching else "não chamada"
+            detail = f"http_get com '{url_needle}': {'OK → ' + used_url[:60] if passed else 'NÃO encontrado'}"
+
+        elif ctype == "tool_call_result_contains":
+            # Verifica se a resposta de um http_get contém um valor esperado (ex: campo JSON)
+            tool_name   = check.get("tool", "http_get")
+            url_needle  = check.get("url_needle", "")
+            res_needle  = check["result_needle"]
+            calls = [t for t in agent_result["tool_calls"]
+                     if t["name"] == tool_name
+                     and url_needle.lower() in t.get("args", {}).get("url", "").lower()]
+            passed = any(res_needle.lower() in t.get("result", "").lower() for t in calls)
+            detail = f"resultado de '{url_needle}' contém '{res_needle}': {'SIM' if passed else 'NÃO'}"
+
         elif ctype == "response_contains":
             needle = check["needle"]
             passed = needle.lower() in agent_result["final_response"].lower()

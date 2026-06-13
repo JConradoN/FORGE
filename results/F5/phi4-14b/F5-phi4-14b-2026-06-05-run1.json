@@ -88,11 +88,6 @@
   "composite_score": null,
   "notes": "",
   "ollama_version": "0.30.3",
-  "artifact_judge_scores": {
-    "code_review.md": {
-      "error": "arquivo não encontrado"
-    }
-  },
   "llm_judge_scores": {
     "review_coverage": 0,
     "review_accuracy": 0,
@@ -109,5 +104,17 @@
     "fix_scope": "O artefato fornecido está vazio, não há escopo de correção para avaliar.",
     "report_quality": "O artefato fornecido está vazio, não há relatório de qualidade para avaliar."
   },
-  "llm_judge_model": "gemini-2.5-flash"
+  "llm_judge_model": "gemini-2.5-flash",
+  "artifact_judge_scores": {
+    "code_review.md": {
+      "error": "bloqueado — code_review.md ausente (tarefa incompleta)"
+    },
+    "plano_correcoes.md": {
+      "error": "bloqueado — plano_correcoes.md ausente (tarefa incompleta)"
+    },
+    "quality_report.md": {
+      "error": "bloqueado — quality_report.md ausente (tarefa incompleta)"
+    }
+  },
+  "judge_blocked_reason": "missing required files: ['code_review.md', 'plano_correcoes.md', 'quality_report.md']"
 }

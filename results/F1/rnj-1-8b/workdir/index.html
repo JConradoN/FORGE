@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Certa Imóveis - Encontre seu lar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B4332;
+      --secondary: #40916C;
+      --bg: #D8F3DC;
+      --text: #081C15;
+    }
+
+    * { box-sizing: border-box; font-family: 'Nunito Sans', sans-serif; }
+
+    body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+
+    header { background: var(--primary); color: white; padding: 1rem; text-align: center; }
+
+    #hero { padding: 4rem 1rem; text-align: center; }
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    p { font-size: 1.2rem; }
+
+    #imoveis { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; padding: 2rem; }
+    .prop { border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+    .prop img { width: 100%; height: 150px; object-fit: cover; }
+    .prop h3 { padding: 1rem; margin: 0; }
+
+    #sobre { background: var(--secondary); color: white; padding: 2rem; text-align: center; }
+    #contato { padding: 2rem; display: flex; gap: 1rem; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #imoveis { grid-template-columns: 1fr; }
+      .hamburger { display: block; text-align: right; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Casa Certa Imóveis</h1>
+    <nav class="hamburger" id="hamburger">☰ Menu</nav>
+  </header>
+
+  <section id="hero">
+    <h1>Encontre seu lar perfeito</h1>
+    <p>Explorando imóveis de qualidade para sua vida feliz.</p>
+  </section>
+
+  <section id="imoveis"></section>
+
+  <section id="sobre">
+    <h2>Sobre Nós</h2>
+    <p>Nossa missão é conectar você com o imóvel ideal, com dedicação e transparência.</p>
+  </section>
+
+  <section id="contato">
+    <form id="formulario">
+      <div>
+        <label>Nome:</label>
+        <input type="text" id="nome" required>
+        <span id="erro-nome" style="color:red;"></span>
+      </div>
+      <div>
+        <label>E-mail:</label>
+        <input type="email" id="email" required>
+        <span id="erro-email" style="color:red;"></span>
+      </div>
+      <div>
+        <label>Mensagem:</label>
+        <textarea id="mensagem" required></textarea>
+        <span id="erro-msg" style="color:red;"></span>
+      </div>
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <script>
+    // Fetch dados
+    fetch('./imoveis.json').then(r=>r.json()).then(data=>{
+      const grid = document.getElementById('imoveis');
+      data.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'prop';
+        el.innerHTML = `<img src="${p.foto}" alt="${p.titulo}">
+                       <h3>${p.titulo}</h3>`;
+        grid.appendChild(el);
+      });
+    });
+
+    // Filtros
+    ['Todos', 'Apartamento', 'Casa', 'Terreno'].forEach(t => {
+      const btn = document.createElement('button');
+      btn.textContent = t;
+      btn.onclick = () => {
+        document.querySelectorAll('.prop').forEach(e => {
+          if (t === 'Todos' || e.innerText.includes(t)) e.style.display = 'block';
+          else e.style.display = 'none';
+        });
+      };
+      document.body.appendChild(btn);
+    });
+
+    // Formulário
+    document.getElementById('formulario').addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const msg = document.getElementById('mensagem').value.trim();
+      let ok = true;
+      if (!nome) { document.getElementById('erro-nome').textContent = 'Campo obrigatório'; ok = false; }
+      else document.getElementById('erro-nome').textContent = '';
+      if (!email || !/\S+@\S+\.\S+/.test(email)) { document.getElementById('erro-email').textContent = 'E-mail inválido'; ok = false; }
+      else document.getElementById('erro-email').textContent = '';
+      if (!msg) { document.getElementById('erro-msg').textContent = 'Campo obrigatório'; ok = false; }
+      else document.getElementById('erro-msg').textContent = '';
+      if (ok) alert('Mensagem enviada com sucesso!');
+    });
+  </script>
+</body>
+</html>

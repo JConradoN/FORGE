@@ -1,0 +1,60 @@
+[{
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apto Moderno no Centro",
+    "endereco": "Rua das Flores, 123 - Bairro Central",
+    "preco": 450000,
+    "area_m2": 85,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300?text=Apto+Centro"
+},
+{
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Casa Familiar em Residencial",
+    "endereco": "Avenida Brasil, 789 - Vila Verde",
+    "preco": 650000,
+    "area_m2": 140,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300?text=Casa+Familiar"
+},
+{
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Terreno Urbanizável em Zona Nobre",
+    "endereco": "Rua das Palmeiras, 456 - Jardim Botânico",
+    "preco": 280000,
+    "area_m2": 300,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300?text=Terreno+Nobre"
+},
+{
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Apto Luxo com Vista",
+    "endereco": "Praça Central, 10 - Edifício Skyview",
+    "preco": 720000,
+    "area_m2": 95,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300?text=Apto+Luxo"
+},
+{
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Chácara com Piscina",
+    "endereco": "Estrada do Sol, 246 - Zona Rural",
+    "preco": 890000,
+    "area_m2": 350,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300?text=Chácara+Piscina"
+},
+{
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Lote em Condomínio Fechado",
+    "endereco": "Rua dos Ipês, 321 - Parque Residencial",
+    "preco": 220000,
+    "area_m2": 250,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300?text=Lote+Condomínio"
+}]

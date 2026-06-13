@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Luxo Centro",
+    "endereco": "Rua Principal, 123",
+    "preco": 450000,
+    "area_m2": 68,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Casa",
+    "titulo": "Casa Familiar Grande",
+    "endereco": "Avenida Central, 456",
+    "preco": 320000,
+    "area_m2": 120,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Terreno",
+    "titulo": "Terreno Comercial",
+    "endereco": "Largo do Comércio, 789",
+    "preco": 180000,
+    "area_m2": 85,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Vista Mar",
+    "endereco": "Praça do Sol, 101",
+    "preco": 380000,
+    "area_m2": 52,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Casa",
+    "titulo": "Casa de Condomínio",
+    "endereco": "Rua das Flores, 202",
+    "preco": 410000,
+    "area_m2": 95,
+    "quartos": 5,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno Residencial",
+    "endereco": "Avenida das Pedras, 303",
+    "preco": 220000,
+    "area_m2": 70,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

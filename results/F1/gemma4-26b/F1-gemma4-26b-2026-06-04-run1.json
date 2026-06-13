@@ -97,9 +97,26 @@
     }
   ],
   "final_response": "PÁGINA PUBLICADA: http://localhost:8200/",
-  "llm_judge_score": null,
+  "llm_judge_score": 0.88,
   "claude_score": null,
   "human_score": null,
   "composite_score": null,
-  "notes": ""
+  "notes": "",
+  "llm_judge_scores": {
+    "data_architecture": 1,
+    "filter_functionality": 0,
+    "form_validation": 0,
+    "design_fidelity": 2,
+    "responsive_quality": 0,
+    "aesthetic": 1
+  },
+  "llm_judge_justificativas": {
+    "data_architecture": "O arquivo imoveis.json está presente e bem estruturado, mas não há código JavaScript para carregá-lo e renderizar os imóveis na página.",
+    "filter_functionality": "Não há código JavaScript para implementar a funcionalidade de filtro, portanto, os botões não funcionam.",
+    "form_validation": "Não há código JavaScript para implementar a validação do formulário, e os campos de erro estão ocultos por CSS sem lógica para exibi-los.",
+    "design_fidelity": "As cores e a tipografia foram aplicadas, mas o CSS está incompleto, faltando estilos para elementos importantes como o botão de submit do formulário.",
+    "responsive_quality": "O CSS para responsividade está incompleto, o menu hamburger não tem funcionalidade e o grid de imóveis não se adapta corretamente.",
+    "aesthetic": "O design inicial é razoável, mas a falta de funcionalidade e o CSS incompleto para responsividade e elementos do formulário prejudicam a percepção de um produto real."
+  },
+  "llm_judge_model": "gemini-2.5-flash"
 }

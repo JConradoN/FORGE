@@ -1,0 +1,6 @@
+qwen3:8b
+qwen3.5:9b
+gemma4:12b
+qwen3:14b
+devstral-small-2:24b
+gemma4:26b

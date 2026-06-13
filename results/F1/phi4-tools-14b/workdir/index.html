@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Certa Imóveis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #D8F3DC;
+            color: #081C15;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #1B4332;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            margin: 0;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        #hero {
+            background-color: #40916C;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        #sobre, #contato {
+            margin: 40px 0;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                display: none;
+            }
+            nav.active ul {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                padding: 10px;
+                background-color: #1B4332;
+                color: white;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Casa Certa Imóveis</h1>
+        <nav>
+            <span class="menu-toggle">☰ Menu</span>
+            <ul>
+                <li><a href="#hero">Início</a></li>
+                <li><a href="#imoveis">Imóveis</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="hero">
+    <div class="container">
+        <h2>Encontre o seu imóvel ideal!</h2>
+        <p>Explore nossas opções e encontre a casa dos seus sonhos.</p>
+        <button onclick="location.href='#imoveis'">Ver Imóveis</button>
+    </div>
+</section>
+
+<section id="imoveis" class="container">
+    <h3>Imóveis Disponíveis</h3>
+    <div class="grid" id="imovel-list"></div>
+    <div>
+        <button onclick="filterType('Todos')">Todos</button>
+        <button onclick="filterType('Apartamento')">Apartamentos</button>
+        <button onclick="filterType('Casa')">Casas</button>
+        <button onclick="filterType('Terreno')">Terrenos</button>
+    </div>
+</section>
+
+<section id="sobre" class="container">
+    <h3>Sobre Nós</h3>
+    <p>A Casa Certa Imóveis é uma agência comprometida em ajudar você a encontrar o imóvel perfeito. Com experiência e dedicação, oferecemos um serviço personalizado para atender às suas necessidades.</p>
+</section>
+
+<section id="contato" class="container">
+    <h3>Contate-nos</h3>
+    <form id="contact-form">
+        <input type="text" id="name" placeholder="Seu Nome *" required>
+        <span class="error" id="name-error"></span><br>
+        <input type="email" id="email" placeholder="Seu E-mail *" required>
+        <span class="error" id="email-error"></span><br>
+        <textarea id="message" placeholder="Sua Mensagem *" rows="4" required></textarea>
+        <span class="error" id="message-error"></span><br>
+        <button type="submit">Enviar</button>
+    </form>
+</section>
+
+<footer>
+    <div class="container">
+        &copy; 2023 Casa Certa Imóveis. Todos os direitos reservados.
+    </div>
+</footer>
+
+<script>
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('nav').classList.toggle('active');
+    });
+
+    const imoveis = [];
+
+    fetch('./imoveis.json')
+        .then(response => response.json())
+        .then(data => {
+            imoveis.push(...data);
+            displayImoveis(imoveis);
+        });
+
+    function displayImoveis(imoveis) {
+        const container = document.getElementById('imovel-list');
+        container.innerHTML = '';
+        imoveis.forEach(imovel => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${imovel.foto}" alt="Foto de ${imovel.titulo}">
+                <h4>${imovel.titulo}</h4>
+                <p><strong>Endereço:</strong> ${imovel.endereco}</p>
+                <p><strong>Tipo:</strong> ${imovel.tipo}</p>
+                <p><strong>Preço:</strong> R$${imovel.preco.toLocaleString()}</p>
+                <p><strong>Área:</strong> ${imovel.area_m2} m²</p>
+                <p><strong>Quartos:</strong> ${imovel.quartos || 'N/A'}</p>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function filterType(type) {
+        const filteredImoveis = type === 'Todos' ? imoveis : imoveis.filter(imovel => imovel.tipo === type);
+        displayImoveis(filteredImoveis);
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        let valid = true;
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+
+        if (!document.getElementById('name').value.trim()) {
+            nameError.textContent = 'Nome é obrigatório.';
+            valid = false;
+        } else {
+            nameError.textContent = '';
+        }
+
+        if (!document.getElementById('email').value.trim() || !/\S+@\S+\.\S+/.test(document.getElementById('email').value)) {
+            emailError.textContent = 'E-mail inválido.';
+            valid = false;
+        } else {
+            emailError.textContent = '';
+        }
+
+        if (!document.getElementById('message').value.trim()) {
+            messageError.textContent = 'Mensagem é obrigatória.';
+            valid = false;
+        } else {
+            messageError.textContent = '';
+        }
+
+        if (valid) {
+            alert('Formulário enviado com sucesso!');
+            document.getElementById('contact-form').reset();
+        }
+    });
+</script>
+
+</body>
+</html>

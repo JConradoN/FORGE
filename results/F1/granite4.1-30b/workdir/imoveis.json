@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Cozinha Moderna",
+    "endereco": "Rua das Flores, 123 - Centro",
+    "preco": 250000,
+    "area_m2": 58,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Studio Executivo",
+    "endereco": "Av. Brasil, 456 - Bairro Sul",
+    "preco": 180000,
+    "area_m2": 35,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa de 3 Quartos com Quintal",
+    "endereco": "Rua Jardim, 789 - Alta Vista",
+    "preco": 420000,
+    "area_m2": 120,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Semi‑solado Charme",
+    "endereco": "Rua Lago, 101 - Lagoa Azul",
+    "preco": 550000,
+    "area_m2": 150,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Terreno Urbano em Área Nobre",
+    "endereco": "Rua Monteiro, 202 - Parque Oeste",
+    "preco": 300000,
+    "area_m2": 800,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Lote Pronto para Construir",
+    "endereco": "Rua das Acácias, 303 - Jardim Sul",
+    "preco": 275000,
+    "area_m2": 950,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300"
+  }
+]

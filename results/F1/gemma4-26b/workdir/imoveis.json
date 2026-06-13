@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "tipo": "Apartamento",
+    "titulo": "Apartamento Moderno Centro",
+    "endereco": "Rua das Flores, 123 - Centro",
+    "preco": 450000,
+    "area_m2": 65,
+    "quartos": 2,
+    "foto": "https://placehold.co/400x300?text=Apartamento+Centro"
+  },
+  {
+    "id": 2,
+    "tipo": "Apartamento",
+    "titulo": "Studio Luxo",
+    "endereco": "Av. Paulista, 1500 - Bela Vista",
+    "preco": 320000,
+    "area_m2": 35,
+    "quartos": 1,
+    "foto": "https://placehold.co/400x300?text=Studio+Luxo"
+  },
+  {
+    "id": 3,
+    "tipo": "Casa",
+    "titulo": "Casa de Condomínio",
+    "endereco": "Alameda Verde, 45 - Jardim América",
+    "preco": 890000,
+    "area_m2": 250,
+    "quartos": 4,
+    "foto": "https://placehold.co/400x300?text=Casa+Condominio"
+  },
+  {
+    "id": 4,
+    "tipo": "Casa",
+    "titulo": "Sobrado Familiar",
+    "endereco": "Rua São Bento, 88 - Vila Mariana",
+    "preco": 550000,
+    "area_m2": 140,
+    "quartos": 3,
+    "foto": "https://placehold.co/400x300?text=Sobrado+Familiar"
+  },
+  {
+    "id": 5,
+    "tipo": "Terreno",
+    "titulo": "Lote Residencial",
+    "endereco": "Estrada do Sol, s/n - Bairro Novo",
+    "preco": 120000,
+    "area_m2": 360,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300?text=Lote+Residencial"
+  },
+  {
+    "id": 6,
+    "tipo": "Terreno",
+    "titulo": "Terreno de Alto Padrão",
+    "endereco": "Av. Beira Mar, 10 - Orla",
+    "preco": 750000,
+    "area_m2": 1000,
+    "quartos": 0,
+    "foto": "https://placehold.co/400x300?text=Terreno+Alto+Padrao"
+  }
+]
