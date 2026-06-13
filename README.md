@@ -20,17 +20,21 @@ This moves beyond "can it answer a question?" toward "can it do the job?"
 
 ---
 
-## The Benchmark Hierarchy
+## The Certification Funnel
 
-| Stage | Repo | Focus | What it tests |
-|-------|------|-------|---------------|
-| **ABS** | `agent-benchmark-suite` | Capability baseline | Tool use, reasoning, structured output on isolated tasks |
-| **LOP** | `LOP` | Local-only pressure | Same tasks, no internet, local-only tools |
-| **FORGE** ← *this repo* | `FORGE` | Real-world chained tasks | Multi-step agentic loops with measurable deliverables |
-| **REAL** | `REAL` | Production simulation | Browser automation, real test suites, SPA interaction |
-| *(applied)* | `agent-FORGE` | Framework | Production multi-agent runtime built from benchmark learnings |
+FORGE is not a ranking benchmark. It is **gate 3 of 4** in a progressive model certification funnel.
 
-Each stage filters and refines the candidate set. FORGE accepted 7 models from LOP; REAL accepted 4 from FORGE. The progression reveals which models hold up under realistic workloads — and the accumulated findings across all 4 stages shaped the design of **agent-FORGE**.
+19 models entered ABS. Each stage eliminates models that can't meet the next bar. By the time a model reaches FORGE, it has already proven it can call tools correctly (ABS) and hold up under real operational pressure (LOP).
+
+| Stage | Gate question | What it proves | Filter |
+|-------|--------------|----------------|--------|
+| **ABS** | Can it call tools at all? | Tool mechanics, parameter accuracy, structured output | 19 entered |
+| **LOP** | Does it hold under real pressure? | Consistency under operational load, no external APIs | — |
+| **FORGE** ← *you are here* | Can it function as an agent? | Multi-turn chaining, autonomous planning, deliverable output | 7 entered |
+| **REAL** | Does it work in production? | Real browser, tests that pass, enterprise-grade tasks | 4 proven |
+| **agent-FORGE** | *Deploy* | Production runtime for models that survived the full funnel | — |
+
+FORGE is where the question changes from "can it do tool calls?" to "can it **be** an agent?" — multi-turn, chained tools, autonomous planning, measurable delivery. 7 models entered; only those that proved agentic capability advanced to REAL.
 
 ---
 
